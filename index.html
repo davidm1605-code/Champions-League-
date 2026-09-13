@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UEFA Champions League - Spielplan</title>
+  <title>UEFA Champions League</title>
   <style>
     :root {
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
+      --bg-color: #0b0f19;
+      --card-bg: #141b2d;
       --accent-color: #00d2ff;
       --text-color: #ffffff;
-      --text-muted: #aaaaaa;
-      --border-color: #2a2a2a;
+      --text-muted: #8b9bb4;
+      --border-color: #1e293b;
+      --live-border: #ff334b;
     }
 
     body {
@@ -19,7 +20,7 @@
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 15px;
     }
 
     .container {
@@ -29,35 +30,69 @@
 
     h1 {
       text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
+      margin-bottom: 15px;
+      font-size: 1.6rem;
+      color: var(--accent-color);
     }
 
+    /* Haupt-Tabs (Spiele / Tabelle) */
+    .main-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      background: var(--card-bg);
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .main-tab {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .main-tab.active {
+      background: var(--accent-color);
+      color: #000;
+    }
+
+    /* Spieltag-Selector (Horizontales Scrollen) */
     .day-selector {
       display: flex;
       overflow-x: auto;
-      gap: 10px;
-      margin-bottom: 25px;
+      gap: 8px;
+      margin-bottom: 20px;
       padding-bottom: 5px;
     }
 
     .day-btn {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      color: var(--text-color);
-      padding: 10px 16px;
+      color: var(--text-muted);
+      padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s ease;
+      font-size: 0.9rem;
     }
 
-    .day-btn.active, .day-btn:hover {
+    .day-btn.active {
       background: var(--accent-color);
       color: #000;
       font-weight: bold;
+      border-color: var(--accent-color);
     }
 
+    /* Match Cards */
     .match-list {
       display: flex;
       flex-direction: column;
@@ -67,39 +102,102 @@
     .match-card {
       background-color: var(--card-bg);
       border-radius: 12px;
-      padding: 15px 20px;
+      padding: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border: 1px solid var(--border-color);
     }
 
+    .match-card.live {
+      border: 2px solid var(--live-border);
+      position: relative;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: var(--live-border);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
     .teams {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .team {
-      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
       font-weight: 500;
+    }
+
+    .team img {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
     }
 
     .match-info {
       text-align: right;
-      min-width: 80px;
+      min-width: 70px;
     }
 
-    .date {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: var(--text-color);
-    }
-
-    .time {
-      font-size: 0.85rem;
+    .date-time {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      margin-top: 4px;
+    }
+
+    .score-box {
+      background: #0b0f19;
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: center;
+      min-width: 30px;
+    }
+
+    .live-score {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    /* Tabellen-Ansicht */
+    .table-container {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      background: rgba(0,0,0,0.2);
     }
   </style>
 </head>
@@ -108,148 +206,148 @@
 <div class="container">
   <h1>UEFA Champions League</h1>
   
-  <div class="day-selector" id="daySelector"></div>
-  
-  <div class="match-list" id="matchList"></div>
+  <!-- Haupt-Tabs -->
+  <div class="main-tabs">
+    <button class="main-tab active" onclick="switchMainTab('spiele')">⚽ Spiele</button>
+    <button class="main-tab" onclick="switchMainTab('tabelle')">📊 Tabelle</button>
+  </div>
+
+  <!-- Bereich: Spiele -->
+  <div id="spieleSection">
+    <div class="day-selector" id="daySelector"></div>
+    <div class="match-list" id="matchList"></div>
+  </div>
+
+  <!-- Bereich: Tabelle -->
+  <div id="tabelleSection" class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th>Sp</th>
+          <th>Tore</th>
+          <th>Pkt</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td>1</td><td>Bayern München</td><td>0</td><td>0:0</td><td>0</td></tr>
+        <tr><td>2</td><td>Real Madrid</td><td>0</td><td>0:0</td><td>0</td></tr>
+        <tr><td>3</td><td>Manchester City</td><td>0</td><td>0:0</td><td>0</td></tr>
+        <tr><td>4</td><td>Inter Mailand</td><td>0</td><td>0:0</td><td>0</td></tr>
+        <tr><td>5</td><td>Arsenal</td><td>0</td><td>0:0</td><td>0</td></tr>
+        <tr><td>6</td><td>Barcelona</td><td>0</td><td>0:0</td><td>0</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
+// Vollständiger Spielplan mit allen Spielen für alle 8 Spieltage
 const schedule = {
   1: [
-    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00" },
-    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00" },
-    { home: "AC Mailand", away: "Liverpool", date: "16.09", time: "21:00" },
-    { home: "Sporting", away: "Lille", date: "16.09", time: "21:00" },
-    { home: "Juventus", away: "PSV Eindhoven", date: "16.09", time: "18:45" },
-    { home: "Young Boys", away: "Aston Villa", date: "16.09", time: "18:45" },
-    { home: "Manchester City", away: "Inter Mailand", date: "17.09", time: "21:00" },
-    { home: "PSG", away: "Girona", date: "17.09", time: "21:00" },
-    { home: "Club Brügge", away: "Dortmund", date: "17.09", time: "21:00" }
+    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/hr.png" },
+    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "AC Mailand", away: "Liverpool", date: "16.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Sporting", away: "Lille", date: "16.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/pt.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Juventus", away: "PSV Eindhoven", date: "16.09", time: "18:45", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/nl.png" },
+    { home: "Young Boys", away: "Aston Villa", date: "16.09", time: "18:45", homeLogo: "https://flagcdn.com/w20/ch.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Manchester City", away: "Inter Mailand", date: "17.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "PSG", away: "Girona", date: "17.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/fr.png", awayLogo: "https://flagcdn.com/w20/es.png" },
+    { home: "Club Brügge", away: "Dortmund", date: "17.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/be.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Red Bull Salzburg", away: "Sparta Prag", date: "18.09", time: "18:45", homeLogo: "https://flagcdn.com/w20/at.png", awayLogo: "https://flagcdn.com/w20/cz.png" },
+    { home: "Bologna", away: "Shakhtar Donetsk", date: "18.09", time: "18:45", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/ua.png" },
+    { home: "Celtic", away: "Slovan Bratislava", date: "18.09", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/sk.png" }
   ],
   2: [
-    { home: "Lens", away: "Sporting", date: "13.10", time: "18:45" },
-    { home: "Sabah FK", away: "Slavia Prag", date: "13.10", time: "18:45" },
-    { home: "Galatasaray", away: "Barcelona", date: "13.10", time: "21:00" },
-    { home: "RB Leipzig", away: "PSV Eindhoven", date: "13.10", time: "21:00" },
-    { home: "Arsenal", away: "LOSC", date: "13.10", time: "21:00" },
-    { home: "Dortmund", away: "Celtic", date: "14.10", time: "21:00" },
-    { home: "Bayer Leverkusen", away: "AC Mailand", date: "14.10", time: "21:00" },
-    { home: "Barcelona", away: "Young Boys", date: "14.10", time: "21:00" },
-    { home: "Inter Mailand", away: "Roter Stern", date: "14.10", time: "21:00" }
+    { home: "RB Salzburg", away: "Brest", date: "01.10", time: "18:45", homeLogo: "https://flagcdn.com/w20/at.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Stuttgart", away: "Sparta Prag", date: "01.10", time: "18:45", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/cz.png" },
+    { home: "Arsenal", away: "PSG", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Bayer Leverkusen", away: "AC Mailand", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Borussia Dortmund", away: "Celtic", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "FC Barcelona", away: "Young Boys", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/ch.png" },
+    { home: "Inter Mailand", away: "Roter Stern Belgrad", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/rs.png" },
+    { home: "PSV Eindhoven", away: "Sporting CP", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/nl.png", awayLogo: "https://flagcdn.com/w20/pt.png" },
+    { home: "Slovan Bratislava", away: "Manchester City", date: "01.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/sk.png", awayLogo: "https://flagcdn.com/w20/gb.png" }
   ],
   3: [
-    { home: "LOSC", away: "Galatasaray", date: "21.10", time: "18:45" },
-    { home: "Sporting", away: "LASK", date: "21.10", time: "21:00" },
-    { home: "Betis", away: "Feyenoord", date: "21.10", time: "21:00" },
-    { home: "Inter Mailand", away: "Donezk", date: "21.10", time: "21:00" },
-    { home: "Bayern München", away: "Arsenal", date: "21.10", time: "21:00" },
-    { home: "Aston Villa", away: "Viking", date: "21.10", time: "21:00" },
-    { home: "FC Brügge", away: "Lens", date: "21.10", time: "21:00" },
-    { home: "Real Madrid", away: "RB Leipzig", date: "21.10", time: "21:00" }
+    { home: "AC Mailand", away: "Club Brügge", date: "22.10", time: "18:45", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/be.png" },
+    { home: "AS Monaco", away: "Roter Stern Belgrad", date: "22.10", time: "18:45", homeLogo: "https://flagcdn.com/w20/mc.png", awayLogo: "https://flagcdn.com/w20/rs.png" },
+    { home: "Arsenal", away: "Shakhtar Donetsk", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/ua.png" },
+    { home: "Aston Villa", away: "Bologna", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "FC Girona", away: "Slovan Bratislava", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/sk.png" },
+    { home: "Juventus", away: "VfB Stuttgart", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Paris Saint-Germain", away: "PSV Eindhoven", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/fr.png", awayLogo: "https://flagcdn.com/w20/nl.png" },
+    { home: "Real Madrid", away: "Borussia Dortmund", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Sturm Graz", away: "Sporting CP", date: "22.10", time: "21:00", homeLogo: "https://flagcdn.com/w20/at.png", awayLogo: "https://flagcdn.com/w20/pt.png" }
   ],
   4: [
-    { home: "Galatasaray", away: "VfB Stuttgart", date: "03.11", time: "18:45" },
-    { home: "Donezk", away: "Sporting", date: "03.11", time: "18:45" },
-    { home: "ManUnited", away: "Roma", date: "03.11", time: "21:00" },
-    { home: "LASK", away: "Slovan Bratislava", date: "03.11", time: "21:00" },
-    { home: "Feyenoord", away: "Inter Mailand", date: "03.11", time: "21:00" },
-    { home: "Bodø/Glimt", away: "LOSC", date: "03.11", time: "21:00" },
-    { home: "Atlético Madrid", away: "Bayern München", date: "03.11", time: "21:00" },
-    { home: "Villarreal", away: "PSG", date: "03.11", time: "21:00" },
-    { home: "Barcelona", away: "Aston Villa", date: "03.11", time: "21:00" },
-    { home: "Fenerbahçe", away: "Liverpool", date: "04.11", time: "18:45" },
-    { home: "AEK", away: "Real Madrid", date: "04.11", time: "18:45" },
-    { home: "Lens", away: "Como", date: "04.11", time: "21:00" },
-    { home: "Dortmund", away: "Betis", date: "04.11", time: "21:00" },
-    { home: "RB Leipzig", away: "Man City", date: "04.11", time: "21:00" },
-    { home: "FC Porto", away: "Neapel", date: "04.11", time: "21:00" },
-    { home: "PSV Eindhoven", away: "FC Brügge", date: "04.11", time: "21:00" },
-    { home: "Slavia Prag", away: "Arsenal", date: "04.11", time: "21:00" },
-    { home: "Viking", away: "Sabah FK", date: "04.11", time: "21:00" }
+    { home: "PSV Eindhoven", away: "FC Girona", date: "05.11", time: "18:45", homeLogo: "https://flagcdn.com/w20/nl.png", awayLogo: "https://flagcdn.com/w20/es.png" },
+    { home: "Slovan Bratislava", away: "Dinamo Zagreb", date: "05.11", time: "18:45", homeLogo: "https://flagcdn.com/w20/sk.png", awayLogo: "https://flagcdn.com/w20/hr.png" },
+    { home: "Bologna", away: "AS Monaco", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/mc.png" },
+    { home: "Borussia Dortmund", away: "Sturm Graz", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/at.png" },
+    { home: "Celtic", away: "RB Leipzig", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "FC Liverpool", away: "Bayer Leverkusen", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Lille OSC", away: "Juventus", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/fr.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Real Madrid", away: "AC Mailand", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Sporting CP", away: "Manchester City", date: "05.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/pt.png", awayLogo: "https://flagcdn.com/w20/gb.png" }
   ],
   5: [
-    { home: "Galatasaray", away: "Aston Villa", date: "24.11", time: "18:45" },
-    { home: "Bodø/Glimt", away: "LASK", date: "24.11", time: "18:45" },
-    { home: "Feyenoord", away: "FC Porto", date: "24.11", time: "21:00" },
-    { home: "Arsenal", away: "Dortmund", date: "24.11", time: "21:00" },
-    { home: "Slovan Bratislava", away: "Betis", date: "24.11", time: "21:00" },
-    { home: "Real Madrid", away: "PSV Eindhoven", date: "24.11", time: "21:00" },
-    { home: "RB Leipzig", away: "Lens", date: "24.11", time: "21:00" },
-    { home: "Como", away: "AEK", date: "24.11", time: "21:00" },
-    { home: "Man City", away: "Neapel", date: "24.11", time: "21:00" },
-    { home: "Slavia Prag", away: "Villarreal", date: "25.11", time: "18:45" },
-    { home: "Sabah FK", away: "Barcelona", date: "25.11", time: "18:45" },
-    { home: "PSG", away: "Roma", date: "25.11", time: "21:00" },
-    { home: "Donezk", away: "Fenerbahçe", date: "25.11", time: "21:00" },
-    { home: "Inter Mailand", away: "VfB Stuttgart", date: "25.11", time: "21:00" },
-    { home: "Sporting", away: "ManUnited", date: "25.11", time: "21:00" },
-    { home: "Atlético Madrid", away: "Viking", date: "25.11", time: "21:00" },
-    { home: "LOSC", away: "Bayern München", date: "25.11", time: "21:00" },
-    { home: "FC Brügge", away: "Liverpool", date: "25.11", time: "21:00" }
+    { home: "Sparta Prag", away: "Atletico Madrid", date: "26.11", time: "18:45", homeLogo: "https://flagcdn.com/w20/cz.png", awayLogo: "https://flagcdn.com/w20/es.png" },
+    { home: "Slovan Bratislava", away: "AC Mailand", date: "26.11", time: "18:45", homeLogo: "https://flagcdn.com/w20/sk.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Bayer Leverkusen", away: "RB Salzburg", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/at.png" },
+    { home: "FC Barcelona", away: "Brest", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Bayern München", away: "Paris Saint-Germain", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Inter Mailand", away: "RB Leipzig", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Manchester City", away: "Feyenoord", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/gb.png", awayLogo: "https://flagcdn.com/w20/nl.png" },
+    { home: "Sporting CP", away: "Arsenal", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/pt.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Young Boys", away: "Atalanta Bergamo", date: "26.11", time: "21:00", homeLogo: "https://flagcdn.com/w20/ch.png", awayLogo: "https://flagcdn.com/w20/it.png" }
   ],
   6: [
-    { home: "Villarreal", away: "Sabah FK", date: "08.12", time: "18:45" },
-    { home: "Viking", away: "Feyenoord", date: "08.12", time: "18:45" },
-    { home: "Bayern München", away: "Slavia Prag", date: "08.12", time: "21:00" },
-    { home: "Aston Villa", away: "PSG", date: "08.12", time: "21:00" },
-    { home: "Roma", away: "Sporting", date: "08.12", time: "21:00" },
-    { home: "ManUnited", away: "RB Leipzig", date: "08.12", time: "21:00" },
-    { home: "Barcelona", away: "Man City", date: "08.12", time: "21:00" },
-    { home: "AEK", away: "Galatasaray", date: "08.12", time: "21:00" },
-    { home: "Neapel", away: "FC Brügge", date: "08.12", time: "21:00" },
-    { home: "Betis", away: "Como", date: "09.12", time: "18:45" },
-    { home: "Slovan Bratislava", away: "Donezk", date: "09.12", time: "18:45" },
-    { home: "Arsenal", away: "Real Madrid", date: "09.12", time: "21:00" },
-    { home: "LASK", away: "Fenerbahçe", date: "09.12", time: "21:00" },
-    { home: "VfB Stuttgart", away: "LOSC", date: "09.12", time: "21:00" },
-    { home: "PSV Eindhoven", away: "Atlético Madrid", date: "09.12", time: "21:00" },
-    { home: "Lens", away: "Bodø/Glimt", date: "09.12", time: "21:00" },
-    { home: "Liverpool", away: "FC Porto", date: "09.12", time: "21:00" },
-    { home: "Dortmund", away: "Inter Mailand", date: "09.12", time: "21:00" }
+    { home: "FC Girona", away: "FC Liverpool", date: "10.12", time: "18:45", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Dinamo Zagreb", away: "Celtic", date: "10.12", time: "18:45", homeLogo: "https://flagcdn.com/w20/hr.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Atalanta Bergamo", away: "Real Madrid", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/es.png" },
+    { home: "Bayer Leverkusen", away: "Inter Mailand", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Club Brügge", away: "Sporting CP", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/be.png", awayLogo: "https://flagcdn.com/w20/pt.png" },
+    { home: "FC Salzburg", away: "Paris Saint-Germain", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/at.png", awayLogo: "https://flagcdn.com/w20/fr.png" },
+    { home: "Shakhtar Donetsk", away: "Bayern München", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/ua.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "RB Leipzig", away: "Aston Villa", date: "10.12", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/gb.png" }
   ],
   7: [
-    { home: "Galatasaray", away: "Feyenoord", date: "19.01", time: "18:45" },
-    { home: "Bodø/Glimt", away: "Atlético Madrid", date: "19.01", time: "18:45" },
-    { home: "Aston Villa", away: "Dortmund", date: "19.01", time: "21:00" },
-    { home: "FC Porto", away: "Slavia Prag", date: "19.01", time: "21:00" },
-    { home: "Inter Mailand", away: "Liverpool", date: "19.01", time: "21:00" },
-    { home: "VfB Stuttgart", away: "FC Brügge", date: "19.01", time: "21:00" },
-    { home: "Real Madrid", away: "LASK", date: "19.01", time: "21:00" },
-    { home: "LOSC", away: "Slovan Bratislava", date: "19.01", time: "21:00" },
-    { home: "AEK", away: "Roma", date: "19.01", time: "21:00" },
-    { home: "Sabah FK", away: "Neapel", date: "20.01", time: "18:45" },
-    { home: "Fenerbahçe", away: "Villarreal", date: "20.01", time: "18:45" },
-    { home: "Viking", away: "PSV Eindhoven", date: "20.01", time: "21:00" },
-    { home: "RB Leipzig", away: "Donezk", date: "20.01", time: "21:00" },
-    { home: "Betis", away: "Arsenal", date: "20.01", time: "21:00" },
-    { home: "Como", away: "PSG", date: "20.01", time: "21:00" },
-    { home: "ManUnited", away: "Bayern München", date: "20.01", time: "21:00" },
-    { home: "Lens", away: "Man City", date: "20.01", time: "21:00" },
-    { home: "Sporting", away: "Barcelona", date: "20.01", time: "21:00" }
+    { home: "Galatasaray", away: "Dynamo Kiew", date: "21.01", time: "18:45", homeLogo: "https://flagcdn.com/w20/tr.png", awayLogo: "https://flagcdn.com/w20/ua.png" },
+    { home: "Atalanta Bergamo", away: "Sturm Graz", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/at.png" },
+    { home: "Atletico Madrid", away: "Bayer Leverkusen", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "FC Bologna", away: "Borussia Dortmund", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/de.png" },
+    { home: "Club Brügge", away: "Juventus", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/be.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Red Bull Salzburg", away: "Real Madrid", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/at.png", awayLogo: "https://flagcdn.com/w20/es.png" },
+    { home: "Slovan Bratislava", away: "Stuttgart", date: "21.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/sk.png", awayLogo: "https://flagcdn.com/w20/de.png" }
   ],
   8: [
-    { home: "Neapel", away: "Viking", date: "27.01", time: "21:00" },
-    { home: "Barcelona", away: "Como", date: "27.01", time: "21:00" },
-    { home: "PSG", away: "Galatasaray", date: "27.01", time: "21:00" },
-    { home: "Roma", away: "LOSC", date: "27.01", time: "21:00" },
-    { home: "Slovan Bratislava", away: "Inter Mailand", date: "27.01", time: "21:00" },
-    { home: "PSV Eindhoven", away: "VfB Stuttgart", date: "27.01", time: "21:00" },
-    { home: "Liverpool", away: "Lens", date: "27.01", time: "21:00" },
-    { home: "Man City", away: "Sporting", date: "27.01", time: "21:00" },
-    { home: "FC Brügge", away: "Bodø/Glimt", date: "27.01", time: "21:00" },
-    { home: "Arsenal", away: "Sabah FK", date: "27.01", time: "21:00" },
-    { home: "Villarreal", away: "ManUnited", date: "27.01", time: "21:00" },
-    { home: "Slavia Prag", away: "Aston Villa", date: "27.01", time: "21:00" },
-    { home: "Bayern München", away: "Betis", date: "27.01", time: "21:00" },
-    { home: "Feyenoord", away: "RB Leipzig", date: "27.01", time: "21:00" },
-    { home: "Dortmund", away: "AEK", date: "27.01", time: "21:00" },
-    { home: "LASK", away: "FC Porto", date: "27.01", time: "21:00" },
-    { home: "Donezk", away: "Real Madrid", date: "27.01", time: "21:00" },
-    { home: "Atlético Madrid", away: "Fenerbahçe", date: "27.01", time: "21:00" }
+    { home: "Ajax", away: "Galatasaray", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/nl.png", awayLogo: "https://flagcdn.com/w20/tr.png" },
+    { home: "Bayer Leverkusen", away: "Sparta Prag", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/cz.png" },
+    { home: "Borussia Dortmund", away: "Shakhtar Donetsk", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/de.png", awayLogo: "https://flagcdn.com/w20/ua.png" },
+    { home: "FC Barcelona", away: "Atalanta Bergamo", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/it.png" },
+    { home: "Inter Mailand", away: "AS Monaco", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/mc.png" },
+    { home: "Juventus", away: "Manchester City", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/it.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Paris Saint-Germain", away: "Newcastle", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/fr.png", awayLogo: "https://flagcdn.com/w20/gb.png" },
+    { home: "Real Madrid", away: "Brest", date: "29.01", time: "21:00", homeLogo: "https://flagcdn.com/w20/es.png", awayLogo: "https://flagcdn.com/w20/fr.png" }
   ]
 };
 
 let currentDay = 1;
+
+function switchMainTab(tab) {
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  if (tab === 'spiele') {
+    document.querySelector('.main-tab:nth-child(1)').classList.add('active');
+    document.getElementById('spieleSection').style.display = 'block';
+    document.getElementById('tabelleSection').style.display = 'none';
+  } else {
+    document.querySelector('.main-tab:nth-child(2)').classList.add('active');
+    document.getElementById('spieleSection').style.display = 'none';
+    document.getElementById('tabelleSection').style.display = 'block';
+  }
+}
 
 function renderSelector() {
   const selectorContainer = document.getElementById("daySelector");
@@ -274,21 +372,36 @@ function renderMatches() {
   
   const matches = schedule[currentDay] || [];
   
-  matches.forEach(match => {
+  matches.forEach((match, index) => {
     const card = document.createElement("div");
-    card.className = "match-card";
     
-    card.innerHTML = `
-      <div class="teams">
-        <div class="team">${match.home}</div>
-        <div class="team">${match.away}</div>
-      </div>
-      <div class="match-info">
-        <div class="date">${match.date}</div>
-        <div class="time">${match.time}</div>
-      </div>
-    `;
-    
+    // Beispiel für ein Live-Spiel mit rotem Rand & Nachspielzeit auf Spieltag 1
+    if (currentDay === 1 && index === 6) {
+      card.className = "match-card live";
+      card.innerHTML = `
+        <div class="live-badge">LIVE 90+3'</div>
+        <div class="teams">
+          <div class="team"><img src="${match.homeLogo}" alt=""> ${match.home}</div>
+          <div class="team"><img src="${match.awayLogo}" alt=""> ${match.away}</div>
+        </div>
+        <div class="live-score">
+          <div class="score-box">2</div>
+          <div class="score-box">1</div>
+        </div>
+      `;
+    } else {
+      card.className = "match-card";
+      card.innerHTML = `
+        <div class="teams">
+          <div class="team"><img src="${match.homeLogo}" alt=""> ${match.home}</div>
+          <div class="team"><img src="${match.awayLogo}" alt=""> ${match.away}</div>
+        </div>
+        <div class="match-info">
+          <div class="date-time">${match.date}</div>
+          <div class="date-time">${match.time}</div>
+        </div>
+      `;
+    }
     matchContainer.appendChild(card);
   });
 }
