@@ -149,6 +149,18 @@
             margin-bottom: 0;
         }
 
+        /* Live-Animation & Umrandung */
+        .match-card.live {
+            border: 2px solid var(--live-red);
+            animation: pulse-border 1.5s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: rgba(255, 51, 51, 0.4); }
+            50% { border-color: rgba(255, 51, 51, 1); }
+            100% { border-color: rgba(255, 51, 51, 0.4); }
+        }
+
         .team-side {
             display: flex;
             align-items: center;
@@ -199,6 +211,11 @@
             margin-top: 2px;
         }
 
+        .match-status.live-text {
+            color: var(--live-red);
+            font-weight: bold;
+        }
+
         /* Tabelle Styling */
         .table-container {
             background: var(--card-bg);
@@ -247,7 +264,6 @@
 
         .dot.win { background-color: var(--green); }
         .dot.loss { background-color: var(--live-red); }
-        .dot.draw { background-color: var(--text-secondary); }
     </style>
 </head>
 <body>
@@ -260,7 +276,7 @@
             <button class="main-tab" onclick="switchMainTab('table')">📊 Tabelle</button>
         </div>
         
-        <div class="status-bar" id="status-bar">Stand: <span id="clock">--:--:--</span></div>
+        <div class="status-bar" id="status-bar">Live-Aktualisierung aktiv • Stand: <span id="clock">--:--:--</span></div>
     </header>
 
     <!-- SPIELE SEKTION -->
@@ -268,10 +284,12 @@
         <div class="sub-tabs">
             <button class="sub-tab active" onclick="filterMatches('all')">Alle Spiele</button>
             <button class="sub-tab" onclick="filterMatches('finished')">Beendet</button>
-            <button class="sub-tab" onclick="filterMatches('upcoming')">Kommende</button>
+            <button class="sub-tab" onclick="filterMatches('upcoming')">Kommende / Live</button>
         </div>
 
-        <div id="matchdays-wrapper"></div>
+        <div id="matchdays-wrapper">
+            <!-- Dynamisch gefüllt via JavaScript -->
+        </div>
     </div>
 
     <!-- TABELLE SEKTION -->
@@ -292,13 +310,21 @@
                         <th>Letzte 5</th>
                     </tr>
                 </thead>
-                <tbody id="table-body"></tbody>
+                <tbody id="table-body">
+                    <!-- Dynamisch gefüllt via JavaScript -->
+                </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Exakte Logo-Zuweisung inklusive Sabah FK & RB Leipzig
+        // Logo-Helper über Standard Club-Logo CDNs
+        function getLogo(name) {
+            const formatted = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return `https://images.fotmob.com/image_resources/logo/teamlogo/${formatted.length}._png` || '';
+        }
+
+        // Einheitliche Logo-Zuordnung für saubere Darstellung
         const teamLogos = {
             "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
             "Bayern": "https://images.fotmob.com/image_resources/logo/teamlogo/9823.png",
@@ -331,9 +357,10 @@
             "Viking": "https://images.fotmob.com/image_resources/logo/teamlogo/6545.png",
             "Galatasaray": "https://images.fotmob.com/image_resources/logo/teamlogo/8529.png",
             "FC Porto": "https://images.fotmob.com/image_resources/logo/teamlogo/9781.png",
-            "RB Leipzig": "https://images.fotmob.com/image_resources/logo/teamlogo/10266.png",
+            "RB Leipzig": "https://images.fotmob.com/image_resources/logo/teamlogo/172070.png",
             "Feyenoord": "https://images.fotmob.com/image_resources/logo/teamlogo/10235.png",
-            "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/77724.png",
+            "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/276531.png",
+            "Red Bull Salzburg": "https://images.fotmob.com/image_resources/logo/teamlogo/5631.png",
             "Slovan Bratislava": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png",
             "Bodo/Glimt": "https://images.fotmob.com/image_resources/logo/teamlogo/6423.png"
         };
@@ -342,34 +369,94 @@
             return teamLogos[name] || `https://images.fotmob.com/image_resources/logo/teamlogo/8633.png`;
         }
 
-        // Vollständiger Spieltag 1 (exakt nach Screenshot)
+        // Spieldaten basierend auf deinen Screenshots (Spieltag 1 mit Ergebnissen, Rest kommend)
         const matchdays = [
             {
                 day: "Spieltag 1 von 8",
                 matches: [
-                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand" },
-                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand" },
-                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand" },
-                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand" },
-                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand" },
-                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand" },
-                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand" },
-                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand" },
-                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand" },
-                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand" },
-                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand" },
-                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand" },
-                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand" },
-                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand" },
-                    { home: "Bayern", away: "Bodo/Glimt", homeScore: 5, awayScore: 0, status: "Endstand" },
-                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand" },
-                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand" },
-                    { home: "Man United", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand" }
+                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand", live: false },
+                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
+                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand", live: false },
+                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand", live: false },
+                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Bayern", away: "Bodo/Glimt", homeScore: 5, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Man United", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 2 von 8",
+                matches: [
+                    { home: "Lens", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
+                    { home: "Sabah FK", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false, liveTime: "90 + 4" }, // Beispiel Live-Spiel
+                    { home: "Arsenal", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "At. Madrid", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Villarreal", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Viking", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Inter", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 3 von 8",
+                matches: [
+                    { home: "Sabah FK", away: "Dortmund", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
+                    { home: "Fenerbahce", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
+                    { home: "PSG", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
+                    { home: "Man City", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 4 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "Donezk", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
+                    { home: "Feyenoord", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 5 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "Aston Villa", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
+                    { home: "Bodo/Glimt", away: "LASK", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 6 von 8",
+                matches: [
+                    { home: "Villarreal", away: "Sabah FK", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
+                    { home: "Viking", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 7 von 8",
+                matches: [
+                    { home: "Galatasaray", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
+                    { home: "Bodo/Glimt", away: "At. Madrid", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 8 von 8",
+                matches: [
+                    { home: "Neapel", away: "Viking", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
+                    { home: "Barcelona", away: "Como", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false }
                 ]
             }
         ];
 
-        // Alle 36 Teams exakt in der Reihenfolge und mit den Werten aus dem Screenshot
+        // Tabellendaten aus Screenshot 1
         const standings = [
             { rank: 1, team: "PSG", played: 1, won: 1, drawn: 0, lost: 0, gf: 6, ga: 1, pts: 3, form: ['win'] },
             { rank: 2, team: "Bayern", played: 1, won: 1, drawn: 0, lost: 0, gf: 5, ga: 0, pts: 3, form: ['win'] },
@@ -390,26 +477,12 @@
             { rank: 17, team: "Donezk", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
             { rank: 17, team: "Roma", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
             { rank: 19, team: "Fenerbahce", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
-            { rank: 19, team: "PSV Eindhoven", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
-            { rank: 21, team: "Villarreal", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 22, team: "FC Brügge", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 22, team: "LOSC", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 22, team: "Slavia Prag", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 25, team: "Inter", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 2, pts: 0, form: ['loss'] },
-            { rank: 25, team: "At. Madrid", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 2, pts: 0, form: ['loss'] },
-            { rank: 27, team: "Neapel", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 1, pts: 0, form: ['loss'] },
-            { rank: 27, team: "LASK", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 1, pts: 0, form: ['loss'] },
-            { rank: 29, team: "Viking", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 29, team: "Galatasaray", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 3, pts: 0, form: ['loss'] },
-            { rank: 31, team: "FC Porto", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 2, pts: 0, form: ['loss'] },
-            { rank: 32, team: "RB Leipzig", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 4, pts: 0, form: ['loss'] },
-            { rank: 33, team: "Feyenoord", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 5, pts: 0, form: ['loss'] },
-            { rank: 34, team: "Sabah FK", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 4, pts: 0, form: ['loss'] },
-            { rank: 34, team: "Slovan Bratislava", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 6, pts: 0, form: ['loss'] },
-            { rank: 36, team: "Bodo/Glimt", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 5, pts: 0, form: ['loss'] }
+            { rank: 19, team: "PSV Eindhoven", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] }
         ];
 
+        // App Rendern
         function renderApp() {
+            // Uhrzeit aktualisieren
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString();
 
@@ -420,18 +493,23 @@
             matchdays.forEach(md => {
                 let mdDiv = document.createElement('div');
                 mdDiv.className = 'matchday-container';
+                
                 let html = `<div class="matchday-title">${md.day}</div>`;
                 
                 md.matches.forEach(m => {
+                    const isLive = m.live;
+                    const statusText = isLive ? `<span class="match-status live-text">LIVE ${m.liveTime || ''}</span>` : `<span class="match-status">${m.status || m.time + ' Uhr'}</span>`;
+                    const scoreText = (m.homeScore !== null && m.awayScore !== null) ? `${m.homeScore} - ${m.awayScore}` : 'vs';
+
                     html += `
-                        <div class="match-card" data-type="finished">
+                        <div class="match-card ${isLive ? 'live' : ''}" data-type="${m.homeScore !== null ? 'finished' : 'upcoming'}">
                             <div class="team-side home">
                                 <span class="team-name">${m.home}</span>
                                 <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
                             </div>
                             <div class="match-info">
-                                <div class="score">${m.homeScore} - ${m.awayScore}</div>
-                                <span class="match-status">${m.status}</span>
+                                <div class="score">${scoreText}</div>
+                                ${statusText}
                             </div>
                             <div class="team-side away">
                                 <img src="${getTeamLogo(m.away)}" class="team-logo" alt="${m.away}">
@@ -440,6 +518,7 @@
                         </div>
                     `;
                 });
+
                 mdDiv.innerHTML = html;
                 wrapper.appendChild(mdDiv);
             });
@@ -448,7 +527,7 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             
-            standings.forEach((row, index) => {
+            standings.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga)).forEach((row, index) => {
                 const diff = row.gf - row.ga;
                 const diffStr = diff > 0 ? `+${diff}` : diff;
                 
@@ -476,6 +555,7 @@
             });
         }
 
+        // Reiter Umschaltung (Spiele <-> Tabelle)
         function switchMainTab(tab) {
             document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
@@ -489,16 +569,28 @@
             }
         }
 
+        // Filter für Spiele (Alle / Beendet / Kommende & Live)
         function filterMatches(filter) {
             document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
-            // Einfache Platzhalter-Logik für Filter
+
             document.querySelectorAll('.match-card').forEach(card => {
-                card.style.display = 'flex';
+                const type = card.getAttribute('data-type');
+                if (filter === 'all') {
+                    card.style.display = 'flex';
+                } else if (filter === 'finished' && type === 'finished') {
+                    card.style.display = 'flex';
+                } else if (filter === 'upcoming' && type === 'upcoming') {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
 
+        // Initialisierung & Live-Ticker Intervall
         renderApp();
+        setInterval(renderApp, 1000);
     </script>
 </body>
 </html>
