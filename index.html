@@ -3,333 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Champions League Hub</title>
+    <title>UEFA Champions League - Live & Spiele</title>
     <style>
         :root {
-            --bg-color: #0e1111;
-            --card-bg: #1a1f1f;
-            --accent: #00ffcc;
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
+            --accent-color: #00f0ff;
             --text-main: #ffffff;
-            --text-muted: #8b9bb4;
-            --border: #2a3439;
+            --text-muted: #94a3b8;
+            --border-color: #1e293b;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         h1 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
+            font-size: 1.6rem;
+            color: var(--accent-color);
+            text-align: center;
             margin-bottom: 20px;
+            letter-spacing: 0.5px;
         }
-        .nav-btn {
-            background-color: var(--card-bg);
-            color: var(--text-muted);
-            border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s ease;
-        }
-        .nav-btn.active {
-            background-color: var(--accent);
-            color: #000;
-            border-color: var(--accent);
-        }
-        .container {
+
+        /* Haupt-Tabs (Spiele / Tabelle) */
+        .main-tabs {
+            display: flex;
+            gap: 12px;
             width: 100%;
             max-width: 600px;
-        }
-        .view-section {
-            display: none;
-        }
-        .view-section.active {
-            display: block;
-        }
-        .matchday-title {
-            color: var(--accent);
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-        .match-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
             margin-bottom: 12px;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            gap: 10px;
         }
-        .team {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .team.away {
-            justify-content: flex-end;
-            text-align: right;
-        }
-        .team img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-        }
-        .score-box {
+
+        .tab-btn {
+            flex: 1;
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            border: 2px solid var(--border-color);
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
             text-align: center;
         }
-        .score {
-            font-size: 1.2rem;
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        /* Live-Status Zeile */
+        .live-status-bar {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Unter-Tabs (Alle Spiele / Beendet / Kommende / Live) */
+        .sub-tabs {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .sub-tab-btn {
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .sub-tab-btn.active {
+            background-color: transparent;
+            color: var(--accent-color);
+            border-color: var(--accent-color);
             font-weight: bold;
         }
-        .status {
+
+        /* Inhaltsbereiche */
+        .content-section {
+            width: 100%;
+            max-width: 600px;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Spiel-Card Design */
+        .match-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
             font-size: 0.75rem;
             color: var(--text-muted);
         }
-        .status.live {
-            color: #ff3333;
-            font-weight: bold;
+
+        .match-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        /* Tabelle Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid var(--border);
+
+        .team {
+            flex: 1;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
-        th, td {
-            padding: 10px 12px;
-            text-align: left;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            background-color: #22292f;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-        }
-        td.pos {
-            font-weight: bold;
-            color: var(--accent);
-            width: 30px;
-            text-align: center;
-        }
-        td.pts {
-            font-weight: bold;
+
+        .team.home {
             text-align: right;
+        }
+
+        .team.away {
+            text-align: left;
+        }
+
+        .score-box {
+            padding: 0 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* Live-Anzeige Kennzeichnung */
+        .live-badge {
+            color: #ff3b30;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <h1>Champions League Hub</h1>
+    <h1>UEFA Champions League</h1>
 
-    <div class="nav-buttons">
-        <button class="nav-btn active" onclick="switchView('spiele')">Spiele</button>
-        <button class="nav-btn" onclick="switchView('tabelle')">Tabelle</button>
+    <!-- Haupt-Reiter -->
+    <div class="main-tabs">
+        <button class="tab-btn active" onclick="switchMainTab('games')">⚽ Spiele</button>
+        <button class="tab-btn" onclick="switchMainTab('table')">📊 Tabelle</button>
     </div>
 
-    <div class="container">
-        <!-- SPIELE ANSICHT -->
-        <div id="spiele-view" class="view-section active">
-            <div class="matchday-title">Spieltag 1 von 8</div>
-            
-            <div id="matches-container">
-                <!-- Dynamisch generierte Spiele des 1. Spieltags -->
+    <!-- Live Status -->
+    <div class="live-status-bar">
+        Live-Aktualisierung aktiv • Stand: <span id="current-time">23:03:37</span>
+    </div>
+
+    <!-- Sektion: Spiele -->
+    <div id="section-games" class="content-section active">
+        <!-- Unter-Reiter -->
+        <div class="sub-tabs">
+            <button class="sub-tab-btn active" onclick="filterGames('all')">Alle Spiele</button>
+            <button class="sub-tab-btn" onclick="filterGames('finished')">Beendet</button>
+            <button class="sub-tab-btn" onclick="filterGames('live-upcoming')">Kommende / Live</button>
+        </div>
+
+        <!-- Beispiel Spiel 1: Live -->
+        <div class="match-card" data-status="live">
+            <div class="match-header">
+                <span>Spieltag 1</span>
+                <span class="live-badge">🔴 LIVE 78' +3'</span>
+            </div>
+            <div class="match-body">
+                <div class="team home">FC Bayern München</div>
+                <div class="score-box">2 : 1</div>
+                <div class="team away">Galatasaray</div>
             </div>
         </div>
 
-        <!-- TABELLE ANSICHT -->
-        <div id="tabelle-view" class="view-section">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="text-align: center;">#</th>
-                        <th>Team</th>
-                        <th style="text-align: center;">Sp</th>
-                        <th style="text-align: center;">Tore</th>
-                        <th style="text-align: right;">Pkt</th>
-                    </tr>
-                </thead>
-                <tbody id="standings-container">
-                    <!-- Dynamisch generierte Tabelle basierend auf echten Daten -->
-                </tbody>
-            </table>
+        <!-- Beispiel Spiel 2: Beendet -->
+        <div class="match-card" data-status="finished">
+            <div class="match-header">
+                <span>Spieltag 1</span>
+                <span>Beendet</span>
+            </div>
+            <div class="match-body">
+                <div class="team home">Real Madrid</div>
+                <div class="score-box">3 : 0</div>
+                <div class="team away">VfB Stuttgart</div>
+            </div>
+        </div>
+
+        <!-- Beispiel Spiel 3: Kommend -->
+        <div class="match-card" data-status="upcoming">
+            <div class="match-header">
+                <span>Spieltag 2</span>
+                <span>Mittwoch, 21:00</span>
+            </div>
+            <div class="match-body">
+                <div class="team home">Arsenal FC</div>
+                <div class="score-box">- : -</div>
+                <div class="team away">Paris Saint-Germain</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sektion: Tabelle (Platzhalter) -->
+    <div id="section-table" class="content-section">
+        <div class="match-card">
+            <div style="text-align: center; padding: 20px; color: var(--text-muted);">
+                Tabellenansicht wird hier geladen...
+            </div>
         </div>
     </div>
 
     <script>
-        // Echte Logos von Google-Quellen
-        const logos = {
-            "Paris Saint-Germain": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/mcpMspef1hwHwi9qrfp4YQ_500x500.png",
-            "FC Bayern München": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/-_cmntP5q_pHL7g5LfkRiw_500x500.png",
-            "FC Barcelona": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/paYnEE8hcrP96neHRNofhQ_500x500.png",
-            "Manchester United": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/udQ6ns69PctCv143h-GeYw_500x500.png",
-            "Como 1907": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/6InMYSIcwGvDV1SD3-cPGA_500x500.png",
-            "VfB Stuttgart": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/Qc_eb6-lZEDR8ojQmZxFhQ_500x500.png",
-            "Sporting CP": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/58doDuhR0wW3WZE9PdODUw_500x500.png",
-            "Manchester City": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/z44l-a0W1v5FmgPnemV6Xw_500x500.png",
-            "Aston Villa": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/uyNNelfnFvCEnsLrUL-j2Q_500x500.png",
-            "RC Lens": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/TUvwItKazVFpgThEhhlN1Q_500x500.png",
-            "Real Betis Balompié": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/XDClkrMKtkm3UTP2YKN6oQ_500x500.png",
-            "Borussia Dortmund": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/FZnTSH2rbHFos4BnlWAItw_500x500.png",
-            "FC Liverpool": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/nGfV05dipbAc7zzojivKew_500x500.png",
-            "Real Madrid": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/Th4fAVAZeCJWRcKoLW7koA_500x500.png",
-            "FC Arsenal": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/4us2nCgl6kgZc0t3hpW75Q_500x500.png",
-            "AEK Athen": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/AsO4CJclxhZUbsowELZRTw_500x500.png",
-            "AS Rom": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/BQdP4jUBFJfG7U_JBsFIMg_500x500.png",
-            "Schachtar Donezk": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/3rx1dndeeE1gb97w6et-GA_500x500.png",
-            "PSV Eindhoven": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/FylTPR72JXIGFzqwQocSAQ_500x500.png",
-            "Fenerbahçe Istanbul": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/HOQreZgFrmtQiLi8HKb9zA_500x500.png",
-            "FC Villarreal": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/WKH7Ak5cYD6Qm1EEqXzmVw_500x500.png",
-            "FC Brügge": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/5FQBXpID1LAQJb0BOnmTpw_500x500.png",
-            "LOSC Lille": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/D2AQe8qoyPIP4K8MzLvwuA_500x500.png",
-            "Slavia Prag": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/gfoznySB_HVFREKTmomtlg_500x500.png",
-            "Inter Mailand": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/l2-icwsMhIvsbRw8AwC1yg_500x500.png",
-            "Atlético Madrid": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/pEqmA7CL-VRo4Llq3rwIPA_500x500.png",
-            "SSC Neapel": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/ueX_32AIja-hLmJSHpUuFg_500x500.png",
-            "LASK": "https://dimg-pa.googleapis.com/lg/CgYwMTAxMDE.png?sig=AP7Bre11midm47rRQpwE6Dl3wZm0&key=AIzaSyCUqbG5Kw_8jb3cy2ZBKvV2kAi8z0qmQO0&sk=gYzYZLTOIdQ&w=%W&h=%H",
-            "Viking Stavanger": "https://dimg-pa.googleapis.com/lg/CgYxZjJjNTY.png?sig=AP7Bre0UneFUbAnybXEWvhheSb-6&key=AIzaSyCUqbG5Kw_8jb3cy2ZBKvV2kAi8z0qmQO0&sk=paJiCO3bQn4&w=%W&h=%H",
-            "Galatasaray Istanbul": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/TWjoccvTU4JXZJZ3aW3cVg_500x500.png",
-            "FC Porto": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/QkkllEKwkj60jEVtOEZWAg_500x500.png",
-            "RB Leipzig": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/R7-Lqc_SDxd97uWgoeUQ-g_500x500.png",
-            "Feyenoord Rotterdam": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/36g41WN3WdjCRsSFiurazw_500x500.png",
-            "Sabah FK": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/q_9HJ9ZnqqLHaw2MaA-Glg_500x500.png",
-            "ŠK Slovan Bratislava": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/At_RY6yVgrmSW0hTKQ6X6Q_500x500.png",
-            "FK Bodø/Glimt": "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/LP_MW8fDEgJarq60qjdyvA_500x500.png"
-        };
+        function switchMainTab(tab) {
+            document.querySelectorAll('.main-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
 
-        // Alle echten Spiele von Spieltag 1 (inkl. gespielter Ergebnisse)
-        const matches = [
-            { home: "FC Brügge", away: "Aston Villa", homeScore: 2, awayScore: 3, status: "Endstand" },
-            { home: "AEK Athen", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand" },
-            { home: "FC Porto", away: "Manchester City", homeScore: 0, awayScore: 2, status: "Endstand" },
-            { home: "Real Madrid", away: "Inter Mailand", homeScore: 2, awayScore: 1, status: "Endstand" },
-            { home: "Borussia Dortmund", away: "FC Villarreal", homeScore: 3, awayScore: 2, status: "Endstand" },
-            { home: "LOSC Lille", away: "Real Betis Balompié", homeScore: 2, awayScore: 3, status: "Endstand" },
-            { home: "FC Barcelona", away: "Feyenoord Rotterdam", homeScore: 5, awayScore: 1, status: "Endstand" },
-            { home: "VfB Stuttgart", away: "Viking Stavanger", homeScore: 3, awayScore: 1, status: "Endstand" },
-            { home: "SSC Neapel", away: "FC Arsenal", homeScore: 0, awayScore: 1, status: "Endstand" },
-            { home: "FC Liverpool", away: "Atlético Madrid", homeScore: 2, awayScore: 1, status: "Endstand" },
-            { home: "Paris Saint-Germain", away: "ŠK Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand" },
-            { home: "Sporting CP", away: "Galatasaray Istanbul", homeScore: 3, awayScore: 1, status: "Endstand" },
-            { home: "Fenerbahçe Istanbul", away: "AS Rom", homeScore: 1, awayScore: 1, status: "Endstand" },
-            { home: "PSV Eindhoven", away: "Schachtar Donezk", homeScore: 1, awayScore: 1, status: "Endstand" },
-            { home: "FC Bayern München", away: "FK Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand" },
-            { home: "Slavia Prag", away: "RC Lens", homeScore: 2, awayScore: 3, status: "Endstand" },
-            { home: "Como 1907", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand" },
-            { home: "Manchester United", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand" }
-        ];
-
-        // Offizielle Tabelle nach Spieltag 1
-        const standings = [
-            { pos: 1, team: "Paris Saint-Germain", p: 1, gf: 6, ga: 1, pts: 3 },
-            { pos: 2, team: "FC Bayern München", p: 1, gf: 5, ga: 0, pts: 3 },
-            { pos: 3, team: "FC Barcelona", p: 1, gf: 5, ga: 1, pts: 3 },
-            { pos: 4, team: "Manchester United", p: 1, gf: 4, ga: 0, pts: 3 },
-            { pos: 5, team: "Como 1907", p: 1, gf: 4, ga: 1, pts: 3 },
-            { pos: 6, team: "VfB Stuttgart", p: 1, gf: 3, ga: 1, pts: 3 },
-            { pos: 7, team: "Sporting CP", p: 1, gf: 3, ga: 1, pts: 3 },
-            { pos: 8, team: "Manchester City", p: 1, gf: 2, ga: 0, pts: 3 },
-            { pos: 9, team: "Aston Villa", p: 1, gf: 3, ga: 2, pts: 3 },
-            { pos: 10, team: "RC Lens", p: 1, gf: 3, ga: 2, pts: 3 },
-            { pos: 11, team: "Real Betis Balompié", p: 1, gf: 3, ga: 2, pts: 3 },
-            { pos: 12, team: "Borussia Dortmund", p: 1, gf: 3, ga: 2, pts: 3 },
-            { pos: 13, team: "FC Liverpool", p: 1, gf: 2, ga: 1, pts: 3 },
-            { pos: 14, team: "Real Madrid", p: 1, gf: 2, ga: 1, pts: 3 },
-            { pos: 15, team: "FC Arsenal", p: 1, gf: 1, ga: 0, pts: 3 },
-            { pos: 16, team: "AEK Athen", p: 1, gf: 1, ga: 0, pts: 3 },
-            { pos: 17, team: "AS Rom", p: 1, gf: 1, ga: 1, pts: 1 },
-            { pos: 18, team: "Schachtar Donezk", p: 1, gf: 1, ga: 1, pts: 1 },
-            { pos: 19, team: "PSV Eindhoven", p: 1, gf: 1, ga: 1, pts: 1 },
-            { pos: 20, team: "Fenerbahçe Istanbul", p: 1, gf: 1, ga: 1, pts: 1 },
-            { pos: 21, team: "FC Villarreal", p: 1, gf: 2, ga: 3, pts: 0 },
-            { pos: 22, team: "LOSC Lille", p: 1, gf: 2, ga: 3, pts: 0 },
-            { pos: 23, team: "Slavia Prag", p: 1, gf: 2, ga: 3, pts: 0 },
-            { pos: 24, team: "FC Brügge", p: 1, gf: 2, ga: 3, pts: 0 },
-            { pos: 25, team: "Inter Mailand", p: 1, gf: 1, ga: 2, pts: 0 },
-            { pos: 26, team: "Atlético Madrid", p: 1, gf: 1, ga: 2, pts: 0 },
-            { pos: 27, team: "SSC Neapel", p: 1, gf: 0, ga: 1, pts: 0 },
-            { pos: 28, team: "LASK", p: 1, gf: 0, ga: 1, pts: 0 },
-            { pos: 29, team: "Viking Stavanger", p: 1, gf: 1, ga: 3, pts: 0 },
-            { pos: 30, team: "Galatasaray Istanbul", p: 1, gf: 1, ga: 3, pts: 0 },
-            { pos: 31, team: "FC Porto", p: 1, gf: 0, ga: 2, pts: 0 },
-            { pos: 32, team: "RB Leipzig", p: 1, gf: 1, ga: 4, pts: 0 },
-            { pos: 33, team: "Feyenoord Rotterdam", p: 1, gf: 1, ga: 5, pts: 0 },
-            { pos: 34, team: "Sabah FK", p: 1, gf: 0, ga: 4, pts: 0 },
-            { pos: 35, team: "ŠK Slovan Bratislava", p: 1, gf: 1, ga: 6, pts: 0 },
-            { pos: 36, team: "FK Bodø/Glimt", p: 1, gf: 0, ga: 5, pts: 0 }
-        ];
-
-        function renderMatches() {
-            const container = document.getElementById('matches-container');
-            container.innerHTML = matches.map(m => `
-                <div class="match-card">
-                    <div class="team">
-                        <img src="${logos[m.home] || ''}" alt="${m.home}">
-                        <span>${m.home}</span>
-                    </div>
-                    <div class="score-box">
-                        <div class="score">${m.homeScore} : ${m.awayScore}</div>
-                        <div class="status">${m.status}</div>
-                    </div>
-                    <div class="team away">
-                        <span>${m.away}</span>
-                        <img src="${logos[m.away] || ''}" alt="${m.away}">
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderStandings() {
-            const container = document.getElementById('standings-container');
-            container.innerHTML = standings.map(s => `
-                <tr>
-                    <td class="pos">${s.pos}</td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <img src="${logos[s.team] || ''}" style="width: 18px; height: 18px; object-fit: contain;">
-                            <span>${s.team}</span>
-                        </div>
-                    </td>
-                    <td style="text-align: center;">${s.p}</td>
-                    <td style="text-align: center;">${s.gf}:${s.ga}</td>
-                    <td class="pts">${s.pts}</td>
-                </tr>
-            `).join('');
-        }
-
-        function switchView(view) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-            
-            if (view === 'spiele') {
-                event.target.classList.add('active');
-                document.getElementById('spiele-view').classList.add('style', 'active').classList.add('active');
+            if (tab === 'games') {
+                document.querySelector('.main-tabs .tab-btn:nth-child(1)').classList.add('active');
+                document.getElementById('section-games').classList.add('active');
             } else {
-                event.target.classList.add('active');
-                document.getElementById('tabelle-view').classList.add('active');
+                document.querySelector('.main-tabs .tab-btn:nth-child(2)').classList.add('active');
+                document.getElementById('section-table').classList.add('active');
             }
         }
 
-        // Init beim Laden
-        renderMatches();
-        renderStandings();
+        function filterGames(filter) {
+            document.querySelectorAll('.sub-tabs .sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.match-card');
+            cards.forEach(card => {
+                const status = card.getAttribute('data-status');
+                if (filter === 'all') {
+                    card.style.display = 'flex';
+                } else if (filter === 'finished' && status === 'finished') {
+                    card.style.display = 'flex';
+                } else if (filter === 'live-upcoming' && (status === 'live' || status === 'upcoming')) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 </html>
