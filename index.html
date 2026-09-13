@@ -313,6 +313,9 @@
     </div>
 
     <script>
+        // Hier deinen API-Schlüssel eintragen
+        const API_KEY = "DEIN_API_SCHLUESSEL_HIER_EINTRAGEN";
+
         const teamLogos = {
             "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
             "Bayern": "https://images.fotmob.com/image_resources/logo/teamlogo/9823.png",
@@ -547,8 +550,13 @@
 
         async function fetchLiveScores() {
             try {
-                // Automatischer Abruf echter Live-Daten via öffentlicher Live-Schnittstelle
-                const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard');
+                // Automatischer Abruf echter Live-Daten via öffentlicher Live-Schnittstelle mit integriertem API-Schlüssel
+                const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard', {
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'X-API-Key': API_KEY
+                    }
+                });
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.events) {
