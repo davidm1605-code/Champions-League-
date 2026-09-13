@@ -468,7 +468,7 @@
                     { home: "Inter", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
                     { home: "Sporting", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
                     { home: "At. Madrid", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
-                    { home: "Bayern", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false }, // Additional placeholder match
+                    { home: "Bayern", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false },
                     { home: "FC Brügge", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false }
                 ]
             },
@@ -545,8 +545,46 @@
 
         let currentFilter = 'all';
 
-        function fetchLiveScores() {
+        async function fetchLiveScores() {
             try {
+                // Automatischer Abruf echter Live-Daten via öffentlicher Live-Schnittstelle
+                const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.events) {
+                        data.events.forEach(event => {
+                            const competition = event.competitions[0];
+                            const homeTeamName = competition.competitors.find(c => c.homeAway === 'home').team.shortDisplayName;
+                            const awayTeamName = competition.competitors.find(c => c.homeAway === 'away').team.shortDisplayName;
+                            const homeScore = parseInt(competition.competitors.find(c => c.homeAway === 'home').score);
+                            const awayScore = parseInt(competition.competitors.find(c => c.homeAway === 'away').score);
+                            const statusType = competition.status.type.state; // 'pre', 'in', 'post'
+                            const detailMinutes = competition.status.displayClock;
+
+                            // Abgleich mit dem bestehenden Spielplan-Array
+                            matchdays.forEach(md => {
+                                md.matches.forEach(m => {
+                                    // Toleranter Namensabgleich
+                                    if (m.home.toLowerCase().includes(homeTeamName.toLowerCase().substring(0, 3)) && 
+                                        m.away.toLowerCase().includes(awayTeamName.toLowerCase().substring(0, 3))) {
+                                        
+                                        if (!isNaN(homeScore)) m.homeScore = homeScore;
+                                        if (!isNaN(awayScore)) m.awayScore = awayScore;
+
+                                        if (statusType === 'in') {
+                                            m.live = true;
+                                            m.liveTime = detailMinutes ? detailMinutes + "'" : '';
+                                            m.status = "LIVE";
+                                        } else if (statusType === 'post') {
+                                            m.live = false;
+                                            m.status = "Endstand";
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                }
                 document.getElementById('clock').innerText = new Date().toLocaleTimeString();
             } catch (error) {
                 console.error("Fehler beim Abrufen der Live-Daten:", error);
@@ -565,7 +603,7 @@
                         }
                     });
 
-                    if (m.homeScore !== null && m.awayScore !== null) {
+                    if (m.homeScore !== null && m.awayScore !== null && !m.live) {
                         const hTeam = tableMap[m.home];
                         const aTeam = tableMap[m.away];
 
@@ -617,8 +655,8 @@
             return standingsArr;
         }
 
-        function renderApp() {
-            fetchLiveScores();
+        async function renderApp() {
+            await fetchLiveScores();
 
             const wrapper = document.getElementById('matchdays-wrapper');
             wrapper.innerHTML = '';
@@ -632,7 +670,7 @@
                 
                 md.matches.forEach(m => {
                     const hasResult = (m.homeScore !== null && m.awayScore !== null);
-                    const isFinished = hasResult && !m.live;
+                    const isFinished = hasResult && !m.live && m.status === "Endstand";
                     const isUpcoming = !hasResult || m.live;
 
                     let showCard = (currentFilter === 'all') || 
