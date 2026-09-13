@@ -1,415 +1,453 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UEFA Champions League</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background-color: #0b0f19;
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-    }
-    .app-container {
-      width: 100%;
-      max-width: 480px;
-    }
-    h1 {
-      text-align: center;
-      color: #00a8ff;
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-    /* Haupt-Tabs */
-    .main-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      background-color: #161c2e;
-      color: #a0aec0;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .tab-btn.active {
-      background-color: #00a8ff;
-      color: #000000;
-    }
-    /* Statusleiste */
-    .status-bar {
-      text-align: center;
-      font-size: 0.75rem;
-      color: #718096;
-      margin-bottom: 14px;
-    }
-    /* Filter Buttons */
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .filter-btn {
-      flex: 1;
-      padding: 6px 10px;
-      border: 1px solid #1a233a;
-      border-radius: 6px;
-      background-color: #121826;
-      color: #a0aec0;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .filter-btn.active {
-      border-color: #00a8ff;
-      color: #00a8ff;
-      background-color: #121d33;
-    }
-    /* Match Card Standby */
-    .match-card {
-      background-color: #121826;
-      border: 1px solid #1a233a;
-      border-radius: 10px;
-      padding: 12px 14px;
-      margin-bottom: 12px;
-      transition: all 0.2s ease;
-    }
-    /* LIVE MATCH STYLING (Roter Rahmen + Leuchten) */
-    .match-card.is-live {
-      border: 2px solid #ff3b30;
-      box-shadow: 0 0 10px rgba(255, 59, 48, 0.3);
-      background-color: #1a121d;
-    }
-    .match-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: #718096;
-      margin-bottom: 10px;
-    }
-    .status-badge {
-      font-weight: bold;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .status-badge.beendet {
-      color: #718096;
-      background-color: #1a233a;
-    }
-    /* Blinken für Live Badges */
-    .status-badge.live-status {
-      color: #ffffff;
-      background-color: #ff3b30;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UEFA Champions League Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --text-color: #ffffff;
+            --accent-color: #0084ff;
+            --live-color: #ff3d00;
+            --border-color: #222d42;
+            --text-secondary: #8c9ba5;
+        }
 
-    .match-body {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .teams-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-    .team-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .team-logo {
-      width: 22px;
-      height: 22px;
-      object-fit: contain;
-    }
-    .scores-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .score-box {
-      background-color: #0b0f19;
-      border: 1px solid #1a233a;
-      color: #00a8ff;
-      font-weight: bold;
-      width: 32px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      font-size: 0.95rem;
-    }
-    /* Live Treffer Hebel */
-    .match-card.is-live .score-box {
-      color: #ff3b30;
-      border-color: #ff3b30;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* Tabelle Styling */
-    .table-container {
-      background-color: #121826;
-      border: 1px solid #1a233a;
-      border-radius: 10px;
-      padding: 12px;
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.85rem;
-    }
-    th {
-      color: #00a8ff;
-      padding: 8px;
-      border-bottom: 1px solid #1a233a;
-    }
-    td {
-      padding: 10px 8px;
-      border-bottom: 1px solid #161c2e;
-      vertical-align: middle;
-    }
-    tr:last-child td {
-      border-bottom: none;
-    }
-    .rank-col {
-      color: #718096;
-      font-weight: bold;
-      width: 20px;
-    }
-    .team-col {
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .num-col {
-      text-align: right;
-      color: #00a8ff;
-      font-weight: bold;
-    }
-    .sp-col {
-      text-align: right;
-      color: #a0aec0;
-    }
-  </style>
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Nav Tab Styling */
+        .nav-tabs {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        /* Filter Pills */
+        .filter-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .filter-btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .filter-btn.active {
+            border-color: var(--accent-color);
+            color: #ffffff;
+            background: rgba(0, 132, 255, 0.15);
+        }
+
+        /* Match Card Styling */
+        .match-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .match-card.live-card {
+            border: 1.5px solid var(--live-color);
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0.4); }
+            70% { box-shadow: 0 0 0 8px rgba(255, 61, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0); }
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+
+        .status-badge.live {
+            background-color: var(--live-color);
+            color: #fff;
+        }
+
+        .status-badge.ft {
+            background-color: #334155;
+            color: #cbd5e1;
+        }
+
+        .teams-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .team-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .team-logo {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+        }
+
+        .team-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .score {
+            font-size: 1rem;
+            font-weight: 700;
+            background: #1e293b;
+            padding: 2px 8px;
+            border-radius: 6px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* Standings Table Styling */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        th {
+            color: var(--text-secondary);
+            padding: 8px 4px;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 10px 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .table-team {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .table-logo {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+
+        .text-center { text-align: center; }
+        .text-bold { font-weight: bold; }
+        .hidden { display: none; }
+        
+        .update-time {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="app-container">
-  <h1>UEFA Champions League</h1>
+    <div class="container">
+        <h1>UEFA Champions League</h1>
 
-  <!-- Haupt-Navigation -->
-  <div class="main-tabs">
-    <button class="tab-btn active" id="tabSpiele" onclick="switchMainTab('spiele')">⚽ Spiele</button>
-    <button class="tab-btn" id="tabTabelle" onclick="switchMainTab('tabelle')">📊 Tabelle</button>
-  </div>
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" id="tabSpiele" onclick="switchTab('spiele')">⚽ Spiele</button>
+            <button class="tab-btn" id="tabTabelle" onclick="switchTab('tabelle')">📊 Tabelle</button>
+        </div>
 
-  <div class="status-bar">
-    Live-Aktualisierung aktiv • Stand: <span id="clock">13:36:07</span>
-  </div>
+        <!-- Section: Spiele -->
+        <div id="sectionSpiele">
+            <div class="update-time">Live-Aktualisierung aktiv • Stand: <span id="clock">--:--:--</span></div>
 
-  <!-- BEREICH: SPIELE -->
-  <div id="viewSpiele">
-    <div class="filter-tabs">
-      <button class="filter-btn active" id="filterAlle" onclick="setFilter('alle')">Alle Spiele</button>
-      <button class="filter-btn" id="filterBeendet" onclick="setFilter('beendet')">Beendet</button>
-      <button class="filter-btn" id="filterLive" onclick="setFilter('live')">Kommende / Live</button>
+            <!-- Filter Buttons -->
+            <div class="filter-container">
+                <button class="filter-btn active" id="filterAlle" onclick="setFilter('alle')">Alle Spiele</button>
+                <button class="filter-btn" id="filterBeendet" onclick="setFilter('beendet')">Beendet</button>
+                <button class="filter-btn" id="filterLive" onclick="setFilter('live')">Kommende / Live</button>
+            </div>
+
+            <div id="matchesList"></div>
+        </div>
+
+        <!-- Section: Tabelle -->
+        <div id="sectionTabelle" class="hidden">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th class="text-center">Sp</th>
+                            <th class="text-center">TD</th>
+                            <th class="text-center">Pkt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standingsBody"></tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div id="matchesList"></div>
-  </div>
+    <script>
+        const matches = [
+            {
+                date: '13.10. • Beendet',
+                status: 'FT',
+                isLive: false,
+                home: 'Inter Mailand',
+                homeLogo: 'https://media.api-sports.io/football/teams/505.png',
+                homeScore: 2,
+                away: 'Arsenal',
+                awayLogo: 'https://media.api-sports.io/football/teams/42.png',
+                awayScore: 1
+            },
+            {
+                date: '13.10. • Anstoß',
+                status: '18:45',
+                isLive: false,
+                home: 'FC Lens',
+                homeLogo: 'https://media.api-sports.io/football/teams/116.png',
+                homeScore: '-',
+                away: 'Sporting CP',
+                awayLogo: 'https://media.api-sports.io/football/teams/228.png',
+                awayScore: '-'
+            },
+            {
+                date: '13.10. • Anstoß',
+                status: '21:00',
+                isLive: false,
+                home: 'Galatasaray',
+                homeLogo: 'https://media.api-sports.io/football/teams/645.png',
+                homeScore: '-',
+                away: 'FC Barcelona',
+                awayLogo: 'https://media.api-sports.io/football/teams/529.png',
+                awayScore: '-'
+            },
+            {
+                date: '13.10. • Anstoß',
+                status: '21:00',
+                isLive: false,
+                home: 'RB Leipzig',
+                homeLogo: 'https://media.api-sports.io/football/teams/173.png',
+                homeScore: '-',
+                away: 'PSV Eindhoven',
+                awayLogo: 'https://media.api-sports.io/football/teams/197.png',
+                awayScore: '-'
+            },
+            {
+                date: '13.10. • Anstoß',
+                status: '21:00',
+                isLive: false,
+                home: 'Bayern München',
+                homeLogo: 'https://media.api-sports.io/football/teams/157.png',
+                homeScore: '-',
+                away: 'Real Madrid',
+                awayLogo: 'https://media.api-sports.io/football/teams/541.png',
+                awayScore: '-'
+            }
+        ];
 
-  <!-- BEREICH: TABELLE -->
-  <div id="viewTabelle" style="display: none;">
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th class="rank-col">#</th>
-            <th>Team</th>
-            <th style="text-align: right;">Sp</th>
-            <th style="text-align: right;">Pkt</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"></tbody>
-      </table>
-    </div>
-  </div>
-</div>
+        const standings = [
+            { pos: 1, team: 'Inter Mailand', logo: 'https://media.api-sports.io/football/teams/505.png', sp: 4, td: '+7', pkt: 10 },
+            { pos: 2, team: 'FC Barcelona', logo: 'https://media.api-sports.io/football/teams/529.png', sp: 3, td: '+6', pkt: 9 },
+            { pos: 3, team: 'Bayern München', logo: 'https://media.api-sports.io/football/teams/157.png', sp: 3, td: '+5', pkt: 9 },
+            { pos: 4, team: 'Real Madrid', logo: 'https://media.api-sports.io/football/teams/541.png', sp: 3, td: '+3', pkt: 7 },
+            { pos: 5, team: 'Arsenal', logo: 'https://media.api-sports.io/football/teams/42.png', sp: 4, td: '+1', pkt: 6 },
+            { pos: 6, team: 'Sporting CP', logo: 'https://media.api-sports.io/football/teams/228.png', sp: 3, td: '0', pkt: 4 },
+            { pos: 7, team: 'RB Leipzig', logo: 'https://media.api-sports.io/football/teams/173.png', sp: 3, td: '-2', pkt: 3 },
+            { pos: 8, team: 'PSV Eindhoven', logo: 'https://media.api-sports.io/football/teams/197.png', sp: 3, td: '-3', pkt: 1 }
+        ];
 
-<script>
-  // Daten inklusive Logos, Live-Minuten und Nachspielzeiten
-  const matches = [
-    { 
-      home: "FC Brügge", homeLogo: "https://media.api-sports.io/football/teams/569.png",
-      away: "Aston Villa", awayLogo: "https://media.api-sports.io/football/teams/66.png",
-      scoreHome: 2, scoreAway: 3, status: "BEENDET", isLive: false, date: "08.09. • 18:45 Uhr" 
-    },
-    { 
-      home: "AEK Athen", homeLogo: "https://media.api-sports.io/football/teams/553.png",
-      away: "LASK", awayLogo: "https://media.api-sports.io/football/teams/1435.png",
-      scoreHome: 1, scoreAway: 0, status: "BEENDET", isLive: false, date: "08.09. • 18:45 Uhr" 
-    },
-    { 
-      home: "Inter Mailand", homeLogo: "https://media.api-sports.io/football/teams/505.png",
-      away: "Arsenal", awayLogo: "https://media.api-sports.io/football/teams/42.png",
-      scoreHome: 2, scoreAway: 1, status: "90+3'", isLive: true, date: "LIVE • 2. Halbzeit" 
-    },
-    { 
-      home: "FC Porto", homeLogo: "https://media.api-sports.io/football/teams/212.png",
-      away: "Manchester City", awayLogo: "https://media.api-sports.io/football/teams/50.png",
-      scoreHome: 0, scoreAway: 2, status: "BEENDET", isLive: false, date: "08.09. • 21:00 Uhr" 
-    },
-    { 
-      home: "FC Lens", homeLogo: "https://media.api-sports.io/football/teams/116.png",
-      away: "Sporting CP", awayLogo: "https://media.api-sports.io/football/teams/228.png",
-      scoreHome: "-", scoreAway: "-", status: "18:45", isLive: false, date: "13.10. • Anstoß" 
-    },
-    { 
-      home: "Galatasaray", homeLogo: "https://media.api-sports.io/football/teams/645.png",
-      away: "FC Barcelona", awayLogo: "https://media.api-sports.io/football/teams/529.png",
-      scoreHome: "-", scoreAway: "-", status: "21:00", isLive: false, date: "13.10. • Anstoß" 
-    },
-    { 
-      home: "RB Leipzig", homeLogo: "https://media.api-sports.io/football/teams/173.png",
-      away: "PSV Eindhoven", awayLogo: "https://media.api-sports.io/football/teams/197.png",
-      scoreHome: "-", scoreAway: "-", status: "21:00", isLive: false, date: "13.10. • Anstoß" 
-    },
-    { 
-      home: "Viking FK", homeLogo: "https://media.api-sports.io/football/teams/328.png",
-      away: "FC Bayern München", awayLogo: "https://media.api-sports.io/football/teams/157.png",
-      scoreHome: "-", scoreAway: "-", status: "21:00", isLive: false, date: "13.10. • Anstoß" 
-    }
-  ];
+        let currentFilter = 'alle';
 
-  const standings = [
-    { rank: 1, team: "Paris St. Germain", logo: "https://media.api-sports.io/football/teams/85.png", sp: 1, pkt: 3 },
-    { rank: 2, team: "FC Bayern München", logo: "https://media.api-sports.io/football/teams/157.png", sp: 1, pkt: 3 },
-    { rank: 3, team: "FC Barcelona", logo: "https://media.api-sports.io/football/teams/529.png", sp: 1, pkt: 3 },
-    { rank: 4, team: "Manchester United FC", logo: "https://media.api-sports.io/football/teams/33.png", sp: 1, pkt: 3 },
-    { rank: 5, team: "Como 1907", logo: "https://media.api-sports.io/football/teams/880.png", sp: 1, pkt: 3 },
-    { rank: 6, team: "Sporting CP", logo: "https://media.api-sports.io/football/teams/228.png", sp: 1, pkt: 3 },
-    { rank: 7, team: "Borussia Dortmund", logo: "https://media.api-sports.io/football/teams/165.png", sp: 1, pkt: 3 },
-    { rank: 8, team: "FC Lens", logo: "https://media.api-sports.io/football/teams/116.png", sp: 1, pkt: 3 }
-  ];
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-  let currentFilter = 'alle';
+        function switchTab(tab) {
+            if (tab === 'spiele') {
+                document.getElementById('sectionSpiele').classList.remove('hidden');
+                document.getElementById('sectionTabelle').classList.add('hidden');
+                document.getElementById('tabSpiele').classList.add('active');
+                document.getElementById('tabTabelle').classList.remove('active');
+            } else {
+                document.getElementById('sectionSpiele').classList.add('hidden');
+                document.getElementById('sectionTabelle').classList.remove('hidden');
+                document.getElementById('tabSpiele').classList.remove('active');
+                document.getElementById('tabTabelle').classList.add('active');
+                renderStandings();
+            }
+        }
 
-  function switchMainTab(tab) {
-    document.getElementById('tabSpiele').classList.toggle('active', tab === 'spiele');
-    document.getElementById('tabTabelle').classList.toggle('active', tab === 'tabelle');
-    document.getElementById('viewSpiele').style.display = tab === 'spiele' ? 'block' : 'none';
-    document.getElementById('viewTabelle').style.display = tab === 'tabelle' ? 'block' : 'none';
-  }
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.getElementById('filterAlle').classList.toggle('active', filter === 'alle');
+            document.getElementById('filterBeendet').classList.toggle('active', filter === 'beendet');
+            document.getElementById('filterLive').classList.toggle('active', filter === 'live');
+            renderMatches();
+        }
 
-  function setFilter(filter) {
-    currentFilter = filter;
-    document.getElementById('filterAlle').classList.toggle('active', filter === 'alle');
-    document.getElementById('filterBeendet').classList.toggle('active', filter === 'beendet');
-    document.getElementById('filterLive').classList.toggle('active', filter === 'live');
-    renderMatches();
-  }
+        function renderMatches() {
+            const list = document.getElementById('matchesList');
+            list.innerHTML = '';
 
-  function renderMatches() {
-    const list = document.getElementById('matchesList');
-    list.innerHTML = '';
+            const filtered = matches.filter(m => {
+                if (currentFilter === 'beendet') return m.status === 'FT';
+                if (currentFilter === 'live') return m.status !== 'FT';
+                return true;
+            });
 
-    const filtered = matches.filter(m => {
-      if (currentFilter === 'beendet') return m.status === 'BEENDET';
-      if (currentFilter === 'live') return m.isLive || m.scoreHome === '-';
-      return true;
-    });
+            filtered.forEach(m => {
+                const card = document.createElement('div');
+                card.className = `match-card ${m.isLive ? 'live-card' : ''}`;
 
-    filtered.forEach(m => {
-      const card = document.createElement('div');
-      card.className = `match-card ${m.isLive ? 'is-live' : ''}`;
+                const badgeClass = m.isLive ? 'live-status' : 'ft';
 
-      const badgeClass = m.isLive ? 'live-status' : (m.status === 'BEENDET' ? 'beendet' : '');
+                card.innerHTML = `
+                    <div class="match-header">
+                        <span>${m.date}</span>
+                        <span class="status-badge ${badgeClass}">${m.status}</span>
+                    </div>
+                    <div class="match-body">
+                        <div class="teams-list">
+                            <div class="team-row">
+                                <div class="team-info">
+                                    <img src="${m.homeLogo}" class="team-logo" alt="${m.home}">
+                                    <span class="team-name">${m.home}</span>
+                                </div>
+                                <span class="score">${m.homeScore}</span>
+                            </div>
+                            <div class="team-row">
+                                <div class="team-info">
+                                    <img src="${m.awayLogo}" class="team-logo" alt="${m.away}">
+                                    <span class="team-name">${m.away}</span>
+                                </div>
+                                <span class="score">${m.awayScore}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
 
-      card.innerHTML = `
-        <div class="match-header">
-          <span>${m.date}</span>
-          <span class="status-badge ${badgeClass}">${m.isLive ? 'LIVE ' + m.status : m.status}</span>
-        </div>
-        <div class="match-body">
-          <div class="teams-list">
-            <div class="team-item">
-              <img class="team-logo" src="${m.homeLogo}" alt="${m.home}">
-              <span>${m.home}</span>
-            </div>
-            <div class="team-item">
-              <img class="team-logo" src="${m.awayLogo}" alt="${m.away}">
-              <span>${m.away}</span>
-            </div>
-          </div>
-          <div class="scores-list">
-            <div class="score-box">${m.scoreHome}</div>
-            <div class="score-box">${m.scoreAway}</div>
-          </div>
-        </div>
-      `;
-      list.appendChild(card);
-    });
-  }
+        function renderStandings() {
+            const body = document.getElementById('standingsBody');
+            body.innerHTML = '';
 
-  function renderTable() {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-    standings.forEach(s => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="rank-col">${s.rank}</td>
-        <td>
-          <div class="team-col">
-            <img class="team-logo" src="${s.logo}" alt="${s.team}">
-            <span>${s.team}</span>
-          </div>
-        </td>
-        <td class="sp-col">${s.sp}</td>
-        <td class="num-col">${s.pkt}</td>
-      `;
-      tbody.appendChild(row);
-    });
-  }
+            standings.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-bold">${row.pos}</td>
+                    <td>
+                        <div class="table-team">
+                            <img src="${row.logo}" class="table-logo" alt="${row.team}">
+                            <span>${row.team}</span>
+                        </div>
+                    </td>
+                    <td class="text-center">${row.sp}</td>
+                    <td class="text-center">${row.td}</td>
+                    <td class="text-center text-bold">${row.pkt}</td>
+                `;
+                body.appendChild(tr);
+            });
+        }
 
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
-  }
-
-  setInterval(updateClock, 1000);
-  updateClock();
-  renderMatches();
-  renderTable();
-</script>
-
+        // Initiale Darstellung
+        renderMatches();
+    </script>
 </body>
 </html>
