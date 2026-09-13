@@ -256,71 +256,130 @@
 </div>
 
 <script>
-// Exakte Logo-Zuweisung für alle 36 aktuellen Champions-League-Teams
+// Exakte Logo-Zuweisung gemäß Screenshots
 const logos = {
-  "Real Madrid": "https://crests.football-data.org/86.png",
-  "Manchester City": "https://crests.football-data.org/65.png",
-  "Bayern München": "https://crests.football-data.org/5.png",
-  "Paris Saint-Germain": "https://crests.football-data.org/524.png",
-  "FC Liverpool": "https://crests.football-data.org/64.png",
-  "Inter Mailand": "https://crests.football-data.org/108.png",
-  "Borussia Dortmund": "https://crests.football-data.org/4.png",
-  "RB Leipzig": "https://crests.football-data.org/721.png",
-  "FC Barcelona": "https://crests.football-data.org/81.png",
-  "Bayer Leverkusen": "https://crests.football-data.org/3.png",
-  "Atlético Madrid": "https://crests.football-data.org/78.png",
-  "Atalanta Bergamo": "https://crests.football-data.org/102.png",
-  "FC Juventus": "https://crests.football-data.org/109.png",
-  "Benfica Lissabon": "https://crests.football-data.org/1903.png",
-  "FC Arsenal": "https://crests.football-data.org/57.png",
-  "FC Brügge": "https://crests.football-data.org/609.png",
-  "Schachtar Donezk": "https://crests.football-data.org/558.png",
-  "AC Mailand": "https://crests.football-data.org/98.png",
-  "Feyenoord Rotterdam": "https://crests.football-data.org/675.png",
-  "Sporting Lissabon": "https://crests.football-data.org/498.png",
-  "PSV Eindhoven": "https://crests.football-data.org/674.png",
-  "Dinamo Zagreb": "https://crests.football-data.org/758.png",
+  "Inter": "https://crests.football-data.org/108.png",
+  "Dortmund": "https://crests.football-data.org/4.png",
+  "Villarreal": "https://crests.football-data.org/94.png",
+  "LOSC": "https://crests.football-data.org/521.png",
+  "Betis": "https://crests.football-data.org/90.png",
+  "Barcelona": "https://crests.football-data.org/81.png",
+  "Feyenoord": "https://crests.football-data.org/675.png",
   "VfB Stuttgart": "https://crests.football-data.org/10.png",
-  "FC Girona": "https://crests.football-data.org/298.png",
-  "Celtic Glasgow": "https://crests.football-data.org/346.png",
-  "AS Monaco": "https://crests.football-data.org/548.png",
-  "Aston Villa": "https://crests.football-data.org/58.png",
-  "FC Bologna": "https://crests.football-data.org/102.png",
-  "Stade Brest": "https://crests.football-data.org/512.png",
-  "Sparta Prag": "https://crests.football-data.org/471.png",
-  "Young Boys Bern": "https://crests.football-data.org/1871.png",
-  "Roter Stern Belgrad": "https://crests.football-data.org/675.png",
+  "Viking": "https://crests.football-data.org/11317.png",
+  "Neapel": "https://crests.football-data.org/113.png",
+  "Arsenal": "https://crests.football-data.org/57.png",
+  "Liverpool": "https://crests.football-data.org/64.png",
+  "Atlético Madrid": "https://crests.football-data.org/78.png",
+  "PSG": "https://crests.football-data.org/524.png",
   "Slovan Bratislava": "https://crests.football-data.org/1876.png",
-  "Lille OSC": "https://crests.football-data.org/521.png",
-  "FC Salzburg": "https://crests.football-data.org/1877.png",
-  "Sturm Graz": "https://crests.football-data.org/2021.png"
+  "Sporting": "https://crests.football-data.org/498.png",
+  "Galatasaray": "https://crests.football-data.org/610.png",
+  "Fenerbahçe": "https://crests.football-data.org/617.png",
+  "Roma": "https://crests.football-data.org/100.png",
+  "PSV Eindhoven": "https://crests.football-data.org/674.png",
+  "Donezk": "https://crests.football-data.org/558.png",
+  "Bayern": "https://crests.football-data.org/5.png",
+  "Bodo/Glimt": "https://crests.football-data.org/623.png",
+  "Slavia Prag": "https://crests.football-data.org/471.png",
+  "Lens": "https://crests.football-data.org/546.png",
+  "Como": "https://crests.football-data.org/1126.png",
+  "RB Leipzig": "https://crests.football-data.org/721.png",
+  "ManUnited": "https://crests.football-data.org/66.png",
+  "Sabah FK": "https://crests.football-data.org/8395.png",
+  "FC Brügge": "https://crests.football-data.org/609.png",
+  "Aston Villa": "https://crests.football-data.org/58.png",
+  "ASK": "https://crests.football-data.org/412.png",
+  "LASK": "https://crests.football-data.org/412.png",
+  "FC Porto": "https://crests.football-data.org/503.png",
+  "Man City": "https://crests.football-data.org/65.png",
+  "Real Madrid": "https://crests.football-data.org/86.png",
+  "Rayo": "https://crests.football-data.org/79.png"
 };
 
 function getLogo(teamName) {
   return logos[teamName] || "https://crests.football-data.org/placeholder.png";
 }
 
-const allTeams = Object.keys(logos);
+const allTeams = [
+  "PSG", "Bayern", "Barcelona", "ManUnited", "Como", "Sporting", "VfB Stuttgart", 
+  "Man City", "Aston Villa", "Betis", "Lens", "Dortmund", "Liverpool", "Real Madrid", 
+  "Arsenal", "ASK", "Donezk", "Roma", "Fenerbahçe", "PSV Eindhoven", "Villarreal", 
+  "FC Brügge", "LOSC", "Slavia Prag", "Inter", "Atlético Madrid", "Neapel", "LASK", 
+  "Viking", "Galatasaray", "FC Porto", "RB Leipzig", "Feyenoord", "Sabah FK", "Slovan Bratislava", "Bodo/Glimt"
+];
 
-// Vollständiger Spielplan über 8 Spieltage mit Status ('finished', 'live', 'upcoming')
+// Exakte Spieldaten exakt nach deinen Screenshots für Spieltag 1 und Spieltag 2
 const schedule = {
   1: [
-    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00", status: "finished", homeScore: 9, awayScore: 2 },
-    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
-    { home: "AC Mailand", away: "FC Liverpool", date: "16.09", time: "21:00", status: "finished", homeScore: 1, awayScore: 3 },
-    { home: "Manchester City", away: "Inter Mailand", date: "Heute", time: "21:00", status: "live", homeScore: 1, awayScore: 1, minute: "45'+3'" },
-    { home: "Paris Saint-Germain", away: "FC Girona", date: "17.09", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
-    { home: "Borussia Dortmund", away: "FC Brügge", date: "17.09", time: "21:00", status: "upcoming", homeScore: null, awayScore: null }
+    { home: "FC Brügge", away: "Aston Villa", date: "16.09", time: "21:00", status: "finished", homeScore: 2, awayScore: 3 },
+    { home: "ASK", away: "LASK", date: "16.09", time: "21:00", status: "finished", homeScore: 1, awayScore: 0 },
+    { home: "FC Porto", away: "Man City", date: "16.09", time: "21:00", status: "finished", homeScore: 0, awayScore: 2 },
+    { home: "Real Madrid", away: "Inter", date: "16.09", time: "21:00", status: "finished", homeScore: 2, awayScore: 1 },
+    { home: "Dortmund", away: "Villarreal", date: "16.09", time: "21:00", status: "finished", homeScore: 3, awayScore: 2 },
+    { home: "LOSC", away: "Betis", date: "16.09", time: "21:00", status: "finished", homeScore: 2, awayScore: 3 },
+    { home: "Barcelona", away: "Feyenoord", date: "16.09", time: "21:00", status: "finished", homeScore: 5, awayScore: 1 },
+    { home: "VfB Stuttgart", away: "Viking", date: "16.09", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
+    { home: "Neapel", away: "Arsenal", date: "16.09", time: "21:00", status: "finished", homeScore: 0, awayScore: 1 },
+    { home: "Liverpool", away: "Atlético Madrid", date: "16.09", time: "21:00", status: "finished", homeScore: 2, awayScore: 1 },
+    { home: "PSG", away: "Slovan Bratislava", date: "16.09", time: "21:00", status: "finished", homeScore: 6, awayScore: 1 },
+    { home: "Sporting", away: "Galatasaray", date: "16.09", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
+    { home: "Fenerbahçe", away: "Roma", date: "16.09", time: "21:00", status: "finished", homeScore: 1, awayScore: 1 },
+    { home: "PSV Eindhoven", away: "Donezk", date: "16.09", time: "21:00", status: "finished", homeScore: 1, awayScore: 1 },
+    { home: "Bayern", away: "Bodo/Glimt", date: "16.09", time: "21:00", status: "finished", homeScore: 5, awayScore: 0 },
+    { home: "Slavia Prag", away: "Lens", date: "16.09", time: "21:00", status: "finished", homeScore: 2, awayScore: 3 },
+    { home: "Como", away: "RB Leipzig", date: "16.09", time: "21:00", status: "finished", homeScore: 4, awayScore: 1 },
+    { home: "ManUnited", away: "Sabah FK", date: "16.09", time: "21:00", status: "finished", homeScore: 4, awayScore: 0 }
   ],
   2: [
-    { home: "FC Salzburg", away: "Bayer Leverkusen", date: "01.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
-    { home: "Sturm Graz", away: "FC Bruges", date: "02.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null }
+    { home: "Inter", away: "Dortmund", date: "01.10", time: "21:00", status: "finished", homeScore: 1, awayScore: 3 },
+    { home: "Dortmund", away: "Villarreal", date: "01.10", time: "21:00", status: "finished", homeScore: 3, awayScore: 2 },
+    { home: "LOSC", away: "Betis", date: "01.10", time: "21:00", status: "finished", homeScore: 2, awayScore: 3 },
+    { home: "Barcelona", away: "Feyenoord", date: "01.10", time: "21:00", status: "finished", homeScore: 5, awayScore: 1 },
+    { home: "VfB Stuttgart", away: "Viking", date: "01.10", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
+    { home: "Neapel", away: "Arsenal", date: "01.10", time: "21:00", status: "finished", homeScore: 0, awayScore: 1 },
+    { home: "Liverpool", away: "Atlético Madrid", date: "01.10", time: "21:00", status: "finished", homeScore: 2, awayScore: 1 },
+    { home: "PSG", away: "Slovan Bratislava", date: "01.10", time: "21:00", status: "finished", homeScore: 6, awayScore: 1 },
+    { home: "Sporting", away: "Galatasaray", date: "01.10", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
+    { home: "Fenerbahçe", away: "Roma", date: "01.10", time: "21:00", status: "finished", homeScore: 1, awayScore: 1 },
+    { home: "PSV Eindhoven", away: "Donezk", date: "01.10", time: "21:00", status: "finished", homeScore: 1, awayScore: 1 },
+    { home: "Bayern", away: "Bodo/Glimt", date: "01.10", time: "21:00", status: "finished", homeScore: 5, awayScore: 0 },
+    { home: "Slavia Prag", away: "Lens", date: "01.10", time: "21:00", status: "finished", homeScore: 2, awayScore: 3 },
+    { home: "Como", away: "RB Leipzig", date: "01.10", time: "21:00", status: "finished", homeScore: 4, awayScore: 1 },
+    { home: "ManUnited", away: "Sabah FK", date: "01.10", time: "21:00", status: "live", homeScore: 4, awayScore: 0, minute: "90'+4'" }
   ],
-  3: [],
+  3: [
+    { home: "Atlético Madrid", away: "ManUnited", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Villarreal", away: "Neapel", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Viking", away: "Rayo", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Inter", away: "FC Brügge", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "LASK", away: "Liverpool", date: "22.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Feyenoord", away: "Como", date: "22.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Donezk", away: "ASK", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Betis", away: "FC Porto", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Roma", away: "Real Madrid", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Slovan Bratislava", away: "VfB Stuttgart", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Aston Villa", away: "Fenerbahçe", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Man City", away: "PSG", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Bodo/Glimt", away: "Dortmund", date: "22.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Sabah FK", away: "Dortmund", date: "22.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Fenerbahçe", away: "Slavia Prag", date: "22.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null }
+  ],
   4: [],
   5: [],
   6: [],
-  7: [],
+  7: [
+    { home: "Lens", away: "Sporting", date: "21.01", time: "18:45", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Sabah FK", away: "Slavia Prag", date: "21.01", time: "18:45", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Galatasaray", away: "Barcelona", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "RB Leipzig", away: "PSV Eindhoven", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Arsenal", away: "LOSC", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Atlético Madrid", away: "ManUnited", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Villarreal", away: "Neapel", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Viking", away: "Bayern", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Inter", away: "FC Brügge", date: "21.01", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "LASK", away: "Liverpool", date: "21.01", time: "18:45", status: "upcoming", homeScore: null, awayScore: null }
+  ],
   8: []
 };
 
