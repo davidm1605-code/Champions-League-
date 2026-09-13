@@ -348,7 +348,6 @@
             "RB Leipzig": "https://images.fotmob.com/image_resources/logo/teamlogo/7980.png",
             "Feyenoord": "https://images.fotmob.com/image_resources/logo/teamlogo/10235.png",
             "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/8633.png",
-            "Red Bull Salzburg": "https://images.fotmob.com/image_resources/logo/teamlogo/5631.png",
             "Slovan Bratislava": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png",
             "Bodo/Glimt": "https://images.fotmob.com/image_resources/logo/teamlogo/6423.png"
         };
@@ -357,7 +356,7 @@
             return teamLogos[name] || `https://images.fotmob.com/image_resources/logo/teamlogo/8633.png`;
         }
 
-        // Alle Spieltage 1 bis 8 wieder vollständig integriert
+        // Alle Spieltage 1 bis 8 (Exakt die 36 offiziellen CL-Teilnehmer)
         let matchdays = [
             {
                 day: "Spieltag 1 von 8",
@@ -400,16 +399,16 @@
             {
                 day: "Spieltag 3 von 8",
                 matches: [
-                    { home: "Barcelona", away: "Olympiakos", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
+                    { home: "Barcelona", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
                     { home: "RB Leipzig", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
                     { home: "Real Madrid", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "22.10.", live: false },
-                    { home: "Juventus", away: "Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "22.10.", live: false }
+                    { home: "Inter", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "22.10.", live: false }
                 ]
             },
             {
                 day: "Spieltag 4 von 8",
                 matches: [
-                    { home: "Dortmund", away: "Sturm Graz", homeScore: null, awayScore: null, time: "21:00", date: "05.11.", live: false },
+                    { home: "Dortmund", away: "Como", homeScore: null, awayScore: null, time: "21:00", date: "05.11.", live: false },
                     { home: "Liverpool", away: "Bayer Leverkusen", homeScore: null, awayScore: null, time: "21:00", date: "05.11.", live: false },
                     { home: "PSG", away: "At. Madrid", homeScore: null, awayScore: null, time: "21:00", date: "06.11.", live: false },
                     { home: "Inter", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "06.11.", live: false }
@@ -418,37 +417,27 @@
             {
                 day: "Spieltag 5 von 8",
                 matches: [
-                    { home: "Bayer Leverkusen", away: "Salzburg", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false },
                     { home: "Bayern", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false },
-                    { home: "Liverpool", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "27.11.", live: false },
-                    { home: "Monaco", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "27.11.", live: false }
+                    { home: "Liverpool", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "27.11.", live: false }
                 ]
             },
             {
                 day: "Spieltag 6 von 8",
                 matches: [
                     { home: "At. Madrid", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "21:00", date: "10.12.", live: false },
-                    { home: "Dortmund", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "10.12.", live: false },
-                    { home: "Juventus", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "11.12.", live: false },
-                    { home: "Milan", away: "Roter Stern", homeScore: null, awayScore: null, time: "21:00", date: "11.12.", live: false }
+                    { home: "Dortmund", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "10.12.", live: false }
                 ]
             },
             {
                 day: "Spieltag 7 von 8",
                 matches: [
-                    { home: "Atalanta", away: "Sturm Graz", homeScore: null, awayScore: null, time: "21:00", date: "21.01.", live: false },
-                    { home: "Atletico", away: "Bayer Leverkusen", homeScore: null, awayScore: null, time: "21:00", date: "21.01.", live: false },
-                    { home: "Barcelona", away: "Atalanta", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false },
-                    { home: "Inter", away: "Monaco", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false }
+                    { home: "Barcelona", away: "Atalanta", homeScore: null, awayScore: null, time: "21:00", date: "21.01.", live: false }
                 ]
             },
             {
                 day: "Spieltag 8 von 8",
                 matches: [
-                    { home: "Sturm Graz", away: "Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false },
-                    { home: "Stuttgart", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false },
-                    { home: "PSV", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false },
-                    { home: "Young Boys", away: "Crvena Zvezda", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false }
+                    { home: "VfB Stuttgart", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "29.01.", live: false }
                 ]
             }
         ];
