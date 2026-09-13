@@ -351,9 +351,9 @@
             "Viking": "https://images.fotmob.com/image_resources/logo/teamlogo/6545.png",
             "Galatasaray": "https://images.fotmob.com/image_resources/logo/teamlogo/8529.png",
             "FC Porto": "https://images.fotmob.com/image_resources/logo/teamlogo/9781.png",
-            "RB Leipzig": "35385.webp",
+            "RB Leipzig": "https://images.fotmob.com/image_resources/logo/teamlogo/172070.png",
             "Feyenoord": "https://images.fotmob.com/image_resources/logo/teamlogo/10235.png",
-            "Sabah FK": "35386.png",
+            "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/276531.png",
             "Red Bull Salzburg": "https://images.fotmob.com/image_resources/logo/teamlogo/5631.png",
             "Slovan Bratislava": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png",
             "Bodo/Glimt": "https://images.fotmob.com/image_resources/logo/teamlogo/6423.png"
@@ -450,7 +450,7 @@
             }
         ];
 
-        // Tabellendaten
+        // Tabellendaten exakt nach Screenshot
         const standings = [
             { rank: 1, team: "PSG", played: 1, won: 1, drawn: 0, lost: 0, gf: 6, ga: 1, pts: 3, form: ['win'] },
             { rank: 2, team: "Bayern", played: 1, won: 1, drawn: 0, lost: 0, gf: 5, ga: 0, pts: 3, form: ['win'] },
@@ -471,7 +471,23 @@
             { rank: 17, team: "Donezk", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
             { rank: 17, team: "Roma", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
             { rank: 19, team: "Fenerbahce", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
-            { rank: 19, team: "PSV Eindhoven", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] }
+            { rank: 19, team: "PSV Eindhoven", played: 1, won: 0, drawn: 1, lost: 0, gf: 1, ga: 1, pts: 1, form: ['loss'] },
+            { rank: 21, team: "Villarreal", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
+            { rank: 22, team: "FC Brügge", played: 1, won: 1, drawn: 0, lost: 0, gf: 3, ga: 1, pts: 3, form: ['win'] },
+            { rank: 22, team: "LOSC", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
+            { rank: 22, team: "Slavia Prag", played: 1, won: 0, drawn: 0, lost: 1, gf: 2, ga: 3, pts: 0, form: ['loss'] },
+            { rank: 25, team: "Inter", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 2, pts: 0, form: ['loss'] },
+            { rank: 25, team: "At. Madrid", played: 1, won: 1, drawn: 0, lost: 0, gf: 3, ga: 2, pts: 3, form: ['win'] },
+            { rank: 27, team: "Neapel", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 1, pts: 0, form: ['loss'] },
+            { rank: 27, team: "LASK", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 1, pts: 0, form: ['loss'] },
+            { rank: 29, team: "Viking", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 3, pts: 0, form: ['loss'] },
+            { rank: 29, team: "Galatasaray", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 3, pts: 0, form: ['loss'] },
+            { rank: 31, team: "FC Porto", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 2, pts: 0, form: ['loss'] },
+            { rank: 32, team: "RB Leipzig", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 4, pts: 0, form: ['loss'] },
+            { rank: 33, team: "Feyenoord", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 5, pts: 0, form: ['loss'] },
+            { rank: 34, team: "Sabah FK", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 4, pts: 0, form: ['loss'] },
+            { rank: 35, team: "Slovan Bratislava", played: 1, won: 0, drawn: 0, lost: 1, gf: 1, ga: 6, pts: 0, form: ['loss'] },
+            { rank: 36, team: "Bodo/Glimt", played: 1, won: 0, drawn: 0, lost: 1, gf: 0, ga: 5, pts: 0, form: ['loss'] }
         ];
 
         // Aktueller aktiver Filter-Zustand fürs Rendern merken
@@ -496,7 +512,6 @@
                 
                 md.matches.forEach(m => {
                     const hasResult = (m.homeScore !== null && m.awayScore !== null);
-                    // Ein Spiel gilt als beendet, wenn ein Ergebnis vorliegt (und es nicht explizit als Live markiert ist)
                     const isFinished = hasResult && !m.live;
                     const isUpcoming = !hasResult || m.live;
 
@@ -535,8 +550,6 @@
                     `;
                 });
 
-                // Wenn in diesem Spieltag gar keine Partien zum Filter passen, können wir den ganzen Block ausblenden oder anzeigen.
-                // Hier blenden wir den Spieltages-Container aus, wenn keine Spiele darin sichtbar sind.
                 mdDiv.innerHTML = html;
                 if (visibleMatchCount === 0) {
                     mdDiv.style.display = 'none';
@@ -544,17 +557,17 @@
                 wrapper.appendChild(mdDiv);
             });
 
-            // Tabelle rendern
+            // Tabelle rendern (exakt nach definierter Reihenfolge im Array / Screenshot)
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             
-            standings.sort((a, b) => b.pts - a.pts || (b.gf - b.ga) - (a.gf - a.ga)).forEach((row, index) => {
+            standings.forEach((row) => {
                 const diff = row.gf - row.ga;
                 const diffStr = diff > 0 ? `+${diff}` : diff;
                 
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${index + 1}</td>
+                    <td>${row.rank}</td>
                     <td class="team-col">
                         <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:16px;height:16px;">
                         ${row.team}
