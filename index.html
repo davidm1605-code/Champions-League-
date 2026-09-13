@@ -96,7 +96,7 @@
       border-color: #8ab4f8;
     }
 
-    /* Match Cards im Google-Stil */
+    /* Match Cards */
     .match-list {
       display: flex;
       flex-direction: column;
@@ -256,11 +256,11 @@
 </div>
 
 <script>
-// Exakte Logos für die 36 aktuellen Champions-League-Teams
+// Exakte Logo-Zuweisung für alle 36 aktuellen Champions-League-Teams
 const logos = {
   "Real Madrid": "https://crests.football-data.org/86.png",
   "Manchester City": "https://crests.football-data.org/65.png",
-  "Bayern München": "https://media.api-sports.io/football/teams/157.png",
+  "Bayern München": "https://crests.football-data.org/5.png",
   "Paris Saint-Germain": "https://crests.football-data.org/524.png",
   "FC Liverpool": "https://crests.football-data.org/64.png",
   "Inter Mailand": "https://crests.football-data.org/108.png",
@@ -279,7 +279,7 @@ const logos = {
   "Feyenoord Rotterdam": "https://crests.football-data.org/675.png",
   "Sporting Lissabon": "https://crests.football-data.org/498.png",
   "PSV Eindhoven": "https://crests.football-data.org/674.png",
-  "Dinamo Zagreb": "https://media.api-sports.io/football/teams/758.png",
+  "Dinamo Zagreb": "https://crests.football-data.org/758.png",
   "VfB Stuttgart": "https://crests.football-data.org/10.png",
   "FC Girona": "https://crests.football-data.org/298.png",
   "Celtic Glasgow": "https://crests.football-data.org/346.png",
@@ -302,18 +302,20 @@ function getLogo(teamName) {
 
 const allTeams = Object.keys(logos);
 
-// Spielplan mit Status: 'finished' (Endstand), 'upcoming' (zukünftig), 'live' (läuft mit Minute & Nachspielzeit)
+// Vollständiger Spielplan über 8 Spieltage mit Status ('finished', 'live', 'upcoming')
 const schedule = {
   1: [
     { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00", status: "finished", homeScore: 9, awayScore: 2 },
     { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00", status: "finished", homeScore: 3, awayScore: 1 },
     { home: "AC Mailand", away: "FC Liverpool", date: "16.09", time: "21:00", status: "finished", homeScore: 1, awayScore: 3 },
-    // Beispiel für ein Live-Spiel mit Spielminute und Nachspielzeit:
     { home: "Manchester City", away: "Inter Mailand", date: "Heute", time: "21:00", status: "live", homeScore: 1, awayScore: 1, minute: "45'+3'" },
-    { home: "Paris Saint-Germain", away: "FC Girona", date: "Heute", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Paris Saint-Germain", away: "FC Girona", date: "17.09", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
     { home: "Borussia Dortmund", away: "FC Brügge", date: "17.09", time: "21:00", status: "upcoming", homeScore: null, awayScore: null }
   ],
-  2: [],
+  2: [
+    { home: "FC Salzburg", away: "Bayer Leverkusen", date: "01.10", time: "21:00", status: "upcoming", homeScore: null, awayScore: null },
+    { home: "Sturm Graz", away: "FC Bruges", date: "02.10", time: "18:45", status: "upcoming", homeScore: null, awayScore: null }
+  ],
   3: [],
   4: [],
   5: [],
@@ -360,7 +362,7 @@ function renderMatches() {
   
   const matches = schedule[currentDay] || [];
   if (matches.length === 0) {
-    container.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding: 20px;">Keine Spiele an diesem Spieltag.</div>`;
+    container.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding: 20px;">Keine Spiele an diesem Spieltag eingetragen.</div>`;
     return;
   }
   
@@ -405,7 +407,6 @@ function calculateTable() {
     stats[team] = { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 };
   });
 
-  // Alle gespielten und live Spiele einrechnen
   Object.values(schedule).forEach(dayMatches => {
     dayMatches.forEach(match => {
       if ((match.status === 'finished' || match.status === 'live') && match.homeScore !== null && match.awayScore !== null) {
