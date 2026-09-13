@@ -547,24 +547,33 @@
 
         async function fetchLiveScores() {
             try {
-                // Aufruf läuft nun über die eigene Netlify/Backend-Funktion (Proxy), die den API-Key sicher einbindet
                 const response = await fetch('/.netlify/functions/proxy');
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.events) {
                         data.events.forEach(event => {
                             const competition = event.competitions[0];
-                            const homeTeamName = competition.competitors.find(c => c.homeAway === 'home').team.shortDisplayName;
-                            const awayTeamName = competition.competitors.find(c => c.homeAway === 'away').team.shortDisplayName;
-                            const homeScore = parseInt(competition.competitors.find(c => c.homeAway === 'home').score);
-                            const awayScore = parseInt(competition.competitors.find(c => c.homeAway === 'away').score);
+                            const homeComp = competition.competitors.find(c => c.homeAway === 'home');
+                            const awayComp = competition.competitors.find(c => c.homeAway === 'away');
+                            
+                            if (!homeComp || !awayComp) return;
+
+                            const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name;
+                            const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name;
+                            const homeScore = parseInt(homeComp.score);
+                            const awayScore = parseInt(awayComp.score);
                             const statusType = competition.status.type.state; 
                             const detailMinutes = competition.status.displayClock;
 
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
-                                    if (m.home.toLowerCase().includes(homeTeamName.toLowerCase().substring(0, 3)) && 
-                                        m.away.toLowerCase().includes(awayTeamName.toLowerCase().substring(0, 3))) {
+                                    const matchHomeLower = m.home.toLowerCase();
+                                    const matchAwayLower = m.away.toLowerCase();
+                                    const apiHomeLower = homeTeamName.toLowerCase();
+                                    const apiAwayLower = awayTeamName.toLowerCase();
+
+                                    if ((matchHomeLower.includes(apiHomeLower) || apiHomeLower.includes(matchHomeLower)) && 
+                                        (matchAwayLower.includes(apiAwayLower) || apiAwayLower.includes(matchAwayLower))) {
                                         
                                         if (!isNaN(homeScore)) m.homeScore = homeScore;
                                         if (!isNaN(awayScore)) m.awayScore = awayScore;
