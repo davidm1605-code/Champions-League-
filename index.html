@@ -6,66 +6,103 @@ app = Flask(__name__)
 SPIELTAGE = {
     1: [
         {
-            "heim": "FC Brügge", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/b/b5/Club_Br%C3%BCgge_Logo.svg",
-            "gast": "Aston Villa", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/f/f9/Aston_Villa_FC.svg",
-            "tore_heim": 2, "tore_gast": 3, "status": "beendet", "zeit": "08.09. • 18:45 Uhr"
+            "heim": "FC Brügge",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/de/b/b5/Club_Br%C3%BCgge_Logo.svg",
+            "gast": "Aston Villa",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/f/f9/Aston_Villa_FC.svg",
+            "tore_heim": 2,
+            "tore_gast": 3,
+            "status": "beendet",
+            "zeit": "08.09. • 18:45 Uhr"
         },
         {
-            "heim": "AEK Athen", "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/e/e1/AEK_Athens_FC.svg",
-            "gast": "LASK", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/2/22/LASK_Logo.svg",
-            "tore_heim": 1, "tore_gast": 0, "status": "beendet", "zeit": "08.09. • 18:45 Uhr"
+            "heim": "AEK Athen",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/e/e6/AEK_Athens_FC.svg",
+            "gast": "LASK",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/2/22/LASK_Logo.svg",
+            "tore_heim": 1,
+            "tore_gast": 0,
+            "status": "beendet",
+            "zeit": "08.09. • 18:45 Uhr"
         },
         {
-            "heim": "FC Porto", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/f/f8/FC_Porto.svg",
-            "gast": "Man City", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/e/eb/Manchester_City_FC.svg",
-            "tore_heim": 0, "tore_gast": 2, "status": "beendet", "zeit": "08.09. • 21:00 Uhr"
+            "heim": "FC Porto",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/de/f/f8/FC_Porto.svg",
+            "gast": "Man City",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/e/eb/Manchester_City_FC_badge_%282016%29.svg",
+            "tore_heim": 0,
+            "tore_gast": 2,
+            "status": "beendet",
+            "zeit": "08.09. • 21:00 Uhr"
         },
         {
-            "heim": "Real Madrid", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/5/56/Real_Madrid_Logo.svg",
-            "gast": "Inter Mailand", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/0/05/Inter_Mailand.svg",
-            "tore_heim": 2, "tore_gast": 1, "status": "beendet", "zeit": "08.09. • 21:00 Uhr"
+            "heim": "Real Madrid",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/de/5/56/Real_Madrid_Logo.svg",
+            "gast": "Inter Mailand",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/0/05/Inter_Mailand.svg",
+            "tore_heim": 2,
+            "tore_gast": 1,
+            "status": "beendet",
+            "zeit": "08.09. • 21:00 Uhr"
         },
         {
-            "heim": "Dortmund", "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
-            "gast": "Villarreal", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/c/c5/Villarreal_CF_logo.svg",
-            "tore_heim": 3, "tore_gast": 2, "status": "beendet", "zeit": "08.09. • 21:00 Uhr"
+            "heim": "Dortmund",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
+            "gast": "Villarreal",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/c/c5/Villarreal_CF_logo.svg",
+            "tore_heim": 3,
+            "tore_gast": 2,
+            "status": "beendet",
+            "zeit": "08.09. • 21:00 Uhr"
         },
         {
-            "heim": "Lille OSC", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/c/c5/Lille_OSC_Logo_2018.svg",
-            "gast": "Real Betis", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/1/13/Real_Betis_Balompi%C3%A9.svg",
-            "tore_heim": 2, "tore_gast": 3, "status": "beendet", "zeit": "08.09. • 21:00 Uhr"
+            "heim": "Lille OSC",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/de/4/4e/Lille_OSC_Logo_2018.svg",
+            "gast": "Stuttgart",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/commons/e/eb/VfB_Stuttgart_1893_Logo.svg",
+            "tore_heim": 1,
+            "tore_gast": 1,
+            "status": "beendet",
+            "zeit": "08.09. • 21:00 Uhr"
         }
     ],
     2: [
         {
-            "heim": "Inter", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/0/05/Inter_Mailand.svg",
-            "gast": "Dortmund", "gast_logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg",
-            "tore_heim": 1, "tore_gast": 3, "status": "beendet", "zeit": "15.09. • 18:45 Uhr"
+            "heim": "FC Bayern",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_Logo_%282002%E2%80%932024%29.svg",
+            "gast": "FC Barcelona",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/4/47/FC_Barcelona_%28logo%29.svg",
+            "tore_heim": 0,
+            "tore_gast": 0,
+            "status": "kommend",
+            "zeit": "16.09. • 21:00 Uhr"
         },
         {
-            "heim": "Barcelona", "heim_logo": "https://upload.wikimedia.org/wikipedia/de/a/aa/FC_Barcelona.svg",
-            "gast": "Feyenoord", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/2/29/Feyenoord_Rotterdam_%28Logo%29.svg",
-            "tore_heim": 5, "tore_gast": 1, "status": "beendet", "zeit": "15.09. • 21:00 Uhr"
-        },
-        {
-            "heim": "Bayern", "heim_logo": "https://upload.wikimedia.org/wikipedia/commons/c/c5/FC_Bayern_M%C3%BCnchen_Logo_%282002%E2%80%932024%29.svg",
-            "gast": "Bodo/Glimt", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/3/36/FK_Bod%C3%B8-Glimt_Logo.svg",
-            "tore_heim": 4, "tore_gast": 0, "status": "live", "zeit": "LIVE", "minute": "90'+4'"
-        },
-        {
-            "heim": "Arsenal", "heim_logo": "https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg",
-            "gast": "Atlético Madrid", "gast_logo": "https://upload.wikimedia.org/wikipedia/de/f/f9/Atletico_Madrid_Logo_2024.svg",
-            "tore_heim": "-", "tore_gast": "-", "status": "kommend", "zeit": "16.09. • 21:00 Uhr"
+            "heim": "Arsenal",
+            "heim_logo": "https://upload.wikimedia.org/wikipedia/de/5/53/Arsenal_FC.svg",
+            "gast": "Paris SG",
+            "gast_logo": "https://upload.wikimedia.org/wikipedia/de/d/d4/Paris_Saint-Germain_Logo.svg",
+            "tore_heim": 0,
+            "tore_gast": 0,
+            "status": "kommend",
+            "zeit": "16.09. • 21:00 Uhr"
         }
     ]
 }
 
-TABELLE_DATEN = [
-    {"rang": 1, "team": "PSG", "logo": "https://upload.wikimedia.org/wikipedia/de/a/a7/Paris_Saint-Germain_F.C._Logo_%282024%29.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "6:1", "td": 5, "punkte": 3},
-    {"rang": 2, "team": "Bayern", "logo": "https://upload.wikimedia.org/wikipedia/commons/c/c5/FC_Bayern_M%C3%BCnchen_Logo_%282002%E2%80%932024%29.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "5:0", "td": 5, "punkte": 3},
-    {"rang": 3, "team": "Barcelona", "logo": "https://upload.wikimedia.org/wikipedia/de/a/aa/FC_Barcelona.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "5:1", "td": 4, "punkte": 3},
-    {"rang": 4, "team": "Man United", "logo": "https://upload.wikimedia.org/wikipedia/de/7/7a/Manchester_United_FC_Logo.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "4:0", "td": 4, "punkte": 3},
-    {"rang": 5, "team": "Como", "logo": "https://upload.wikimedia.org/wikipedia/de/7/76/Como_1907_Logo.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "4:1", "td": 3, "punkte": 3}
+TABELLE = [
+    {"rang": 1, "team": "Man City", "logo": "https://upload.wikimedia.org/wikipedia/de/e/eb/Manchester_City_FC_badge_%282016%29.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "2:0", "diff": 2, "punkte": 3},
+    {"rang": 2, "team": "Real Madrid", "logo": "https://upload.wikimedia.org/wikipedia/de/5/56/Real_Madrid_Logo.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "2:1", "diff": 1, "punkte": 3},
+    {"rang": 3, "team": "Aston Villa", "logo": "https://upload.wikimedia.org/wikipedia/de/f/f9/Aston_Villa_FC.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "3:2", "diff": 1, "punkte": 3},
+    {"rang": 4, "team": "Dortmund", "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "3:2", "diff": 1, "punkte": 3},
+    {"rang": 5, "team": "AEK Athen", "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e6/AEK_Athens_FC.svg", "spiele": 1, "s": 1, "u": 0, "n": 0, "tore": "1:0", "diff": 1, "punkte": 3},
+    {"rang": 6, "team": "Stuttgart", "logo": "https://upload.wikimedia.org/wikipedia/commons/e/eb/VfB_Stuttgart_1893_Logo.svg", "spiele": 1, "s": 0, "u": 1, "n": 0, "tore": "1:1", "diff": 0, "punkte": 1},
+    {"rang": 7, "team": "Lille OSC", "logo": "https://upload.wikimedia.org/wikipedia/de/4/4e/Lille_OSC_Logo_2018.svg", "spiele": 1, "s": 0, "u": 1, "n": 0, "tore": "1:1", "diff": 0, "punkte": 1},
+    {"rang": 8, "team": "Villarreal", "logo": "https://upload.wikimedia.org/wikipedia/de/c/c5/Villarreal_CF_logo.svg", "spiele": 1, "s": 0, "u": 0, "n": 1, "tore": "2:3", "diff": -1, "punkte": 0},
+    {"rang": 9, "team": "Inter Mailand", "logo": "https://upload.wikimedia.org/wikipedia/de/0/05/Inter_Mailand.svg", "spiele": 1, "s": 0, "u": 0, "n": 1, "tore": "1:2", "diff": -1, "punkte": 0},
+    {"rang": 10, "team": "LASK", "logo": "https://upload.wikimedia.org/wikipedia/de/2/22/LASK_Logo.svg", "spiele": 1, "s": 0, "u": 0, "n": 1, "tore": "0:1", "diff": -1, "punkte": 0},
+    {"rang": 11, "team": "FC Brügge", "logo": "https://upload.wikimedia.org/wikipedia/de/b/b5/Club_Br%C3%BCgge_Logo.svg", "spiele": 1, "s": 0, "u": 0, "n": 1, "tore": "2:3", "diff": -1, "punkte": 0},
+    {"rang": 12, "team": "FC Porto", "logo": "https://upload.wikimedia.org/wikipedia/de/f/f8/FC_Porto.svg", "spiele": 1, "s": 0, "u": 0, "n": 1, "tore": "0:2", "diff": -2, "punkte": 0}
 ]
 
 HTML_TEMPLATE = """
@@ -74,228 +111,298 @@ HTML_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UEFA Champions League App</title>
+    <title>UEFA Champions League Dashboard</title>
     <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131b2e;
+            --card-border: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --live-red: #ef4444;
+            --finished-green: #22c55e;
+        }
+
         body {
-            background-color: #0d1117;
-            color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
-            padding: 16px;
+            padding: 20px;
         }
-        h1 {
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
             text-align: center;
-            font-size: 1.3rem;
-            color: #38bdf8;
-            margin-bottom: 16px;
+            margin-bottom: 30px;
         }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Haupt-Navigation (Spiele vs Tabelle) */
         .main-tabs {
             display: flex;
-            gap: 8px;
-            background: #161b22;
-            padding: 4px;
-            border-radius: 16px;
-            margin-bottom: 16px;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
         }
+
         .main-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border-radius: 12px;
-            text-decoration: none;
-            color: #8b949e;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .main-tab.active {
-            background-color: #0ea5e9;
-            color: #ffffff;
-        }
-        .sub-tabs, .filter-tabs {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            margin-bottom: 12px;
-            padding-bottom: 4px;
-        }
-        .chip {
-            background: #161b22;
-            color: #8b949e;
-            border: 1px solid #30363d;
-            padding: 6px 12px;
+            padding: 10px 25px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            background-color: var(--card-border);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .main-tab.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        /* Spieltag-Auswahl Chips */
+        .sub-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+        .sub-tabs::-webkit-scrollbar { display: none; }
+
+        .chip {
+            padding: 8px 16px;
+            border-radius: 15px;
+            background-color: var(--card-border);
+            color: var(--text-muted);
             text-decoration: none;
             white-space: nowrap;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
+
         .chip.active {
-            background: #1f6feb;
-            color: #fff;
-            border-color: #1f6feb;
+            background-color: #334155;
+            color: white;
+            border: 1px solid var(--accent);
         }
+
+        /* Match Karten */
+        .match-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
         .match-card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 10px;
-            position: relative;
-        }
-        .match-card.live {
-            border: 2px solid #ef4444;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
-        }
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #8b949e;
-            margin-bottom: 8px;
-        }
-        .badge-beendet {
-            background: #21262d;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-        }
-        .badge-live {
-            background: #ef4444;
-            color: #fff;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
-        .team-row {
-            display: flex;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: space-between;
-            margin: 6px 0;
+            gap: 10px;
         }
-        .team-info {
+
+        .team {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 0.95rem;
         }
-        .team-logo {
-            width: 22px;
-            height: 22px;
+
+        .team.home {
+            justify-content: flex-end;
+            text-align: right;
+        }
+
+        .team.away {
+            justify-content: flex-start;
+            text-align: left;
+        }
+
+        .team img {
+            width: 28px;
+            height: 28px;
             object-fit: contain;
         }
-        .score {
-            font-size: 1rem;
-            font-weight: bold;
-            background: #21262d;
-            padding: 2px 8px;
-            border-radius: 6px;
-            min-width: 20px;
-            text-align: center;
+
+        .team-name {
+            font-weight: 600;
+            font-size: 0.95rem;
         }
+
+        .match-info {
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .status {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .status.beendet { color: var(--text-muted); }
+        .status.live { color: var(--live-red); animation: pulse 1.5s infinite; }
+        .status.kommend { color: var(--accent); }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        /* Tabellen Styling */
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #161b22;
+            background-color: var(--card-bg);
             border-radius: 12px;
             overflow: hidden;
-            font-size: 0.85rem;
+            border: 1px solid var(--card-border);
         }
+
         th, td {
-            padding: 10px 8px;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #30363d;
+            font-size: 0.9rem;
         }
+
         th {
-            color: #8b949e;
-            font-size: 0.75rem;
+            background-color: var(--card-border);
+            color: var(--text-muted);
+            font-weight: 600;
         }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .table-team {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-team img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
     </style>
 </head>
 <body>
 
-    <h1>UEFA Champions League</h1>
+<div class="container">
+    <header>
+        <h1>UEFA Champions League</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">Live Dashboard & Spielplan</p>
+    </header>
 
+    <!-- Haupt-Tabs -->
     <div class="main-tabs">
-        <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter={{ akt_filter }}" class="main-tab {% if akt_tab == 'spiele' %}active{% endif %}">⚽ Spiele</a>
-        <a href="/?tab=tabelle" class="main-tab {% if akt_tab == 'tabelle' %}active{% endif %}">📊 Tabelle</a>
+        <a href="/?tab=spiele&spieltag={{ akt_spieltag }}" class="main-tab {% if akt_tab == 'spiele' %}active{% endif %}">Spiele</a>
+        <a href="/?tab=tabelle" class="main-tab {% if akt_tab == 'tabelle' %}active{% endif %}">Tabelle</a>
     </div>
 
     {% if akt_tab == 'spiele' %}
+        <!-- Spieltag Filter -->
         <div class="sub-tabs">
-            {% for s in spieltage_keys %}
-            <a href="/?tab=spiele&spieltag={{ s }}&filter={{ akt_filter }}" class="chip {% if akt_spieltag == s %}active{% endif %}">Spieltag {{ s }}</a>
+            {% for s in spieldaten.keys() %}
+                <a href="/?tab=spiele&spieltag={{ s }}" class="chip {% if s == akt_spieltag %}active{% endif %}">Spieltag {{ s }}</a>
             {% endfor %}
         </div>
 
-        <div class="filter-tabs">
-            <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=alle" class="chip {% if akt_filter == 'alle' %}active{% endif %}">Alle Spiele</a>
-            <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=beendet" class="chip {% if akt_filter == 'beendet' %}active{% endif %}">Beendet</a>
-            <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=live" class="chip {% if akt_filter == 'live' %}active{% endif %}">Kommende / Live</a>
-        </div>
-
-        <div class="matches-container">
-            {% for spiel in spiele %}
-            <div class="match-card {% if spiel.status == 'live' %}live{% endif %}">
-                <div class="match-header">
-                    <span>{{ spiel.zeit }}</span>
-                    {% if spiel.status == 'beendet' %}
-                        <span class="badge-beendet">Beendet</span>
-                    {% elif spiel.status == 'live' %}
-                        <span class="badge-live">LIVE {{ spiel.minute }}</span>
-                    {% else %}
-                        <span class="badge-beendet">Kommend</span>
-                    {% endif %}
-                </div>
-                
-                <div class="team-row">
-                    <div class="team-info">
-                        <img src="{{ spiel.heim_logo }}" class="team-logo" alt="">
-                        <span>{{ spiel.heim }}</span>
+        <!-- Spiele Liste -->
+        <div class="match-list">
+            {% for match in spieldaten[akt_spieltag] %}
+                <div class="match-card">
+                    <div class="team home">
+                        <span class="team-name">{{ match.heim }}</span>
+                        <img src="{{ match.heim_logo }}" alt="{{ match.heim }}">
                     </div>
-                    <div class="score">{{ spiel.tore_heim }}</div>
-                </div>
-
-                <div class="team-row">
-                    <div class="team-info">
-                        <img src="{{ spiel.gast_logo }}" class="team-logo" alt="">
-                        <span>{{ spiel.gast }}</span>
+                    <div class="match-info">
+                        <div class="score">
+                            {% if match.status == 'kommend' %}
+                                vs
+                            {% else %}
+                                {{ match.tore_heim }} : {{ match.tore_gast }}
+                            {% endif %}
+                        </div>
+                        <div class="status {{ match.status }}">
+                            {% if match.status == 'beendet' %} Beendet
+                            {% elif match.status == 'live' %} ● LIVE
+                            {% else %} {{ match.zeit }}
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="score">{{ spiel.tore_gast }}</div>
+                    <div class="team away">
+                        <img src="{{ match.gast_logo }}" alt="{{ match.gast }}">
+                        <span class="team-name">{{ match.gast }}</span>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
 
-    {% else %}
+    {% elif akt_tab == 'tabelle' %}
+        <!-- Gesamttabelle -->
         <table>
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Rk</th>
                     <th>Team</th>
-                    <th>Sp</th>
-                    <th>Tore</th>
-                    <th>Pkt</th>
+                    <th class="text-center">Sp</th>
+                    <th class="text-center">Tore</th>
+                    <th class="text-center">Diff</th>
+                    <th class="text-right">Pkt</th>
                 </tr>
             </thead>
             <tbody>
                 {% for row in tabelle %}
                 <tr>
-                    <td>{{ row.rang }}</td>
+                    <td><strong>{{ row.rang }}</strong></td>
                     <td>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <img src="{{ row.logo }}" class="team-logo" alt="">
-                            {{ row.team }}
+                        <div class="table-team">
+                            <img src="{{ row.logo }}" alt="{{ row.team }}">
+                            <span>{{ row.team }}</span>
                         </div>
                     </td>
-                    <td>{{ row.spiele }}</td>
-                    <td>{{ row.tore }}</td>
-                    <td><strong>{{ row.punkte }}</strong></td>
+                    <td class="text-center">{{ row.spiele }}</td>
+                    <td class="text-center">{{ row.tore }}</td>
+                    <td class="text-center">{{ row.diff }}</td>
+                    <td class="text-right"><strong>{{ row.punkte }}</strong></td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% endif %}
+
+</div>
 
 </body>
 </html>
@@ -305,26 +412,14 @@ HTML_TEMPLATE = """
 def index():
     akt_tab = request.args.get("tab", "spiele")
     akt_spieltag = int(request.args.get("spieltag", 1))
-    akt_filter = request.args.get("filter", "alle")
     
-    roh_spiele = SPIELTAGE.get(akt_spieltag, [])
-    
-    if akt_filter == "beendet":
-        spiele = [s for s in roh_spiele if s["status"] == "beendet"]
-    elif akt_filter == "live":
-        spiele = [s for s in roh_spiele if s["status"] in ["live", "kommend"]]
-    else:
-        spiele = roh_spiele
-
     return render_template_string(
         HTML_TEMPLATE,
+        spieldaten=SPIELTAGE,
+        tabelle=TABELLE,
         akt_tab=akt_tab,
-        akt_spieltag=akt_spieltag,
-        akt_filter=akt_filter,
-        spieltage_keys=SPIELTAGE.keys(),
-        spiele=spiele,
-        tabelle=TABELLE_DATEN
+        akt_spieltag=akt_spieltag
     )
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
