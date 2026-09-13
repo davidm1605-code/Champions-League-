@@ -113,13 +113,14 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      flex: 1;
     }
 
     .team {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 500;
     }
 
@@ -131,12 +132,25 @@
 
     .match-info {
       text-align: right;
-      min-width: 70px;
+      min-width: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
     }
 
     .date-time {
       font-size: 0.8rem;
       color: var(--text-muted);
+    }
+
+    .score-display {
+      font-weight: bold;
+      font-size: 1rem;
+      background: #0b0f19;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
     }
 
     /* Tabellen-Ansicht */
@@ -145,18 +159,19 @@
       background: var(--card-bg);
       border-radius: 12px;
       border: 1px solid var(--border-color);
-      overflow: hidden;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      white-space: nowrap;
     }
 
     th, td {
-      padding: 12px;
+      padding: 10px 12px;
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -164,6 +179,18 @@
       color: var(--text-muted);
       font-weight: 600;
       background: rgba(0,0,0,0.2);
+    }
+
+    td:nth-child(2) {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    td img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
     }
   </style>
 </head>
@@ -192,169 +219,97 @@
           <th>#</th>
           <th>Team</th>
           <th>Sp</th>
+          <th>S</th>
+          <th>U</th>
+          <th>N</th>
           <th>Tore</th>
+          <th>Diff</th>
           <th>Pkt</th>
         </tr>
       </thead>
-      <tbody id="tableBody">
-        <tr><td>1</td><td>Bayern München</td><td>0</td><td>0:0</td><td>0</td></tr>
-        <tr><td>2</td><td>Real Madrid</td><td>0</td><td>0:0</td><td>0</td></tr>
-        <tr><td>3</td><td>Manchester City</td><td>0</td><td>0:0</td><td>0</td></tr>
-        <tr><td>4</td><td>Inter Mailand</td><td>0</td><td>0:0</td><td>0</td></tr>
-        <tr><td>5</td><td>Arsenal</td><td>0</td><td>0:0</td><td>0</td></tr>
-        <tr><td>6</td><td>Barcelona</td><td>0</td><td>0:0</td><td>0</td></tr>
-      </tbody>
+      <tbody id="tableBody"></tbody>
     </table>
   </div>
 </div>
 
 <script>
-// Exakte Vereinswappen über offizielle CDN-IDs
+// Offizielle Logos für die aktuellen 36 Champions-League-Teilnehmer
 const logos = {
-  "Bayern München": "https://crests.football-data.org/157.png",
-  "Dinamo Zagreb": "https://crests.football-data.org/758.png",
   "Real Madrid": "https://crests.football-data.org/86.png",
-  "VfB Stuttgart": "https://crests.football-data.org/10.png",
-  "AC Mailand": "https://crests.football-data.org/98.png",
-  "Liverpool": "https://crests.football-data.org/64.png",
-  "Sporting": "https://crests.football-data.org/498.png",
-  "Sporting CP": "https://crests.football-data.org/498.png",
-  "Lille": "https://crests.football-data.org/521.png",
-  "Lille OSC": "https://crests.football-data.org/521.png",
-  "Juventus": "https://crests.football-data.org/109.png",
-  "PSV Eindhoven": "https://crests.football-data.org/674.png",
-  "Young Boys": "https://crests.football-data.org/1871.png",
-  "Aston Villa": "https://crests.football-data.org/58.png",
   "Manchester City": "https://crests.football-data.org/65.png",
-  "Man City": "https://crests.football-data.org/65.png",
-  "Inter Mailand": "https://crests.football-data.org/108.png",
-  "PSG": "https://crests.football-data.org/524.png",
+  "Bayern München": "https://media.api-sports.io/football/teams/157.png",
   "Paris Saint-Germain": "https://crests.football-data.org/524.png",
-  "Girona": "https://crests.football-data.org/298.png",
-  "FC Girona": "https://crests.football-data.org/298.png",
-  "Club Brügge": "https://crests.football-data.org/609.png",
-  "Dortmund": "https://crests.football-data.org/4.png",
+  "FC Liverpool": "https://crests.football-data.org/64.png",
+  "Inter Mailand": "https://crests.football-data.org/108.png",
   "Borussia Dortmund": "https://crests.football-data.org/4.png",
-  "Red Bull Salzburg": "https://crests.football-data.org/1877.png",
-  "RB Salzburg": "https://crests.football-data.org/1877.png",
-  "FC Salzburg": "https://crests.football-data.org/1877.png",
-  "Sparta Prag": "https://crests.football-data.org/471.png",
-  "Bologna": "https://crests.football-data.org/102.png",
-  "FC Bologna": "https://crests.football-data.org/102.png",
-  "Shakhtar Donetsk": "https://crests.football-data.org/558.png",
-  "Celtic": "https://crests.football-data.org/346.png",
-  "Slovan Bratislava": "https://crests.football-data.org/1876.png",
-  "Brest": "https://crests.football-data.org/512.png",
-  "Bayer Leverkusen": "https://crests.football-data.org/3.png",
-  "FC Barcelona": "https://crests.football-data.org/81.png",
-  "Roter Stern Belgrad": "https://crests.football-data.org/675.png",
-  "AS Monaco": "https://crests.football-data.org/548.png",
-  "Sturm Graz": "https://crests.football-data.org/2021.png",
-  "Atalanta Bergamo": "https://crests.football-data.org/102.png",
-  "Atletico Madrid": "https://crests.football-data.org/78.png",
-  "Arsenal": "https://crests.football-data.org/57.png",
-  "Feyenoord": "https://crests.football-data.org/675.png",
   "RB Leipzig": "https://crests.football-data.org/721.png",
-  "Galatasaray": "https://crests.football-data.org/610.png",
-  "Dinamo Kiew": "https://crests.football-data.org/604.png",
-  "Ajax": "https://crests.football-data.org/67.png",
-  "Newcastle": "https://crests.football-data.org/67.png"
+  "FC Barcelona": "https://crests.football-data.org/81.png",
+  "Bayer Leverkusen": "https://crests.football-data.org/3.png",
+  "Atlético Madrid": "https://crests.football-data.org/78.png",
+  "Atalanta Bergamo": "https://crests.football-data.org/102.png",
+  "FC Juventus": "https://crests.football-data.org/109.png",
+  "Benfica Lissabon": "https://crests.football-data.org/1903.png",
+  "FC Arsenal": "https://crests.football-data.org/57.png",
+  "FC Brügge": "https://crests.football-data.org/609.png",
+  "Schachtar Donezk": "https://crests.football-data.org/558.png",
+  "AC Mailand": "https://crests.football-data.org/98.png",
+  "Feyenoord Rotterdam": "https://crests.football-data.org/675.png",
+  "Sporting Lissabon": "https://crests.football-data.org/498.png",
+  "PSV Eindhoven": "https://crests.football-data.org/674.png",
+  "Dinamo Zagreb": "https://media.api-sports.io/football/teams/758.png",
+  "VfB Stuttgart": "https://crests.football-data.org/10.png",
+  "FC Girona": "https://crests.football-data.org/298.png",
+  "Celtic Glasgow": "https://crests.football-data.org/346.png",
+  "AS Monaco": "https://crests.football-data.org/548.png",
+  "Aston Villa": "https://crests.football-data.org/58.png",
+  "FC Bologna": "https://crests.football-data.org/102.png",
+  "Stade Brest": "https://crests.football-data.org/512.png",
+  "Sparta Prag": "https://crests.football-data.org/471.png",
+  "Aston Villa": "https://crests.football-data.org/58.png",
+  "Young Boys Bern": "https://crests.football-data.org/1871.png",
+  "Roter Stern Belgrad": "https://crests.football-data.org/675.png",
+  "Slovan Bratislava": "https://crests.football-data.org/1876.png",
+  "Lille OSC": "https://crests.football-data.org/521.png",
+  "Sturm Graz": "https://crests.football-data.org/2021.png" // Falls benötigt, sonst oben aktiv
 };
 
-// Fallback, falls ein Team nicht gefunden wird (neutrales Icon statt falscher Flagge)
 function getLogo(teamName) {
   return logos[teamName] || "https://crests.football-data.org/placeholder.png";
 }
 
-// Vollständiger Spielplan mit allen Spielen für alle 8 Spieltage
+// Alle 36 Teams als Basis für die Tabelle
+const allTeams = [
+  "Real Madrid", "Manchester City", "Bayern München", "Paris Saint-Germain", 
+  "FC Liverpool", "Inter Mailand", "Borussia Dortmund", "RB Leipzig", 
+  "FC Barcelona", "Bayer Leverkusen", "Atlético Madrid", "Atalanta Bergamo", 
+  "FC Juventus", "Benfica Lissabon", "FC Arsenal", "FC Brügge", 
+  "Schachtar Donezk", "AC Mailand", "Feyenoord Rotterdam", "Sporting Lissabon", 
+  "PSV Eindhoven", "Dinamo Zagreb", "VfB Stuttgart", "FC Girona", 
+  "Celtic Glasgow", "AS Monaco", "Aston Villa", "FC Bologna", 
+  "Stade Brest", "Sparta Prag", "Young Boys Bern", "Roter Stern Belgrad", 
+  "Slovan Bratislava", "Lille OSC"
+];
+
+// Beispiel-Spielplan (mit optionalen Ergebnissen homeScore / awayScore, falls gespielt)
 const schedule = {
   1: [
-    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00" },
-    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00" },
-    { home: "AC Mailand", away: "Liverpool", date: "16.09", time: "21:00" },
-    { home: "Sporting", away: "Lille", date: "16.09", time: "21:00" },
-    { home: "Juventus", away: "PSV Eindhoven", date: "16.09", time: "18:45" },
-    { home: "Young Boys", away: "Aston Villa", date: "16.09", time: "18:45" },
-    { home: "Manchester City", away: "Inter Mailand", date: "17.09", time: "21:00" },
-    { home: "PSG", away: "Girona", date: "17.09", time: "21:00" },
-    { home: "Club Brügge", away: "Dortmund", date: "17.09", time: "21:00" },
-    { home: "Red Bull Salzburg", away: "Sparta Prag", date: "18.09", time: "18:45" },
-    { home: "Bologna", away: "Shakhtar Donetsk", date: "18.09", time: "18:45" },
-    { home: "Celtic", away: "Slovan Bratislava", date: "18.09", time: "21:00" }
+    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "AC Mailand", away: "FC Liverpool", date: "16.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "Sporting Lissabon", away: "Lille OSC", date: "16.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "FC Juventus", away: "PSV Eindhoven", date: "16.09", time: "18:45", homeScore: null, awayScore: null },
+    { home: "Young Boys Bern", away: "Aston Villa", date: "16.09", time: "18:45", homeScore: null, awayScore: null },
+    { home: "Manchester City", away: "Inter Mailand", date: "17.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "Paris Saint-Germain", away: "FC Girona", date: "17.09", time: "21:00", homeScore: null, awayScore: null },
+    { home: "FC Brügge", away: "Borussia Dortmund", date: "17.09", time: "21:00", homeScore: null, awayScore: null }
   ],
-  2: [
-    { home: "RB Salzburg", away: "Brest", date: "01.10", time: "18:45" },
-    { home: "VfB Stuttgart", away: "Sparta Prag", date: "01.10", time: "18:45" },
-    { home: "Arsenal", away: "PSG", date: "01.10", time: "21:00" },
-    { home: "Bayer Leverkusen", away: "AC Mailand", date: "01.10", time: "21:00" },
-    { home: "Borussia Dortmund", away: "Celtic", date: "01.10", time: "21:00" },
-    { home: "FC Barcelona", away: "Young Boys", date: "01.10", time: "21:00" },
-    { home: "Inter Mailand", away: "Roter Stern Belgrad", date: "01.10", time: "21:00" },
-    { home: "PSV Eindhoven", away: "Sporting CP", date: "01.10", time: "21:00" },
-    { home: "Slovan Bratislava", away: "Manchester City", date: "01.10", time: "21:00" }
-  ],
-  3: [
-    { home: "AC Mailand", away: "Club Brügge", date: "22.10", time: "18:45" },
-    { home: "AS Monaco", away: "Roter Stern Belgrad", date: "22.10", time: "18:45" },
-    { home: "Arsenal", away: "Shakhtar Donetsk", date: "22.10", time: "21:00" },
-    { home: "Aston Villa", away: "Bologna", date: "22.10", time: "21:00" },
-    { home: "FC Girona", away: "Slovan Bratislava", date: "22.10", time: "21:00" },
-    { home: "Juventus", away: "VfB Stuttgart", date: "22.10", time: "21:00" },
-    { home: "Paris Saint-Germain", away: "PSV Eindhoven", date: "22.10", time: "21:00" },
-    { home: "Real Madrid", away: "Borussia Dortmund", date: "22.10", time: "21:00" },
-    { home: "Sturm Graz", away: "Sporting CP", date: "22.10", time: "21:00" }
-  ],
-  4: [
-    { home: "PSV Eindhoven", away: "FC Girona", date: "05.11", time: "18:45" },
-    { home: "Slovan Bratislava", away: "Dinamo Zagreb", date: "05.11", time: "18:45" },
-    { home: "Bologna", away: "AS Monaco", date: "05.11", time: "21:00" },
-    { home: "Borussia Dortmund", away: "Sturm Graz", date: "05.11", time: "21:00" },
-    { home: "Celtic", away: "RB Leipzig", date: "05.11", time: "21:00" },
-    { home: "Liverpool", away: "Bayer Leverkusen", date: "05.11", time: "21:00" },
-    { home: "Lille", away: "Juventus", date: "05.11", time: "21:00" },
-    { home: "Real Madrid", away: "AC Mailand", date: "05.11", time: "21:00" },
-    { home: "Sporting CP", away: "Manchester City", date: "05.11", time: "21:00" }
-  ],
-  5: [
-    { home: "Sparta Prag", away: "Atletico Madrid", date: "26.11", time: "18:45" },
-    { home: "Slovan Bratislava", away: "AC Mailand", date: "26.11", time: "18:45" },
-    { home: "Bayer Leverkusen", away: "RB Salzburg", date: "26.11", time: "21:00" },
-    { home: "FC Barcelona", away: "Brest", date: "26.11", time: "21:00" },
-    { home: "Bayern München", away: "Paris Saint-Germain", date: "26.11", time: "21:00" },
-    { home: "Inter Mailand", away: "RB Leipzig", date: "26.11", time: "21:00" },
-    { home: "Manchester City", away: "Feyenoord", date: "26.11", time: "21:00" },
-    { home: "Sporting CP", away: "Arsenal", date: "26.11", time: "21:00" },
-    { home: "Young Boys", away: "Atalanta Bergamo", date: "26.11", time: "21:00" }
-  ],
-  6: [
-    { home: "FC Girona", away: "Liverpool", date: "10.12", time: "18:45" },
-    { home: "Dinamo Zagreb", away: "Celtic", date: "10.12", time: "18:45" },
-    { home: "Atalanta Bergamo", away: "Real Madrid", date: "10.12", time: "21:00" },
-    { home: "Bayer Leverkusen", away: "Inter Mailand", date: "10.12", time: "21:00" },
-    { home: "Club Brügge", away: "Sporting CP", date: "10.12", time: "21:00" },
-    { home: "FC Salzburg", away: "Paris Saint-Germain", date: "10.12", time: "21:00" },
-    { home: "Shakhtar Donetsk", away: "Bayern München", date: "10.12", time: "21:00" },
-    { home: "RB Leipzig", away: "Aston Villa", date: "10.12", time: "21:00" }
-  ],
-  7: [
-    { home: "Galatasaray", away: "Dinamo Kiew", date: "21.01", time: "18:45" },
-    { home: "Atalanta Bergamo", away: "Sturm Graz", date: "21.01", time: "21:00" },
-    { home: "Atletico Madrid", away: "Bayer Leverkusen", date: "21.01", time: "21:00" },
-    { home: "FC Bologna", away: "Borussia Dortmund", date: "21.01", time: "21:00" },
-    { home: "Club Brügge", away: "Juventus", date: "21.01", time: "21:00" },
-    { home: "Red Bull Salzburg", away: "Real Madrid", date: "21.01", time: "21:00" },
-    { home: "Slovan Bratislava", away: "VfB Stuttgart", date: "21.01", time: "21:00" }
-  ],
-  8: [
-    { home: "Ajax", away: "Galatasaray", date: "29.01", time: "21:00" },
-    { home: "Bayer Leverkusen", away: "Sparta Prag", date: "29.01", time: "21:00" },
-    { home: "Borussia Dortmund", away: "Shakhtar Donetsk", date: "29.01", time: "21:00" },
-    { home: "FC Barcelona", away: "Atalanta Bergamo", date: "29.01", time: "21:00" },
-    { home: "Inter Mailand", away: "AS Monaco", date: "29.01", time: "21:00" },
-    { home: "Juventus", away: "Manchester City", date: "29.01", time: "21:00" },
-    { home: "Paris Saint-Germain", away: "Newcastle", date: "29.01", time: "21:00" },
-    { home: "Real Madrid", away: "Brest", date: "29.01", time: "21:00" }
-  ]
+  2: [],
+  3: [],
+  4: [],
+  5: [],
+  6: [],
+  7: [],
+  8: []
 };
 
 let currentDay = 1;
@@ -369,6 +324,7 @@ function switchMainTab(tab) {
     document.querySelector('.main-tab:nth-child(2)').classList.add('active');
     document.getElementById('spieleSection').style.display = 'none';
     document.getElementById('tabelleSection').style.display = 'block';
+    calculateTable();
   }
 }
 
@@ -395,25 +351,105 @@ function renderMatches() {
   
   const matches = schedule[currentDay] || [];
   
+  if (matches.length === 0) {
+    matchContainer.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding: 20px;">Keine Spiele für diesen Spieltag eingetragen.</div>`;
+    return;
+  }
+  
   matches.forEach((match) => {
     const card = document.createElement("div");
     card.className = "match-card";
-    // Alle Spiele zeigen nun sauber Datum und Uhrzeit (keine künstlichen Live-Spiele mehr)
+    
+    let infoHtml = `<div class="date-time">${match.date}</div><div class="date-time">${match.time}</div>`;
+    if (match.homeScore !== null && match.awayScore !== null) {
+      infoHtml = `<div class="score-display">${match.homeScore} : ${match.awayScore}</div>`;
+    }
+
     card.innerHTML = `
       <div class="teams">
         <div class="team"><img src="${getLogo(match.home)}" alt=""> ${match.home}</div>
         <div class="team"><img src="${getLogo(match.away)}" alt=""> ${match.away}</div>
       </div>
       <div class="match-info">
-        <div class="date-time">${match.date}</div>
-        <div class="date-time">${match.time}</div>
+        ${infoHtml}
       </div>
     `;
     matchContainer.appendChild(card);
   });
 }
 
-// Initialisierung
+function calculateTable() {
+  // Statistik-Objekt für jedes Team initialisieren
+  const stats = {};
+  allTeams.forEach(team => {
+    stats[team] = { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 };
+  });
+
+  // Alle Spieltage durchgehen und Ergebnisse einrechnen
+  Object.values(schedule).forEach(dayMatches => {
+    dayMatches.forEach(match => {
+      if (match.homeScore !== null && match.awayScore !== null) {
+        if (stats[match.home]) {
+          stats[match.home].played++;
+          stats[match.home].goalsFor += match.homeScore;
+          stats[match.home].goalsAgainst += match.awayScore;
+        }
+        if (stats[match.away]) {
+          stats[match.away].played++;
+          stats[match.away].goalsFor += match.awayScore;
+          stats[match.away].goalsAgainst += match.homeScore;
+        }
+
+        if (match.homeScore > match.awayScore) {
+          if (stats[match.home]) { stats[match.home].won++; stats[match.home].points += 3; }
+          if (stats[match.away]) { stats[match.away].lost++; }
+        } else if (match.homeScore < match.awayScore) {
+          if (stats[match.away]) { stats[match.away].won++; stats[match.away].points += 3; }
+          if (stats[match.home]) { stats[match.home].lost++; }
+        } else {
+          if (stats[match.home]) { stats[match.home].drawn++; stats[match.home].points += 1; }
+          if (stats[match.away]) { stats[match.away].drawn++; stats[match.away].points += 1; }
+        }
+      }
+    });
+  });
+
+  // In Array umwandeln und sortieren (Punkte -> Tordifferenz -> Tore)
+  const sortedTable = allTeams.map(team => {
+    const s = stats[team];
+    return {
+      name: team,
+      ...s,
+      diff: s.goalsFor - s.goalsAgainst
+    };
+  }).sort((a, b) => {
+    if (b.points !== a.points) return b.points - a.points;
+    if (b.diff !== a.diff) return b.diff - a.diff;
+    return b.goalsFor - a.goalsFor;
+  });
+
+  // Tabelle in HTML rendern
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+
+  sortedTable.forEach((row, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${index + 1}</td>
+      <td><img src="${getLogo(row.name)}" alt=""> ${row.name}</td>
+      <td>${row.played}</td>
+      <td>${row.won}</td>
+      <td>${row.drawn}</td>
+      <td>${row.lost}</td>
+      <td>${row.goalsFor}:${row.goalsAgainst}</td>
+      <td>${row.diff > 0 ? '+' + row.diff : row.diff}</td>
+      <td><strong>${row.points}</strong></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Initialisierung beim Start
 renderSelector();
 renderMatches();
 </script>
