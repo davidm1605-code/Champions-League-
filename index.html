@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, request
 
 app = Flask(__name__)
 
@@ -30,7 +30,7 @@ SPIELTAGE = {
         {"heim": "Neapel", "gast": "Arsenal", "tore_heim": 0, "tore_gast": 1},
         {"heim": "Liverpool", "gast": "Atlético Madrid", "tore_heim": 2, "tore_gast": 1},
         {"heim": "PSG", "gast": "Slovan Bratislava", "tore_heim": 6, "tore_gast": 1},
-        {"heim": "Sporting", "gast": "Galatasaray", "tore_gast": 3, "tore_gast": 1},
+        {"heim": "Sporting", "gast": "Galatasaray", "tore_heim": 3, "tore_gast": 1},
         {"heim": "Fenerbahçe", "gast": "Roma", "tore_heim": 1, "tore_gast": 1},
         {"heim": "PSV Eindhoven", "gast": "Donezk", "tore_heim": 1, "tore_gast": 1},
         {"heim": "Bayern", "gast": "Bodo/Glimt", "tore_heim": 5, "tore_gast": 0},
@@ -144,7 +144,6 @@ HTML_TEMPLATE = """
 
 @app.route("/")
 def index():
-    from flask import request
     try:
         akt_spieltag = int(request.args.get("spieltag", 1))
     except ValueError:
