@@ -89,7 +89,6 @@ HTML_TEMPLATE = """
             color: #38bdf8;
             margin-bottom: 16px;
         }
-        /* Haupt-Tabs (Spiele / Tabelle) */
         .main-tabs {
             display: flex;
             gap: 8px;
@@ -112,7 +111,6 @@ HTML_TEMPLATE = """
             background-color: #0ea5e9;
             color: #ffffff;
         }
-        /* Spieltag-Tabs & Filter */
         .sub-tabs, .filter-tabs {
             display: flex;
             gap: 6px;
@@ -135,7 +133,6 @@ HTML_TEMPLATE = """
             color: #fff;
             border-color: #1f6feb;
         }
-        /* Spielkarte */
         .match-card {
             background-color: #161b22;
             border: 1px solid #30363d;
@@ -196,7 +193,6 @@ HTML_TEMPLATE = """
             min-width: 20px;
             text-align: center;
         }
-        /* Tabelle Styling */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -220,28 +216,24 @@ HTML_TEMPLATE = """
 
     <h1>UEFA Champions League</h1>
 
-    <!-- Hauptnavigation -->
     <div class="main-tabs">
         <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter={{ akt_filter }}" class="main-tab {% if akt_tab == 'spiele' %}active{% endif %}">⚽ Spiele</a>
         <a href="/?tab=tabelle" class="main-tab {% if akt_tab == 'tabelle' %}active{% endif %}">📊 Tabelle</a>
     </div>
 
     {% if akt_tab == 'spiele' %}
-        <!-- Spieltag Auswahl -->
         <div class="sub-tabs">
             {% for s in spieltage_keys %}
             <a href="/?tab=spiele&spieltag={{ s }}&filter={{ akt_filter }}" class="chip {% if akt_spieltag == s %}active{% endif %}">Spieltag {{ s }}</a>
             {% endfor %}
         </div>
 
-        <!-- Filter (Alle, Beendet, Kommend/Live) -->
         <div class="filter-tabs">
             <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=alle" class="chip {% if akt_filter == 'alle' %}active{% endif %}">Alle Spiele</a>
             <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=beendet" class="chip {% if akt_filter == 'beendet' %}active{% endif %}">Beendet</a>
             <a href="/?tab=spiele&spieltag={{ akt_spieltag }}&filter=live" class="chip {% if akt_filter == 'live' %}active{% endif %}">Kommende / Live</a>
         </div>
 
-        <!-- Spiele Liste -->
         <div class="matches-container">
             {% for spiel in spiele %}
             <div class="match-card {% if spiel.status == 'live' %}live{% endif %}">
@@ -276,7 +268,6 @@ HTML_TEMPLATE = """
         </div>
 
     {% else %}
-        <!-- Tabellen Ansicht -->
         <table>
             <thead>
                 <tr>
@@ -318,7 +309,6 @@ def index():
     
     roh_spiele = SPIELTAGE.get(akt_spieltag, [])
     
-    # Filter logik anwenden
     if akt_filter == "beendet":
         spiele = [s for s in roh_spiele if s["status"] == "beendet"]
     elif akt_filter == "live":
