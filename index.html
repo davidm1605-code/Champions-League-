@@ -1,453 +1,302 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UEFA Champions League Dashboard</title>
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #151c2c;
-            --text-color: #ffffff;
-            --accent-color: #0084ff;
-            --live-color: #ff3d00;
-            --border-color: #222d42;
-            --text-secondary: #8c9ba5;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UEFA Champions League - Spielplan</title>
+  <style>
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --accent-color: #00d2ff;
+      --text-color: #ffffff;
+      --text-muted: #aaaaaa;
+      --border-color: #2a2a2a;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
 
-        .container {
-            width: 100%;
-            max-width: 600px;
-        }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+    }
 
-        /* Nav Tab Styling */
-        .nav-tabs {
-            display: flex;
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
+    .day-selector {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      margin-bottom: 25px;
+      padding-bottom: 5px;
+    }
 
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.95rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    .day-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 10px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
 
-        .tab-btn.active {
-            background: var(--accent-color);
-            color: #ffffff;
-        }
+    .day-btn.active, .day-btn:hover {
+      background: var(--accent-color);
+      color: #000;
+      font-weight: bold;
+    }
 
-        /* Filter Pills */
-        .filter-container {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
+    .match-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-        .filter-btn {
-            flex: 1;
-            padding: 8px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-            text-align: center;
-        }
+    .match-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid var(--border-color);
+    }
 
-        .filter-btn.active {
-            border-color: var(--accent-color);
-            color: #ffffff;
-            background: rgba(0, 132, 255, 0.15);
-        }
+    .teams {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-        /* Match Card Styling */
-        .match-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 12px;
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
+    .team {
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
 
-        .match-card.live-card {
-            border: 1.5px solid var(--live-color);
-            animation: pulse-border 2s infinite;
-        }
+    .match-info {
+      text-align: right;
+      min-width: 80px;
+    }
 
-        @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0.4); }
-            70% { box-shadow: 0 0 0 8px rgba(255, 61, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0); }
-        }
+    .date {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
 
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-            align-items: center;
-        }
-
-        .status-badge {
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.7rem;
-        }
-
-        .status-badge.live {
-            background-color: var(--live-color);
-            color: #fff;
-        }
-
-        .status-badge.ft {
-            background-color: #334155;
-            color: #cbd5e1;
-        }
-
-        .teams-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .team-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .team-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .team-logo {
-            width: 22px;
-            height: 22px;
-            object-fit: contain;
-        }
-
-        .team-name {
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .score {
-            font-size: 1rem;
-            font-weight: 700;
-            background: #1e293b;
-            padding: 2px 8px;
-            border-radius: 6px;
-            min-width: 20px;
-            text-align: center;
-        }
-
-        /* Standings Table Styling */
-        .table-container {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            text-align: left;
-        }
-
-        th {
-            color: var(--text-secondary);
-            padding: 8px 4px;
-            border-bottom: 1px solid var(--border-color);
-            font-weight: 600;
-        }
-
-        td {
-            padding: 10px 4px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .table-team {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-        }
-
-        .table-logo {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-        }
-
-        .text-center { text-align: center; }
-        .text-bold { font-weight: bold; }
-        .hidden { display: none; }
-        
-        .update-time {
-            text-align: center;
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-        }
-    </style>
+    .time {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>UEFA Champions League</h1>
+<div class="container">
+  <h1>UEFA Champions League</h1>
+  
+  <div class="day-selector" id="daySelector"></div>
+  
+  <div class="match-list" id="matchList"></div>
+</div>
 
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="tab-btn active" id="tabSpiele" onclick="switchTab('spiele')">⚽ Spiele</button>
-            <button class="tab-btn" id="tabTabelle" onclick="switchTab('tabelle')">📊 Tabelle</button>
-        </div>
+<script>
+const schedule = {
+  1: [
+    { home: "Bayern München", away: "Dinamo Zagreb", date: "16.09", time: "21:00" },
+    { home: "Real Madrid", away: "VfB Stuttgart", date: "16.09", time: "21:00" },
+    { home: "AC Mailand", away: "Liverpool", date: "16.09", time: "21:00" },
+    { home: "Sporting", away: "Lille", date: "16.09", time: "21:00" },
+    { home: "Juventus", away: "PSV Eindhoven", date: "16.09", time: "18:45" },
+    { home: "Young Boys", away: "Aston Villa", date: "16.09", time: "18:45" },
+    { home: "Manchester City", away: "Inter Mailand", date: "17.09", time: "21:00" },
+    { home: "PSG", away: "Girona", date: "17.09", time: "21:00" },
+    { home: "Club Brügge", away: "Dortmund", date: "17.09", time: "21:00" }
+  ],
+  2: [
+    { home: "Lens", away: "Sporting", date: "13.10", time: "18:45" },
+    { home: "Sabah FK", away: "Slavia Prag", date: "13.10", time: "18:45" },
+    { home: "Galatasaray", away: "Barcelona", date: "13.10", time: "21:00" },
+    { home: "RB Leipzig", away: "PSV Eindhoven", date: "13.10", time: "21:00" },
+    { home: "Arsenal", away: "LOSC", date: "13.10", time: "21:00" },
+    { home: "Dortmund", away: "Celtic", date: "14.10", time: "21:00" },
+    { home: "Bayer Leverkusen", away: "AC Mailand", date: "14.10", time: "21:00" },
+    { home: "Barcelona", away: "Young Boys", date: "14.10", time: "21:00" },
+    { home: "Inter Mailand", away: "Roter Stern", date: "14.10", time: "21:00" }
+  ],
+  3: [
+    { home: "LOSC", away: "Galatasaray", date: "21.10", time: "18:45" },
+    { home: "Sporting", away: "LASK", date: "21.10", time: "21:00" },
+    { home: "Betis", away: "Feyenoord", date: "21.10", time: "21:00" },
+    { home: "Inter Mailand", away: "Donezk", date: "21.10", time: "21:00" },
+    { home: "Bayern München", away: "Arsenal", date: "21.10", time: "21:00" },
+    { home: "Aston Villa", away: "Viking", date: "21.10", time: "21:00" },
+    { home: "FC Brügge", away: "Lens", date: "21.10", time: "21:00" },
+    { home: "Real Madrid", away: "RB Leipzig", date: "21.10", time: "21:00" }
+  ],
+  4: [
+    { home: "Galatasaray", away: "VfB Stuttgart", date: "03.11", time: "18:45" },
+    { home: "Donezk", away: "Sporting", date: "03.11", time: "18:45" },
+    { home: "ManUnited", away: "Roma", date: "03.11", time: "21:00" },
+    { home: "LASK", away: "Slovan Bratislava", date: "03.11", time: "21:00" },
+    { home: "Feyenoord", away: "Inter Mailand", date: "03.11", time: "21:00" },
+    { home: "Bodø/Glimt", away: "LOSC", date: "03.11", time: "21:00" },
+    { home: "Atlético Madrid", away: "Bayern München", date: "03.11", time: "21:00" },
+    { home: "Villarreal", away: "PSG", date: "03.11", time: "21:00" },
+    { home: "Barcelona", away: "Aston Villa", date: "03.11", time: "21:00" },
+    { home: "Fenerbahçe", away: "Liverpool", date: "04.11", time: "18:45" },
+    { home: "AEK", away: "Real Madrid", date: "04.11", time: "18:45" },
+    { home: "Lens", away: "Como", date: "04.11", time: "21:00" },
+    { home: "Dortmund", away: "Betis", date: "04.11", time: "21:00" },
+    { home: "RB Leipzig", away: "Man City", date: "04.11", time: "21:00" },
+    { home: "FC Porto", away: "Neapel", date: "04.11", time: "21:00" },
+    { home: "PSV Eindhoven", away: "FC Brügge", date: "04.11", time: "21:00" },
+    { home: "Slavia Prag", away: "Arsenal", date: "04.11", time: "21:00" },
+    { home: "Viking", away: "Sabah FK", date: "04.11", time: "21:00" }
+  ],
+  5: [
+    { home: "Galatasaray", away: "Aston Villa", date: "24.11", time: "18:45" },
+    { home: "Bodø/Glimt", away: "LASK", date: "24.11", time: "18:45" },
+    { home: "Feyenoord", away: "FC Porto", date: "24.11", time: "21:00" },
+    { home: "Arsenal", away: "Dortmund", date: "24.11", time: "21:00" },
+    { home: "Slovan Bratislava", away: "Betis", date: "24.11", time: "21:00" },
+    { home: "Real Madrid", away: "PSV Eindhoven", date: "24.11", time: "21:00" },
+    { home: "RB Leipzig", away: "Lens", date: "24.11", time: "21:00" },
+    { home: "Como", away: "AEK", date: "24.11", time: "21:00" },
+    { home: "Man City", away: "Neapel", date: "24.11", time: "21:00" },
+    { home: "Slavia Prag", away: "Villarreal", date: "25.11", time: "18:45" },
+    { home: "Sabah FK", away: "Barcelona", date: "25.11", time: "18:45" },
+    { home: "PSG", away: "Roma", date: "25.11", time: "21:00" },
+    { home: "Donezk", away: "Fenerbahçe", date: "25.11", time: "21:00" },
+    { home: "Inter Mailand", away: "VfB Stuttgart", date: "25.11", time: "21:00" },
+    { home: "Sporting", away: "ManUnited", date: "25.11", time: "21:00" },
+    { home: "Atlético Madrid", away: "Viking", date: "25.11", time: "21:00" },
+    { home: "LOSC", away: "Bayern München", date: "25.11", time: "21:00" },
+    { home: "FC Brügge", away: "Liverpool", date: "25.11", time: "21:00" }
+  ],
+  6: [
+    { home: "Villarreal", away: "Sabah FK", date: "08.12", time: "18:45" },
+    { home: "Viking", away: "Feyenoord", date: "08.12", time: "18:45" },
+    { home: "Bayern München", away: "Slavia Prag", date: "08.12", time: "21:00" },
+    { home: "Aston Villa", away: "PSG", date: "08.12", time: "21:00" },
+    { home: "Roma", away: "Sporting", date: "08.12", time: "21:00" },
+    { home: "ManUnited", away: "RB Leipzig", date: "08.12", time: "21:00" },
+    { home: "Barcelona", away: "Man City", date: "08.12", time: "21:00" },
+    { home: "AEK", away: "Galatasaray", date: "08.12", time: "21:00" },
+    { home: "Neapel", away: "FC Brügge", date: "08.12", time: "21:00" },
+    { home: "Betis", away: "Como", date: "09.12", time: "18:45" },
+    { home: "Slovan Bratislava", away: "Donezk", date: "09.12", time: "18:45" },
+    { home: "Arsenal", away: "Real Madrid", date: "09.12", time: "21:00" },
+    { home: "LASK", away: "Fenerbahçe", date: "09.12", time: "21:00" },
+    { home: "VfB Stuttgart", away: "LOSC", date: "09.12", time: "21:00" },
+    { home: "PSV Eindhoven", away: "Atlético Madrid", date: "09.12", time: "21:00" },
+    { home: "Lens", away: "Bodø/Glimt", date: "09.12", time: "21:00" },
+    { home: "Liverpool", away: "FC Porto", date: "09.12", time: "21:00" },
+    { home: "Dortmund", away: "Inter Mailand", date: "09.12", time: "21:00" }
+  ],
+  7: [
+    { home: "Galatasaray", away: "Feyenoord", date: "19.01", time: "18:45" },
+    { home: "Bodø/Glimt", away: "Atlético Madrid", date: "19.01", time: "18:45" },
+    { home: "Aston Villa", away: "Dortmund", date: "19.01", time: "21:00" },
+    { home: "FC Porto", away: "Slavia Prag", date: "19.01", time: "21:00" },
+    { home: "Inter Mailand", away: "Liverpool", date: "19.01", time: "21:00" },
+    { home: "VfB Stuttgart", away: "FC Brügge", date: "19.01", time: "21:00" },
+    { home: "Real Madrid", away: "LASK", date: "19.01", time: "21:00" },
+    { home: "LOSC", away: "Slovan Bratislava", date: "19.01", time: "21:00" },
+    { home: "AEK", away: "Roma", date: "19.01", time: "21:00" },
+    { home: "Sabah FK", away: "Neapel", date: "20.01", time: "18:45" },
+    { home: "Fenerbahçe", away: "Villarreal", date: "20.01", time: "18:45" },
+    { home: "Viking", away: "PSV Eindhoven", date: "20.01", time: "21:00" },
+    { home: "RB Leipzig", away: "Donezk", date: "20.01", time: "21:00" },
+    { home: "Betis", away: "Arsenal", date: "20.01", time: "21:00" },
+    { home: "Como", away: "PSG", date: "20.01", time: "21:00" },
+    { home: "ManUnited", away: "Bayern München", date: "20.01", time: "21:00" },
+    { home: "Lens", away: "Man City", date: "20.01", time: "21:00" },
+    { home: "Sporting", away: "Barcelona", date: "20.01", time: "21:00" }
+  ],
+  8: [
+    { home: "Neapel", away: "Viking", date: "27.01", time: "21:00" },
+    { home: "Barcelona", away: "Como", date: "27.01", time: "21:00" },
+    { home: "PSG", away: "Galatasaray", date: "27.01", time: "21:00" },
+    { home: "Roma", away: "LOSC", date: "27.01", time: "21:00" },
+    { home: "Slovan Bratislava", away: "Inter Mailand", date: "27.01", time: "21:00" },
+    { home: "PSV Eindhoven", away: "VfB Stuttgart", date: "27.01", time: "21:00" },
+    { home: "Liverpool", away: "Lens", date: "27.01", time: "21:00" },
+    { home: "Man City", away: "Sporting", date: "27.01", time: "21:00" },
+    { home: "FC Brügge", away: "Bodø/Glimt", date: "27.01", time: "21:00" },
+    { home: "Arsenal", away: "Sabah FK", date: "27.01", time: "21:00" },
+    { home: "Villarreal", away: "ManUnited", date: "27.01", time: "21:00" },
+    { home: "Slavia Prag", away: "Aston Villa", date: "27.01", time: "21:00" },
+    { home: "Bayern München", away: "Betis", date: "27.01", time: "21:00" },
+    { home: "Feyenoord", away: "RB Leipzig", date: "27.01", time: "21:00" },
+    { home: "Dortmund", away: "AEK", date: "27.01", time: "21:00" },
+    { home: "LASK", away: "FC Porto", date: "27.01", time: "21:00" },
+    { home: "Donezk", away: "Real Madrid", date: "27.01", time: "21:00" },
+    { home: "Atlético Madrid", away: "Fenerbahçe", date: "27.01", time: "21:00" }
+  ]
+};
 
-        <!-- Section: Spiele -->
-        <div id="sectionSpiele">
-            <div class="update-time">Live-Aktualisierung aktiv • Stand: <span id="clock">--:--:--</span></div>
+let currentDay = 1;
 
-            <!-- Filter Buttons -->
-            <div class="filter-container">
-                <button class="filter-btn active" id="filterAlle" onclick="setFilter('alle')">Alle Spiele</button>
-                <button class="filter-btn" id="filterBeendet" onclick="setFilter('beendet')">Beendet</button>
-                <button class="filter-btn" id="filterLive" onclick="setFilter('live')">Kommende / Live</button>
-            </div>
+function renderSelector() {
+  const selectorContainer = document.getElementById("daySelector");
+  selectorContainer.innerHTML = "";
+  
+  for (let i = 1; i <= 8; i++) {
+    const btn = document.createElement("button");
+    btn.className = `day-btn ${i === currentDay ? 'active' : ''}`;
+    btn.innerText = `Spieltag ${i}`;
+    btn.onclick = () => {
+      currentDay = i;
+      renderSelector();
+      renderMatches();
+    };
+    selectorContainer.appendChild(btn);
+  }
+}
 
-            <div id="matchesList"></div>
-        </div>
+function renderMatches() {
+  const matchContainer = document.getElementById("matchList");
+  matchContainer.innerHTML = "";
+  
+  const matches = schedule[currentDay] || [];
+  
+  matches.forEach(match => {
+    const card = document.createElement("div");
+    card.className = "match-card";
+    
+    card.innerHTML = `
+      <div class="teams">
+        <div class="team">${match.home}</div>
+        <div class="team">${match.away}</div>
+      </div>
+      <div class="match-info">
+        <div class="date">${match.date}</div>
+        <div class="time">${match.time}</div>
+      </div>
+    `;
+    
+    matchContainer.appendChild(card);
+  });
+}
 
-        <!-- Section: Tabelle -->
-        <div id="sectionTabelle" class="hidden">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Team</th>
-                            <th class="text-center">Sp</th>
-                            <th class="text-center">TD</th>
-                            <th class="text-center">Pkt</th>
-                        </tr>
-                    </thead>
-                    <tbody id="standingsBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+// Initialisierung
+renderSelector();
+renderMatches();
+</script>
 
-    <script>
-        const matches = [
-            {
-                date: '13.10. • Beendet',
-                status: 'FT',
-                isLive: false,
-                home: 'Inter Mailand',
-                homeLogo: 'https://media.api-sports.io/football/teams/505.png',
-                homeScore: 2,
-                away: 'Arsenal',
-                awayLogo: 'https://media.api-sports.io/football/teams/42.png',
-                awayScore: 1
-            },
-            {
-                date: '13.10. • Anstoß',
-                status: '18:45',
-                isLive: false,
-                home: 'FC Lens',
-                homeLogo: 'https://media.api-sports.io/football/teams/116.png',
-                homeScore: '-',
-                away: 'Sporting CP',
-                awayLogo: 'https://media.api-sports.io/football/teams/228.png',
-                awayScore: '-'
-            },
-            {
-                date: '13.10. • Anstoß',
-                status: '21:00',
-                isLive: false,
-                home: 'Galatasaray',
-                homeLogo: 'https://media.api-sports.io/football/teams/645.png',
-                homeScore: '-',
-                away: 'FC Barcelona',
-                awayLogo: 'https://media.api-sports.io/football/teams/529.png',
-                awayScore: '-'
-            },
-            {
-                date: '13.10. • Anstoß',
-                status: '21:00',
-                isLive: false,
-                home: 'RB Leipzig',
-                homeLogo: 'https://media.api-sports.io/football/teams/173.png',
-                homeScore: '-',
-                away: 'PSV Eindhoven',
-                awayLogo: 'https://media.api-sports.io/football/teams/197.png',
-                awayScore: '-'
-            },
-            {
-                date: '13.10. • Anstoß',
-                status: '21:00',
-                isLive: false,
-                home: 'Bayern München',
-                homeLogo: 'https://media.api-sports.io/football/teams/157.png',
-                homeScore: '-',
-                away: 'Real Madrid',
-                awayLogo: 'https://media.api-sports.io/football/teams/541.png',
-                awayScore: '-'
-            }
-        ];
-
-        const standings = [
-            { pos: 1, team: 'Inter Mailand', logo: 'https://media.api-sports.io/football/teams/505.png', sp: 4, td: '+7', pkt: 10 },
-            { pos: 2, team: 'FC Barcelona', logo: 'https://media.api-sports.io/football/teams/529.png', sp: 3, td: '+6', pkt: 9 },
-            { pos: 3, team: 'Bayern München', logo: 'https://media.api-sports.io/football/teams/157.png', sp: 3, td: '+5', pkt: 9 },
-            { pos: 4, team: 'Real Madrid', logo: 'https://media.api-sports.io/football/teams/541.png', sp: 3, td: '+3', pkt: 7 },
-            { pos: 5, team: 'Arsenal', logo: 'https://media.api-sports.io/football/teams/42.png', sp: 4, td: '+1', pkt: 6 },
-            { pos: 6, team: 'Sporting CP', logo: 'https://media.api-sports.io/football/teams/228.png', sp: 3, td: '0', pkt: 4 },
-            { pos: 7, team: 'RB Leipzig', logo: 'https://media.api-sports.io/football/teams/173.png', sp: 3, td: '-2', pkt: 3 },
-            { pos: 8, team: 'PSV Eindhoven', logo: 'https://media.api-sports.io/football/teams/197.png', sp: 3, td: '-3', pkt: 1 }
-        ];
-
-        let currentFilter = 'alle';
-
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        function switchTab(tab) {
-            if (tab === 'spiele') {
-                document.getElementById('sectionSpiele').classList.remove('hidden');
-                document.getElementById('sectionTabelle').classList.add('hidden');
-                document.getElementById('tabSpiele').classList.add('active');
-                document.getElementById('tabTabelle').classList.remove('active');
-            } else {
-                document.getElementById('sectionSpiele').classList.add('hidden');
-                document.getElementById('sectionTabelle').classList.remove('hidden');
-                document.getElementById('tabSpiele').classList.remove('active');
-                document.getElementById('tabTabelle').classList.add('active');
-                renderStandings();
-            }
-        }
-
-        function setFilter(filter) {
-            currentFilter = filter;
-            document.getElementById('filterAlle').classList.toggle('active', filter === 'alle');
-            document.getElementById('filterBeendet').classList.toggle('active', filter === 'beendet');
-            document.getElementById('filterLive').classList.toggle('active', filter === 'live');
-            renderMatches();
-        }
-
-        function renderMatches() {
-            const list = document.getElementById('matchesList');
-            list.innerHTML = '';
-
-            const filtered = matches.filter(m => {
-                if (currentFilter === 'beendet') return m.status === 'FT';
-                if (currentFilter === 'live') return m.status !== 'FT';
-                return true;
-            });
-
-            filtered.forEach(m => {
-                const card = document.createElement('div');
-                card.className = `match-card ${m.isLive ? 'live-card' : ''}`;
-
-                const badgeClass = m.isLive ? 'live-status' : 'ft';
-
-                card.innerHTML = `
-                    <div class="match-header">
-                        <span>${m.date}</span>
-                        <span class="status-badge ${badgeClass}">${m.status}</span>
-                    </div>
-                    <div class="match-body">
-                        <div class="teams-list">
-                            <div class="team-row">
-                                <div class="team-info">
-                                    <img src="${m.homeLogo}" class="team-logo" alt="${m.home}">
-                                    <span class="team-name">${m.home}</span>
-                                </div>
-                                <span class="score">${m.homeScore}</span>
-                            </div>
-                            <div class="team-row">
-                                <div class="team-info">
-                                    <img src="${m.awayLogo}" class="team-logo" alt="${m.away}">
-                                    <span class="team-name">${m.away}</span>
-                                </div>
-                                <span class="score">${m.awayScore}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        function renderStandings() {
-            const body = document.getElementById('standingsBody');
-            body.innerHTML = '';
-
-            standings.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="text-bold">${row.pos}</td>
-                    <td>
-                        <div class="table-team">
-                            <img src="${row.logo}" class="table-logo" alt="${row.team}">
-                            <span>${row.team}</span>
-                        </div>
-                    </td>
-                    <td class="text-center">${row.sp}</td>
-                    <td class="text-center">${row.td}</td>
-                    <td class="text-center text-bold">${row.pkt}</td>
-                `;
-                body.appendChild(tr);
-            });
-        }
-
-        // Initiale Darstellung
-        renderMatches();
-    </script>
 </body>
 </html>
