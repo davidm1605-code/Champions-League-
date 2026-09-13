@@ -313,9 +313,6 @@
     </div>
 
     <script>
-        // Hier deinen API-Schlüssel eintragen
-        const API_KEY = "DEIN_API_SCHLUESSEL_HIER_EINTRAGEN";
-
         const teamLogos = {
             "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
             "Bayern": "https://images.fotmob.com/image_resources/logo/teamlogo/9823.png",
@@ -550,13 +547,8 @@
 
         async function fetchLiveScores() {
             try {
-                // Automatischer Abruf echter Live-Daten via öffentlicher Live-Schnittstelle mit integriertem API-Schlüssel
-                const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard', {
-                    headers: {
-                        'Authorization': `Bearer ${API_KEY}`,
-                        'X-API-Key': API_KEY
-                    }
-                });
+                // Aufruf läuft nun über die eigene Netlify/Backend-Funktion (Proxy), die den API-Key sicher einbindet
+                const response = await fetch('/.netlify/functions/proxy');
                 if (response.ok) {
                     const data = await response.json();
                     if (data && data.events) {
@@ -566,13 +558,11 @@
                             const awayTeamName = competition.competitors.find(c => c.homeAway === 'away').team.shortDisplayName;
                             const homeScore = parseInt(competition.competitors.find(c => c.homeAway === 'home').score);
                             const awayScore = parseInt(competition.competitors.find(c => c.homeAway === 'away').score);
-                            const statusType = competition.status.type.state; // 'pre', 'in', 'post'
+                            const statusType = competition.status.type.state; 
                             const detailMinutes = competition.status.displayClock;
 
-                            // Abgleich mit dem bestehenden Spielplan-Array
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
-                                    // Toleranter Namensabgleich
                                     if (m.home.toLowerCase().includes(homeTeamName.toLowerCase().substring(0, 3)) && 
                                         m.away.toLowerCase().includes(awayTeamName.toLowerCase().substring(0, 3))) {
                                         
