@@ -38,10 +38,11 @@
 
         h1 {
             color: var(--accent-color);
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
+            text-transform: uppercase;
         }
 
         .main-tabs {
@@ -60,7 +61,7 @@
             border: none;
             color: var(--text-secondary);
             padding: 10px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -75,7 +76,7 @@
 
         .status-bar {
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-secondary);
             margin-bottom: 16px;
         }
@@ -92,8 +93,8 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-secondary);
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 6px 14px;
+            font-size: 12px;
             border-radius: 20px;
             cursor: pointer;
             white-space: nowrap;
@@ -114,11 +115,11 @@
         }
 
         .matchday-container {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .matchday-title {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-secondary);
             background: var(--card-bg);
@@ -131,7 +132,7 @@
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 12px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -159,7 +160,7 @@
         .team-side {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             flex: 1;
         }
 
@@ -174,37 +175,43 @@
         }
 
         .team-name {
-            font-size: 13px;
-            font-weight: 500;
-            max-width: 110px;
+            font-size: 14px;
+            font-weight: 600;
+            max-width: 130px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .team-logo {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             object-fit: contain;
         }
 
         .match-info {
-            padding: 0 10px;
+            padding: 0 12px;
             text-align: center;
-            min-width: 85px;
+            min-width: 75px;
         }
 
         .score {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 700;
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
 
         .match-status {
             font-size: 10px;
             color: var(--text-secondary);
-            margin-top: 2px;
+            margin-top: 3px;
             display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .match-status.live-text {
@@ -222,32 +229,35 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size: 13px;
             text-align: center;
         }
 
         th, td {
-            padding: 8px 4px;
+            padding: 10px 6px;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
             color: var(--text-secondary);
             font-weight: 600;
+            font-size: 11px;
             background: rgba(255,255,255,0.02);
+            text-transform: uppercase;
         }
 
         td.team-col {
             text-align: left;
-            padding-left: 8px;
+            padding-left: 10px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            font-weight: 500;
         }
 
         .form-dots {
             display: flex;
-            gap: 2px;
+            gap: 3px;
             justify-content: center;
         }
 
@@ -295,7 +305,7 @@
                 <thead>
                     <tr>
                         <th style="width: 25px;">#</th>
-                        <th style="text-align: left; padding-left: 8px;">Team</th>
+                        <th style="text-align: left; padding-left: 10px;">Team</th>
                         <th>Sp</th>
                         <th>S</th>
                         <th>U</th>
@@ -344,7 +354,7 @@
             "RB Leipzig": "https://images.fotmob.com/image_resources/logo/teamlogo/7980.png",
             "Real Madrid": "https://images.fotmob.com/image_resources/logo/teamlogo/8633.png",
             "Roma": "https://images.fotmob.com/image_resources/logo/teamlogo/8686.png",
-            "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png", // Fallback bzw. Alias
+            "Sabah FK": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png",
             "Slavia Prag": "https://images.fotmob.com/image_resources/logo/teamlogo/8586.png",
             "Slovan Bratislava": "https://images.fotmob.com/image_resources/logo/teamlogo/8657.png",
             "Sporting": "https://images.fotmob.com/image_resources/logo/teamlogo/9845.png",
@@ -694,7 +704,6 @@
                     } else if (hasResult) {
                         statusText = `<span class="match-status">${m.status || 'Endstand'}</span>`;
                     } else {
-                        // Datum und Uhrzeit anzeigen, falls vorhanden
                         const dateTimeString = (m.date ? m.date + ' ' : '') + (m.time ? m.time + ' Uhr' : '');
                         statusText = `<span class="match-status">${dateTimeString}</span>`;
                     }
@@ -745,7 +754,7 @@
                 tr.innerHTML = `
                     <td>${row.rank}</td>
                     <td class="team-col">
-                        <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:16px;height:16px;">
+                        <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:20px;height:20px;">
                         ${row.team}
                     </td>
                     <td>${row.played}</td>
