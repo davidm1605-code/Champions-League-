@@ -625,22 +625,22 @@
                         if (m.homeScore > m.awayScore) {
                             hTeam.won++;
                             hTeam.pts += 3;
-                            hTeam.form.unshift('win');
+                            hTeam.form.push('win');
                             aTeam.lost++;
-                            aTeam.form.unshift('loss');
+                            aTeam.form.push('loss');
                         } else if (m.homeScore < m.awayScore) {
                             aTeam.won++;
                             aTeam.pts += 3;
-                            aTeam.form.unshift('win');
+                            aTeam.form.push('win');
                             hTeam.lost++;
-                            hTeam.form.unshift('loss');
+                            hTeam.form.push('loss');
                         } else {
                             hTeam.drawn++;
                             hTeam.pts += 1;
-                            hTeam.form.unshift('draw');
+                            hTeam.form.push('draw');
                             aTeam.drawn++;
                             aTeam.pts += 1;
-                            aTeam.form.unshift('draw');
+                            aTeam.form.push('draw');
                         }
                     }
                 });
@@ -722,7 +722,7 @@
                 const diffStr = diff > 0 ? `+${diff}` : diff;
                 
                 let dotsHtml = '';
-                const recentForm = row.form.slice(0, 5);
+                const recentForm = row.form.slice(-5);
                 recentForm.forEach(f => {
                     dotsHtml += `<span class="dot ${f}"></span>`;
                 });
