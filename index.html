@@ -132,7 +132,7 @@
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 10px 12px;
+            padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -160,7 +160,7 @@
         .team-side {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex: 1;
         }
 
@@ -175,17 +175,17 @@
         }
 
         .team-name {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
-            max-width: 130px;
+            max-width: 140px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .team-logo {
-            width: 24px;
-            height: 24px;
+            width: 30px;
+            height: 30px;
             object-fit: contain;
             background-color: #ffffff;
             border-radius: 50%;
@@ -195,23 +195,23 @@
         .match-info {
             padding: 0 12px;
             text-align: center;
-            min-width: 75px;
+            min-width: 85px;
         }
 
         .score {
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text-primary);
             background: rgba(255, 255, 255, 0.05);
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
         }
 
         .match-status {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-secondary);
-            margin-top: 3px;
+            margin-top: 4px;
             display: block;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -232,41 +232,41 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 15px;
             text-align: center;
         }
 
         th, td {
-            padding: 10px 6px;
+            padding: 12px 8px;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 11px;
+            font-size: 12px;
             background: rgba(255,255,255,0.02);
             text-transform: uppercase;
         }
 
         td.team-col {
             text-align: left;
-            padding-left: 10px;
+            padding-left: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-weight: 500;
         }
 
         .form-dots {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             justify-content: center;
         }
 
         .dot {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
         }
 
@@ -307,8 +307,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 25px;">#</th>
-                        <th style="text-align: left; padding-left: 10px;">Team</th>
+                        <th style="width: 30px;">#</th>
+                        <th style="text-align: left; padding-left: 12px;">Team</th>
                         <th>Sp</th>
                         <th>S</th>
                         <th>U</th>
@@ -762,7 +762,7 @@
                 tr.innerHTML = `
                     <td>${row.rank}</td>
                     <td class="team-col">
-                        <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:20px;height:20px;">
+                        <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:26px;height:26px;">
                         ${row.team}
                     </td>
                     <td>${row.played}</td>
