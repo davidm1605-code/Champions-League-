@@ -112,6 +112,12 @@
             color: var(--text-primary);
         }
 
+        /* Neu: Container für Dropdown und Reset-Button nebeneinander */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+        }
+
         .team-select {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -121,7 +127,25 @@
             border-radius: 8px;
             outline: none;
             cursor: pointer;
-            width: 100%;
+            flex: 1;
+        }
+
+        .reset-filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .reset-filter-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--text-primary);
         }
 
         .section {
@@ -314,10 +338,12 @@
                 <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
                 <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende / Live</button>
             </div>
-            <div>
+            <!-- Geändert: Dropdown und "Alle"-Button in einer Zeile -->
+            <div class="filter-row">
                 <select id="team-filter" class="team-select" onchange="filterByTeam(this.value)">
                     <option value="all">🔍 Alle Mannschaften anzeigen</option>
                 </select>
+                <button class="reset-filter-btn" onclick="resetTeamFilter()">Alle</button>
             </div>
         </div>
 
@@ -862,6 +888,13 @@
 
         function filterByTeam(team) {
             selectedTeam = team;
+            renderApp();
+        }
+
+        // Neu: Funktion zum Zurücksetzen des Teamfilters über den "Alle"-Button
+        function resetTeamFilter() {
+            selectedTeam = 'all';
+            document.getElementById('team-filter').value = 'all';
             renderApp();
         }
 
