@@ -81,10 +81,16 @@
             margin-bottom: 16px;
         }
 
+        .controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
         .sub-tabs {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
             overflow-x: auto;
             padding-bottom: 4px;
         }
@@ -104,6 +110,18 @@
         .sub-tab.active {
             border-color: var(--accent-color);
             color: var(--text-primary);
+        }
+
+        .team-select {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            width: 100%;
         }
 
         .section {
@@ -290,10 +308,17 @@
 
     <!-- SPIELE SEKTION -->
     <div id="section-matches" class="section active">
-        <div class="sub-tabs">
-            <button class="sub-tab active" onclick="filterMatches('all', event)">Alle Spiele</button>
-            <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
-            <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende / Live</button>
+        <div class="controls-container">
+            <div class="sub-tabs">
+                <button class="sub-tab active" onclick="filterMatches('all', event)">Alle Spiele</button>
+                <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
+                <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende / Live</button>
+            </div>
+            <div>
+                <select id="team-filter" class="team-select" onchange="filterByTeam(this.value)">
+                    <option value="all">🔍 Alle Mannschaften anzeigen</option>
+                </select>
+            </div>
         </div>
 
         <div id="matchdays-wrapper">
@@ -563,6 +588,28 @@
         ];
 
         let currentFilter = 'all';
+        let selectedTeam = 'all';
+
+        // Befüllt das Dropdown-Menü automatisch mit allen gefundenen Mannschaften alphabetisch sortiert
+        function initTeamDropdown() {
+            const teamsSet = new Set();
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    teamsSet.add(m.home);
+                    teamsSet.add(m.away);
+                });
+            });
+
+            const sortedTeams = Array.from(teamsSet).sort();
+            const selectEl = document.getElementById('team-filter');
+            
+            sortedTeams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                selectEl.appendChild(option);
+            });
+        }
 
         async function fetchLiveScores() {
             try {
@@ -699,9 +746,16 @@
                     const isFinished = hasResult && !m.live && m.status === "Endstand";
                     const isUpcoming = !hasResult || m.live;
 
-                    let showCard = (currentFilter === 'all') || 
-                                 (currentFilter === 'finished' && isFinished) || 
-                                 (currentFilter === 'upcoming' && isUpcoming);
+                    // Filter nach Status (Alle, Beendet, Kommende/Live)
+                    let matchesStatusFilter = (currentFilter === 'all') || 
+                                              (currentFilter === 'finished' && isFinished) || 
+                                              (currentFilter === 'upcoming' && isUpcoming);
+
+                    // Filter nach Mannschaft (falls eine ausgewählt wurde)
+                    let matchesTeamFilter = (selectedTeam === 'all') || 
+                                            (m.home === selectedTeam || m.away === selectedTeam);
+
+                    let showCard = matchesStatusFilter && matchesTeamFilter;
 
                     if (showCard) visibleMatchCount++;
 
@@ -737,7 +791,11 @@
                 });
 
                 mdDiv.innerHTML = html;
-                if (visibleMatchCount === 0) mdDiv.style.display = 'none';
+                if (visibleMatchCount === 0) {
+                    mdDiv.style.display = 'none';
+                } else {
+                    mdDiv.style.display = 'block';
+                }
                 wrapper.appendChild(mdDiv);
             });
 
@@ -802,6 +860,13 @@
             renderApp();
         }
 
+        function filterByTeam(team) {
+            selectedTeam = team;
+            renderApp();
+        }
+
+        // Beim Start einmaliges Ausfüllen des Dropdowns und erster Render-Durchlauf
+        initTeamDropdown();
         renderApp();
         setInterval(renderApp, 30000);
     </script>
