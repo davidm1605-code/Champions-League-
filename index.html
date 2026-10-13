@@ -112,7 +112,6 @@
             color: var(--text-primary);
         }
 
-        /* Spezial-Styling für den Live-Sub-Tab */
         .sub-tab.live-tab-btn {
             border-color: rgba(255, 51, 51, 0.4);
             color: var(--text-secondary);
@@ -449,7 +448,7 @@
         };
 
         function getTeamLogo(name) {
-            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'></path><path d='M2 12h20'></path></svg>";
+            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z'></path><path d='M2 12h20'></path></svg>";
         }
 
         let matchdays = [
@@ -479,8 +478,8 @@
             {
                 day: "Spieltag 2 von 8",
                 matches: [
-                    { home: "Lens", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
-                    { home: "Sabah FK", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "13.10.", live: false },
+                    { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
+                    { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
                     { home: "Galatasaray", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
                     { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
                     { home: "Arsenal", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
@@ -497,144 +496,6 @@
                     { home: "Man City", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Bodø/Glimt", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 3 von 8",
-                matches: [
-                    { home: "Sabah FK", away: "Dortmund", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
-                    { home: "Fenerbahce", away: "Slavia Prag", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
-                    { home: "PSG", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "Man City", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "Neapel", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "FC Porto", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "Roma", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "Liverpool", away: "Villarreal", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "VfB Stuttgart", away: "At. Madrid", homeScore: null, awayScore: null, time: "21:00", date: "20.10.", live: false },
-                    { home: "Como", away: "Man United", homeScore: null, awayScore: null, time: "18:45", date: "20.10.", live: false },
-                    { home: "LOSC", away: "Galatasaray", homeScore: null, awayScore: null, time: "18:45", date: "21.10.", live: false },
-                    { home: "Sporting", away: "LASK", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "Benfica", away: "Feyenoord", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "Inter", away: "Donezk", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "Bayern", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "Aston Villa", away: "Viking", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "FC Brügge", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false },
-                    { home: "Real Madrid", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "21.10.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 4 von 8",
-                matches: [
-                    { home: "Galatasaray", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
-                    { home: "Donezk", away: "Sporting", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
-                    { home: "Feyenoord", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "Bodø/Glimt", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "At. Madrid", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "Villarreal", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "Barcelona", away: "Aston Villa", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "Man United", away: "Roma", homeScore: null, awayScore: null, time: "21:00", date: "03.11.", live: false },
-                    { home: "LASK", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
-                    { home: "Fenerbahce", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "03.11.", live: false },
-                    { home: "AEK", away: "Real Madrid", homeScore: null, awayScore: null, time: "18:45", date: "04.11.", live: false },
-                    { home: "Lens", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "04.11.", live: false },
-                    { home: "Dortmund", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
-                    { home: "RB Leipzig", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
-                    { home: "FC Porto", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
-                    { home: "PSV Eindhoven", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
-                    { home: "Slavia Prag", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false },
-                    { home: "Viking", away: "Sabah FK", homeScore: null, awayScore: null, time: "21:00", date: "04.11.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 5 von 8",
-                matches: [
-                    { home: "Galatasaray", away: "Aston Villa", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
-                    { home: "Bodø/Glimt", away: "LASK", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
-                    { home: "Feyenoord", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Arsenal", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Slovan Bratislava", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Real Madrid", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "RB Leipzig", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Como", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Man City", away: "Neapel", homeScore: null, awayScore: null, time: "21:00", date: "24.11.", live: false },
-                    { home: "Slavia Prag", away: "Villarreal", homeScore: null, awayScore: null, time: "18:45", date: "24.11.", live: false },
-                    { home: "Sabah FK", away: "Barcelona", homeScore: null, awayScore: null, time: "18:45", date: "25.11.", live: false },
-                    { home: "PSG", away: "Roma", homeScore: null, awayScore: null, time: "18:45", date: "25.11.", live: false },
-                    { home: "Donezk", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
-                    { home: "Inter", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
-                    { home: "Sporting", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
-                    { home: "At. Madrid", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false },
-                    { home: "Bayern", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "26.11.", live: false },
-                    { home: "FC Brügge", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "25.11.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 6 von 8",
-                matches: [
-                    { home: "Villarreal", away: "Sabah FK", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
-                    { home: "Viking", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
-                    { home: "Bayern", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Aston Villa", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Roma", away: "Sporting", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Man United", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Barcelona", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "AEK", away: "Galatasaray", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Neapel", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "08.12.", live: false },
-                    { home: "Benfica", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "08.12.", live: false },
-                    { home: "Slovan Bratislava", away: "Donezk", homeScore: null, awayScore: null, time: "18:45", date: "09.12.", live: false },
-                    { home: "Arsenal", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "LASK", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "LOSC", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "PSV Eindhoven", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "At. Madrid", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "Liverpool", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false },
-                    { home: "Dortmund", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "09.12.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 7 von 8",
-                matches: [
-                    { home: "Galatasaray", away: "Feyenoord", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
-                    { home: "Bodø/Glimt", away: "At. Madrid", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
-                    { home: "Aston Villa", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "FC Porto", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "Inter", away: "Liverpool", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "VfB Stuttgart", away: "FC Brügge", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "Real Madrid", away: "LASK", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "LOSC", away: "Slovan Bratislava", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "AEK", away: "Roma", homeScore: null, awayScore: null, time: "21:00", date: "19.01.", live: false },
-                    { home: "Sabah FK", away: "Neapel", homeScore: null, awayScore: null, time: "18:45", date: "19.01.", live: false },
-                    { home: "Fenerbahce", away: "Villarreal", homeScore: null, awayScore: null, time: "18:45", date: "20.01.", live: false },
-                    { home: "Viking", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "RB Leipzig", away: "Donezk", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "Benfica", away: "Arsenal", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "Como", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "Man United", away: "Bayern", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "Lens", away: "Man City", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false },
-                    { home: "Sporting", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "20.01.", live: false }
-                ]
-            },
-            {
-                day: "Spieltag 8 von 8",
-                matches: [
-                    { home: "Neapel", away: "Viking", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Barcelona", away: "Como", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "PSG", away: "Galatasaray", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Feyenoord", away: "RB Leipzig", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Dortmund", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "LASK", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Donezk", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "At. Madrid", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "FC Brügge", away: "Bodø/Glimt", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Arsenal", away: "Sabah FK", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Villarreal", away: "Slavia Prag", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Aston Villa", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Bayern", away: "Benfica", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Roma", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Slovan Bratislava", away: "Inter", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "VfB Stuttgart", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Liverpool", away: "Lens", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false },
-                    { home: "Man City", away: "Sporting", homeScore: null, awayScore: null, time: "21:00", date: "27.01.", live: false }
                 ]
             }
         ];
@@ -662,12 +523,21 @@
             });
         }
 
+        // Hilfsfunktion zum flexiblen Abgleich von Vereinsnamen
+        function isTeamMatch(localName, apiName) {
+            if (!localName || !apiName) return false;
+            const l = localName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
+            const a = apiName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
+            return l.includes(a) || a.includes(l);
+        }
+
         async function fetchLiveScores() {
             let hasActiveLiveGames = false;
             try {
                 const response = await fetch('/.netlify/functions/proxy');
                 if (response.ok) {
                     const data = await response.json();
+                    
                     if (data && data.events) {
                         data.events.forEach(event => {
                             const competition = event.competitions[0];
@@ -676,8 +546,8 @@
                             
                             if (!homeComp || !awayComp) return;
 
-                            const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name;
-                            const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name;
+                            const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name || "";
+                            const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name || "";
                             const homeScore = parseInt(homeComp.score);
                             const awayScore = parseInt(awayComp.score);
                             const statusType = competition.status.type.state; 
@@ -685,14 +555,7 @@
 
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
-                                    const matchHomeLower = m.home.toLowerCase();
-                                    const matchAwayLower = m.away.toLowerCase();
-                                    const apiHomeLower = homeTeamName.toLowerCase();
-                                    const apiAwayLower = awayTeamName.toLowerCase();
-
-                                    if ((matchHomeLower.includes(apiHomeLower) || apiHomeLower.includes(matchHomeLower)) && 
-                                        (matchAwayLower.includes(apiAwayLower) || apiAwayLower.includes(matchAwayLower))) {
-                                        
+                                    if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
                                         if (!isNaN(homeScore)) m.homeScore = homeScore;
                                         if (!isNaN(awayScore)) m.awayScore = awayScore;
 
@@ -715,7 +578,7 @@
                 console.error("Fehler beim Abrufen der Live-Daten:", error);
             }
 
-            // Live-Button Status aktualisieren
+            // Prüfen ob irgendwo ein Live-Spiel aktiv ist
             matchdays.forEach(md => {
                 md.matches.forEach(m => {
                     if (m.live) hasActiveLiveGames = true;
@@ -732,8 +595,6 @@
             }
 
             document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            
-            // Ansicht aktualisieren, falls Live-Daten geladen wurden
             renderAppContent();
         }
 
@@ -816,15 +677,14 @@
                 md.matches.forEach(m => {
                     const hasResult = (m.homeScore !== null && m.awayScore !== null);
                     const isFinished = hasResult && !m.live && m.status === "Endstand";
-                    const isUpcoming = !hasResult || m.live;
-
+                    
                     let matchesStatusFilter = false;
                     if (currentFilter === 'all') {
                         matchesStatusFilter = true;
                     } else if (currentFilter === 'finished') {
                         matchesStatusFilter = isFinished;
                     } else if (currentFilter === 'upcoming') {
-                        matchesStatusFilter = isUpcoming && !m.live;
+                        matchesStatusFilter = !isFinished && !m.live;
                     } else if (currentFilter === 'only-live') {
                         matchesStatusFilter = m.live;
                     }
@@ -958,8 +818,8 @@
 
         // Initialisierung
         initTeamDropdown();
-        renderAppContent(); // Sofortige Anzeige der Spiele (ohne Warten)
-        fetchLiveScores();  // API im Hintergrund abfragen
+        renderAppContent(); 
+        fetchLiveScores();  
         setInterval(fetchLiveScores, 30000);
     </script>
 </body>
