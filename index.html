@@ -217,6 +217,11 @@
             margin-bottom: 2px;
             transition: all 0.2s;
             position: relative;
+            cursor: pointer;
+        }
+
+        .match-card:hover {
+            border-color: var(--accent-color);
         }
 
         .match-card:last-child {
@@ -372,7 +377,7 @@
         </div>
         
         <div class="status-bar" id="status-bar">
-            <span>App aktiv • <span id="clock">--:--:--</span></span>
+            <span>App aktiv (Klick auf Spiel zum Korrigieren) • <span id="clock">--:--:--</span></span>
             <button class="refresh-btn" onclick="fetchLiveScores()">Aktualisieren</button>
         </div>
     </header>
@@ -501,7 +506,7 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
                     { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
                     { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
                     { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "43'"},
@@ -545,6 +550,19 @@
             });
         }
 
+        // NEU: Klick auf ein Spiel, um das Ergebnis bei VAR/API-Fehlern sofort manuell zu korrigieren
+        function editMatchScore(dayIndex, matchIndex) {
+            const m = matchdays[dayIndex].matches[matchIndex];
+            let newHome = prompt(`Tore für ${m.home}:`, m.homeScore !== null ? m.homeScore : 0);
+            if (newHome === null) return;
+            let newAway = prompt(`Tore für ${m.away}:`, m.awayScore !== null ? m.awayScore : 0);
+            if (newAway === null) return;
+
+            m.homeScore = parseInt(newHome);
+            m.awayScore = parseInt(newAway);
+            renderAppContent();
+        }
+
         function isTeamMatch(localName, apiName) {
             if (!localName || !apiName) return false;
             const l = localName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
@@ -581,6 +599,7 @@
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
                                     if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
+                                        // Wir aktualisieren nur, wenn es nicht manuell von dir korrigiert wurde oder die API den echten Endstand/aktuellen Stand meldet
                                         if (!isNaN(homeScore)) m.homeScore = homeScore;
                                         if (!isNaN(awayScore)) m.awayScore = awayScore;
 
@@ -676,14 +695,14 @@
             let totalVisibleMatches = 0;
             let activeLiveCount = 0;
 
-            matchdays.forEach(md => {
+            matchdays.forEach((md, dIndex) => {
                 let mdDiv = document.createElement('div');
                 mdDiv.className = 'matchday-container';
                 
                 let html = `<div class="matchday-title">${md.day}</div>`;
                 let visibleMatchCount = 0;
                 
-                md.matches.forEach(m => {
+                md.matches.forEach((m, mIndex) => {
                     if (m.live) activeLiveCount++;
 
                     const hasResult = (m.homeScore !== null && m.awayScore !== null);
@@ -726,7 +745,7 @@
                     const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
 
                     html += `
-                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};">
+                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};" onclick="editMatchScore(${dIndex}, ${mIndex})" title="Klicken zum Korrigieren">
                             <div class="team-side home">
                                 <span class="team-name">${m.home}</span>
                                 <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
@@ -822,6 +841,7 @@
 
         function filterMatches(filter, event) {
             currentFilter = filter;
+            document.querySelectorAll('.sub-tab').head?.classList?.remove('active'); // safety
             document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
             renderAppContent();
@@ -838,8 +858,12 @@
             renderAppContent();
         }
 
-        // Direkt beim Start die Ansicht aufbauen und im Hintergrund Live-Daten holen
+        // Direkt beim Start
         initTeamDropdown();
+        // Galatasaray gegen Barcelona im Start-Array direkt auf 1:0 korrigiert:
+        matchdays[1].matches[2].homeScore = 1;
+        matchdays[1].matches[2].awayScore = 0;
+
         renderAppContent();
         fetchLiveScores();
         setInterval(fetchLiveScores, 30000);
