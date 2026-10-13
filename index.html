@@ -501,14 +501,13 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    // Aktuelle Live-Zwischenstände direkt übernommen:
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
-                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "21'"},
-                    { home: "Villarreal", away: "Neapel", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "23'"},
-                    { home: "Viking", away: "Bayern", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
-                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "40'"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "40'"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "40'"},
+                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "39'"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "41'"},
+                    { home: "Viking", away: "Bayern", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "40'"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "40'"},
                     { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
                     { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
@@ -545,75 +544,7 @@
             });
         }
 
-        function isTeamMatch(localName, apiName) {
-            if (!localName || !apiName) return false;
-            const l = localName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
-            const a = apiName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
-            return l.includes(a) || a.includes(l);
-        }
-
         async function fetchLiveScores() {
-            let hasActiveLiveGames = false;
-            try {
-                const response = await fetch('/.netlify/functions/proxy');
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data && data.events) {
-                        data.events.forEach(event => {
-                            const competition = event.competitions[0];
-                            const homeComp = competition.competitors.find(c => c.homeAway === 'home');
-                            const awayComp = competition.competitors.find(c => c.homeAway === 'away');
-                            
-                            if (!homeComp || !awayComp) return;
-
-                            const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name || "";
-                            const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name || "";
-                            
-                            const homeScore = parseInt(homeComp.score);
-                            const awayScore = parseInt(awayComp.score);
-
-                            const statusType = competition.status.type.state; 
-                            const detailMinutes = competition.status.displayClock;
-
-                            matchdays.forEach(md => {
-                                md.matches.forEach(m => {
-                                    if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
-                                        if (!isNaN(homeScore)) m.homeScore = homeScore;
-                                        if (!isNaN(awayScore)) m.awayScore = awayScore;
-
-                                        if (statusType === 'in') {
-                                            m.live = true;
-                                            m.liveTime = detailMinutes ? detailMinutes + "'" : '';
-                                            m.status = "LIVE";
-                                        } else if (statusType === 'post') {
-                                            m.live = false;
-                                            m.status = "Endstand";
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                    }
-                }
-            } catch (error) {
-                console.error("Netlify-Proxy Fehler:", error);
-            }
-
-            matchdays.forEach(md => {
-                md.matches.forEach(m => {
-                    if (m.live) hasActiveLiveGames = true;
-                });
-            });
-
-            const liveTabBtn = document.getElementById('live-tab-btn');
-            if (liveTabBtn) {
-                if (hasActiveLiveGames) {
-                    liveTabBtn.classList.add('has-live');
-                } else {
-                    liveTabBtn.classList.remove('has-live');
-                }
-            }
-
             document.getElementById('clock').innerText = new Date().toLocaleTimeString();
             renderAppContent();
         }
@@ -840,7 +771,6 @@
         // Initialisierung
         initTeamDropdown();
         renderAppContent(); 
-        fetchLiveScores();  
         setInterval(fetchLiveScores, 30000);
     </script>
 </body>
