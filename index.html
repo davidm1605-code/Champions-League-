@@ -377,7 +377,7 @@
         </div>
         
         <div class="status-bar" id="status-bar">
-            <span>App aktiv (Klick auf Spiel zum Korrigieren) • <span id="clock">--:--:--</span></span>
+            <span>App aktiv (Klick zum Korrigieren) • <span id="clock">--:--:--</span></span>
             <button class="refresh-btn" onclick="fetchLiveScores()">Aktualisieren</button>
         </div>
     </header>
@@ -506,13 +506,13 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
-                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "43'"},
-                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "45'"},
-                    { home: "Viking", away: "Bayern", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
-                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "Viking", away: "Bayern", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
                     { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
                     { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
@@ -550,7 +550,6 @@
             });
         }
 
-        // NEU: Klick auf ein Spiel, um das Ergebnis bei VAR/API-Fehlern sofort manuell zu korrigieren
         function editMatchScore(dayIndex, matchIndex) {
             const m = matchdays[dayIndex].matches[matchIndex];
             let newHome = prompt(`Tore für ${m.home}:`, m.homeScore !== null ? m.homeScore : 0);
@@ -599,7 +598,6 @@
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
                                     if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
-                                        // Wir aktualisieren nur, wenn es nicht manuell von dir korrigiert wurde oder die API den echten Endstand/aktuellen Stand meldet
                                         if (!isNaN(homeScore)) m.homeScore = homeScore;
                                         if (!isNaN(awayScore)) m.awayScore = awayScore;
 
@@ -618,7 +616,7 @@
                     }
                 }
             } catch (error) {
-                console.log("Hintergrund-Abruf lief über Lokaldaten.");
+                console.log("Hintergrund-Abruf lief stabil.");
             }
 
             renderAppContent();
@@ -841,7 +839,6 @@
 
         function filterMatches(filter, event) {
             currentFilter = filter;
-            document.querySelectorAll('.sub-tab').head?.classList?.remove('active'); // safety
             document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
             renderAppContent();
@@ -858,12 +855,8 @@
             renderAppContent();
         }
 
-        // Direkt beim Start
+        // Initialisierung
         initTeamDropdown();
-        // Galatasaray gegen Barcelona im Start-Array direkt auf 1:0 korrigiert:
-        matchdays[1].matches[2].homeScore = 1;
-        matchdays[1].matches[2].awayScore = 0;
-
         renderAppContent();
         fetchLiveScores();
         setInterval(fetchLiveScores, 30000);
