@@ -372,7 +372,7 @@
         </div>
         
         <div class="status-bar" id="status-bar">
-            <span>Live-API verbunden • <span id="clock">--:--:--</span></span>
+            <span>App aktiv • <span id="clock">--:--:--</span></span>
             <button class="refresh-btn" onclick="fetchLiveScores()">Aktualisieren</button>
         </div>
     </header>
@@ -447,4 +447,402 @@
             "Feyenoord": "https://images.fotmob.com/image_resources/logo/teamlogo/10235.png",
             "Galatasaray": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23fff'/><path d='M50 15 A 32 32 0 0 1 72 75 L 72 55 A 15 15 0 0 0 50 40 Z' fill='%23a1163b'/><path d='M50 85 A 32 32 0 0 1 28 25 L 28 45 A 15 15 0 0 0 50 60 Z' fill='%23feb300'/><text x='50' y='54' fill='%23000' font-size='10' font-weight='bold' text-anchor='middle'>1905</text></svg>",
             "Inter": "https://images.fotmob.com/image_resources/logo/teamlogo/8636.png",
-            "LASK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 70 Q 50 95 15 70 Z' fill='%23fff'/><text x='50' y='38' fill='%23000' font-size='18' font-weight='bold' text-anchor='middle'>LASK</text><rect x='25' y='48' width='10' height='25' fill='%23000'/><rect x='40' y='48' width='10' height='
+            "LASK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 70 Q 50 95 15 70 Z' fill='%23fff'/><text x='50' y='38' fill='%23000' font-size='18' font-weight='bold' text-anchor='middle'>LASK</text><rect x='25' y='48' width='10' height='25' fill='%23000'/><rect x='40' y='48' width='10' height='25' fill='%23000'/><rect x='55' y='48' width='10' height='25' fill='%23000'/><rect x='70' y='48' width='10' height='25' fill='%23000'/></svg>",
+            "Lens": "https://images.fotmob.com/image_resources/logo/teamlogo/8588.png",
+            "Liverpool": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
+            "LOSC": "https://images.fotmob.com/image_resources/logo/teamlogo/8689.png",
+            "Man City": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
+            "ManUnited": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
+            "Neapel": "https://images.fotmob.com/image_resources/logo/teamlogo/9875.png",
+            "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
+            "PSV Eindhoven": "https://images.fotmob.com/image_resources/logo/teamlogo/8640.png",
+            "RB Leipzig": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 85 Q 50 98 15 85 Z' fill='%23fff' stroke='%231a2035' stroke-width='4'/><text x='50' y='30' fill='%23e63946' font-size='16' font-weight='bold' text-anchor='middle'>R B</text><circle cx='50' cy='52' r='18' fill='%23ffeb3b'/><path d='M35 50 Q 50 35 65 50 Q 50 65 35 50' fill='%23e63946'/><text x='50' y='80' fill='%231a2035' font-size='11' font-weight='bold' text-anchor='middle'>LEIPZIG</text></svg>",
+            "Real Madrid": "https://images.fotmob.com/image_resources/logo/teamlogo/8633.png",
+            "Roma": "https://images.fotmob.com/image_resources/logo/teamlogo/8686.png",
+            "Sabah FK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 60 Q 50 98 15 60 Z' fill='%23000' stroke='%23ff4081' stroke-width='4'/><text x='50' y='45' fill='%23ff4081' font-size='18' font-weight='bold' text-anchor='middle'>SABAH</text><text x='50' y='75' fill='%23ff4081' font-size='10' font-weight='bold' text-anchor='middle'>2017</text></svg>",
+            "Slavia Prag": "https://images.fotmob.com/image_resources/logo/teamlogo/8658.png",
+            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
+            "Sporting": "https://images.fotmob.com/image_resources/logo/teamlogo/9845.png",
+            "VfB Stuttgart": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 60 Q 50 95 15 60 Z' fill='%23fff' stroke='%23e63946' stroke-width='4'/><text x='50' y='35' fill='%23e63946' font-size='20' font-weight='bold' text-anchor='middle'>VfB</text><path d='M25 60 L75 60 L50 88 Z' fill='%23ffeb3b'/></svg>",
+            "Viking": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%23cc2b32' stroke='%23ffeb3b' stroke-width='3'/><text x='50' y='40' fill='%23ffeb3b' font-size='10' font-weight='bold' text-anchor='middle'>VIKING F.K.</text><text x='50' y='72' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>STAVANGER</text></svg>",
+            "Villarreal": "https://images.fotmob.com/image_resources/logo/teamlogo/10261.png"
+        };
+
+        function getTeamLogo(name) {
+            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z'></path><path d='M2 12h20'></path></svg>";
+        }
+
+        let matchdays = [
+            {
+                day: "Spieltag 1 von 8",
+                matches: [
+                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand", live: false },
+                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
+                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand", live: false },
+                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand", live: false },
+                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
+                    { home: "Bayern", away: "Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
+                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand", live: false },
+                    { home: "ManUnited", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
+                ]
+            },
+            {
+                day: "Spieltag 2 von 8",
+                matches: [
+                    { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
+                    { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "43'"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "45'"},
+                    { home: "Viking", away: "Bayern", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "44'"},
+                    { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Slovan Bratislava", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
+                    { home: "Aston Villa", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Man City", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "Bodø/Glimt", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
+                    { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false }
+                ]
+            }
+        ];
+
+        let currentFilter = 'all';
+        let selectedTeam = 'all';
+
+        function initTeamDropdown() {
+            const teamsSet = new Set();
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    teamsSet.add(m.home);
+                    teamsSet.add(m.away);
+                });
+            });
+
+            const sortedTeams = Array.from(teamsSet).sort();
+            const selectEl = document.getElementById('team-filter');
+            selectEl.innerHTML = '<option value="all">🔍 Alle Mannschaften anzeigen</option>';
+            
+            sortedTeams.forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                selectEl.appendChild(option);
+            });
+        }
+
+        function isTeamMatch(localName, apiName) {
+            if (!localName || !apiName) return false;
+            const l = localName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
+            const a = apiName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
+            return l.includes(a) || a.includes(l);
+        }
+
+        async function fetchLiveScores() {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            
+            try {
+                const targetUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uerj.champions/scoreboard';
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
+                
+                const response = await fetch(proxyUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.events) {
+                        data.events.forEach(event => {
+                            const competition = event.competitions[0];
+                            const homeComp = competition.competitors.find(c => c.homeAway === 'home');
+                            const awayComp = competition.competitors.find(c => c.homeAway === 'away');
+                            
+                            if (!homeComp || !awayComp) return;
+
+                            const homeTeamName = homeComp.team.displayName || homeComp.team.name || "";
+                            const awayTeamName = awayComp.team.displayName || awayComp.team.name || "";
+                            
+                            const homeScore = parseInt(homeComp.score);
+                            const awayScore = parseInt(awayComp.score);
+                            const statusType = competition.status.type.state; 
+                            const detailMinutes = competition.status.displayClock;
+
+                            matchdays.forEach(md => {
+                                md.matches.forEach(m => {
+                                    if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
+                                        if (!isNaN(homeScore)) m.homeScore = homeScore;
+                                        if (!isNaN(awayScore)) m.awayScore = awayScore;
+
+                                        if (statusType === 'in') {
+                                            m.live = true;
+                                            m.liveTime = detailMinutes ? detailMinutes + "'" : '';
+                                            m.status = "LIVE";
+                                        } else if (statusType === 'post') {
+                                            m.live = false;
+                                            m.status = "Endstand";
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                }
+            } catch (error) {
+                console.log("Hintergrund-Abruf lief über Lokaldaten.");
+            }
+
+            renderAppContent();
+        }
+
+        function calculateStandings() {
+            const tableMap = {};
+
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    [m.home, m.away].forEach(team => {
+                        if (!tableMap[team]) {
+                            tableMap[team] = { team: team, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, pts: 0, form: [] };
+                        }
+                    });
+
+                    if (m.homeScore !== null && m.awayScore !== null && !m.live) {
+                        const hTeam = tableMap[m.home];
+                        const aTeam = tableMap[m.away];
+
+                        hTeam.played++;
+                        aTeam.played++;
+
+                        hTeam.gf += m.homeScore;
+                        hTeam.ga += m.awayScore;
+                        aTeam.gf += m.awayScore;
+                        aTeam.ga += m.homeScore;
+
+                        if (m.homeScore > m.awayScore) {
+                            hTeam.won++;
+                            hTeam.pts += 3;
+                            hTeam.form.push('win');
+                            aTeam.lost++;
+                            aTeam.form.push('loss');
+                        } else if (m.homeScore < m.awayScore) {
+                            aTeam.won++;
+                            aTeam.pts += 3;
+                            aTeam.form.push('win');
+                            hTeam.lost++;
+                            aTeam.form.push('loss');
+                        } else {
+                            hTeam.drawn++;
+                            hTeam.pts += 1;
+                            hTeam.form.push('draw');
+                            aTeam.drawn++;
+                            aTeam.pts += 1;
+                            aTeam.form.push('draw');
+                        }
+                    }
+                });
+            });
+
+            let standingsArr = Object.values(tableMap);
+            standingsArr.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                const diffA = a.gf - a.ga;
+                const diffB = b.gf - b.ga;
+                if (diffB !== diffA) return diffB - diffA;
+                return b.gf - a.gf;
+            });
+
+            standingsArr.forEach((row, index) => {
+                row.rank = index + 1;
+            });
+
+            return standingsArr;
+        }
+
+        function renderAppContent() {
+            const wrapper = document.getElementById('matchdays-wrapper');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            let totalVisibleMatches = 0;
+            let activeLiveCount = 0;
+
+            matchdays.forEach(md => {
+                let mdDiv = document.createElement('div');
+                mdDiv.className = 'matchday-container';
+                
+                let html = `<div class="matchday-title">${md.day}</div>`;
+                let visibleMatchCount = 0;
+                
+                md.matches.forEach(m => {
+                    if (m.live) activeLiveCount++;
+
+                    const hasResult = (m.homeScore !== null && m.awayScore !== null);
+                    const isFinished = hasResult && !m.live && m.status === "Endstand";
+                    
+                    let matchesStatusFilter = false;
+                    if (currentFilter === 'all') {
+                        matchesStatusFilter = true;
+                    } else if (currentFilter === 'finished') {
+                        matchesStatusFilter = isFinished;
+                    } else if (currentFilter === 'upcoming') {
+                        matchesStatusFilter = !isFinished && !m.live;
+                    } else if (currentFilter === 'only-live') {
+                        matchesStatusFilter = m.live;
+                    }
+
+                    let matchesTeamFilter = (selectedTeam === 'all') || 
+                                            (m.home === selectedTeam || m.away === selectedTeam);
+
+                    let showCard = matchesStatusFilter && matchesTeamFilter;
+
+                    if (showCard) {
+                        visibleMatchCount++;
+                        totalVisibleMatches++;
+                    }
+
+                    const isLive = m.live;
+                    let statusText = '';
+                    if (isLive) {
+                        statusText = `<span class="match-status live-text">LIVE ${m.liveTime || ''}</span>`;
+                    } else if (hasResult) {
+                        statusText = `<span class="match-status">${m.status || 'Endstand'}</span>`;
+                    } else {
+                        const dateTimeString = (m.date ? m.date + ' ' : '') + (m.time ? m.time + ' Uhr' : '');
+                        statusText = `<span class="match-status">${dateTimeString}</span>`;
+                    }
+
+                    const displayHomeScore = (m.homeScore !== null && !isNaN(m.homeScore)) ? m.homeScore : 0;
+                    const displayAwayScore = (m.awayScore !== null && !isNaN(m.awayScore)) ? m.awayScore : 0;
+                    const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
+
+                    html += `
+                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};">
+                            <div class="team-side home">
+                                <span class="team-name">${m.home}</span>
+                                <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
+                            </div>
+                            <div class="match-info">
+                                <div class="score">${scoreText}</div>
+                                ${statusText}
+                            </div>
+                            <div class="team-side away">
+                                <img src="${getTeamLogo(m.away)}" class="team-logo" alt="${m.away}">
+                                <span class="team-name">${m.away}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                mdDiv.innerHTML = html;
+                if (visibleMatchCount === 0) {
+                    mdDiv.style.display = 'none';
+                } else {
+                    mdDiv.style.display = 'block';
+                }
+                wrapper.appendChild(mdDiv);
+            });
+
+            const liveTabBtn = document.getElementById('live-tab-btn');
+            if (liveTabBtn) {
+                if (activeLiveCount > 0) {
+                    liveTabBtn.classList.add('has-live');
+                } else {
+                    liveTabBtn.classList.remove('has-live');
+                }
+            }
+
+            if (totalVisibleMatches === 0 && currentFilter === 'only-live') {
+                wrapper.innerHTML = `<div class="no-live-msg">Aktuell finden keine Live-Spiele statt. 🔴⚽</div>`;
+            }
+
+            const tbody = document.getElementById('table-body');
+            if (tbody) {
+                tbody.innerHTML = '';
+                const currentStandings = calculateStandings();
+                currentStandings.forEach((row) => {
+                    const diff = row.gf - row.ga;
+                    const diffStr = diff > 0 ? `+${diff}` : diff;
+                    
+                    let dotsHtml = '';
+                    const recentForm = row.form.slice(-5);
+                    recentForm.forEach(f => {
+                        dotsHtml += `<span class="dot ${f}"></span>`;
+                    });
+                    if (dotsHtml === '') {
+                        dotsHtml = `<span class="dot draw"></span>`;
+                    }
+                    
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.rank}</td>
+                        <td class="team-col">
+                            <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:26px;height:26px;">
+                            ${row.team}
+                        </td>
+                        <td>${row.played}</td>
+                        <td>${row.won}</td>
+                        <td>${row.drawn}</td>
+                        <td>${row.lost}</td>
+                        <td>${row.gf}:${row.ga}</td>
+                        <td>${diffStr}</td>
+                        <td><strong>${row.pts}</strong></td>
+                        <td>
+                            <div class="form-dots">
+                                ${dotsHtml}
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function switchMainTab(tab) {
+            document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+
+            if (tab === 'matches') {
+                document.querySelector('.main-tab:nth-child(1)').classList.add('active');
+                document.getElementById('section-matches').classList.add('active');
+            } else {
+                document.querySelector('.main-tab:nth-child(2)').classList.add('active');
+                document.getElementById('section-table').classList.add('active');
+            }
+        }
+
+        function filterMatches(filter, event) {
+            currentFilter = filter;
+            document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            renderAppContent();
+        }
+
+        function filterByTeam(team) {
+            selectedTeam = team;
+            renderAppContent();
+        }
+
+        function resetTeamFilter() {
+            selectedTeam = 'all';
+            document.getElementById('team-filter').value = 'all';
+            renderAppContent();
+        }
+
+        // Direkt beim Start die Ansicht aufbauen und im Hintergrund Live-Daten holen
+        initTeamDropdown();
+        renderAppContent();
+        fetchLiveScores();
+        setInterval(fetchLiveScores, 30000);
+    </script>
+</body>
+</html>
