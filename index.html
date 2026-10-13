@@ -569,19 +569,22 @@
             return l.includes(a) || a.includes(l);
         }
 
+        // INTELLIGENTER MULTI-QUELLEN-ABRUF (ESPN primär, football-data.org als Backup)
         async function fetchLiveScores() {
             const clockEl = document.getElementById('clock');
             if (clockEl) clockEl.innerText = new Date().toLocaleTimeString();
             
+            let success = false;
+
+            // VERSUCH 1: ESPN (Primärquelle über Proxy)
             try {
-                // Wir nutzen wieder den absolut stabilen Original-Endpunkt von ESPN
                 const targetUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uerj.champions/scoreboard';
                 const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
                 
                 const response = await fetch(proxyUrl);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data && data.events) {
+                    if (data && data.events && data.events.length > 0) {
                         data.events.forEach(event => {
                             const competition = event.competitions[0];
                             const homeComp = competition.competitors.find(c => c.homeAway === 'home');
@@ -615,13 +618,55 @@
                                 });
                             });
                         });
+                        success = true;
                     }
                 }
-            } catch (error) {
-                console.log("Netzwerk- oder API-Hinweis: App läuft auf lokalen Daten weiter.");
+            } catch (e) {
+                console.log("Primärquelle (ESPN) hat keine aktuellen Daten geliefert. Wechsle zu Backup...");
             }
 
-            // WICHTIG: Render wird IMMER ausgeführt, selbst wenn die API fehlschlägt!
+            // VERSUCH 2: football-data.org als intelligenter Backup-Fallback, falls Versuch 1 fehlschlägt
+            if (!success) {
+                try {
+                    const backupUrl = 'https://api.football-data.org/v4/competitions/CL/matches?matchday=2';
+                    const proxyBackup = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(backupUrl);
+                    
+                    const backupRes = await fetch(proxyBackup);
+                    if (backupRes.ok) {
+                        const backupData = await backupRes.json();
+                        if (backupData && backupData.matches) {
+                            backupData.matches.forEach(match => {
+                                const homeName = match.homeTeam.name;
+                                const awayName = match.awayTeam.name;
+                                const hScore = match.score.fullTime.home;
+                                const aScore = match.score.fullTime.away;
+                                const status = match.status; // IN_PLAY, FINISHED, SCHEDULED
+
+                                matchdays.forEach(md => {
+                                    md.matches.forEach(m => {
+                                        if (isTeamMatch(m.home, homeName) && isTeamMatch(m.away, awayName)) {
+                                            if (hScore !== null) m.homeScore = hScore;
+                                            if (aScore !== null) m.awayScore = aScore;
+
+                                            if (status === 'IN_PLAY' || status === 'PAUSED') {
+                                                m.live = true;
+                                                m.liveTime = status === 'PAUSED' ? 'Halbzeit' : '2. Halbzeit';
+                                                m.status = 'LIVE';
+                                            } else if (status === 'FINISHED') {
+                                                m.live = false;
+                                                m.status = 'Endstand';
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.log("Backup-Quelle ebenfalls im Limit oder nicht erreichbar.");
+                }
+            }
+
             renderAppContent();
         }
 
@@ -858,10 +903,10 @@
             renderAppContent();
         }
 
-        // Initialisierung – JETZT absolut fehlerresistent
+        // Initialisierung
         initTeamDropdown();
-        renderAppContent(); // Zeigt sofort alle Spiele an!
-        fetchLiveScores();   // Holt im Hintergrund die Live-Daten
+        renderAppContent();
+        fetchLiveScores();
         setInterval(fetchLiveScores, 30000);
     </script>
 </body>
