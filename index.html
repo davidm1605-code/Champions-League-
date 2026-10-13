@@ -452,7 +452,6 @@
             "Liverpool": "https://images.fotmob.com/image_resources/logo/teamlogo/8650.png",
             "LOSC": "https://images.fotmob.com/image_resources/logo/teamlogo/8689.png",
             "Man City": "https://images.fotmob.com/image_resources/logo/teamlogo/8456.png",
-            "Man United": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
             "ManUnited": "https://images.fotmob.com/image_resources/logo/teamlogo/10260.png",
             "Neapel": "https://images.fotmob.com/image_resources/logo/teamlogo/9875.png",
             "PSG": "https://images.fotmob.com/image_resources/logo/teamlogo/9847.png",
@@ -462,7 +461,7 @@
             "Roma": "https://images.fotmob.com/image_resources/logo/teamlogo/8686.png",
             "Sabah FK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 60 Q 50 98 15 60 Z' fill='%23000' stroke='%23ff4081' stroke-width='4'/><text x='50' y='45' fill='%23ff4081' font-size='18' font-weight='bold' text-anchor='middle'>SABAH</text><text x='50' y='75' fill='%23ff4081' font-size='10' font-weight='bold' text-anchor='middle'>2017</text></svg>",
             "Slavia Prag": "https://images.fotmob.com/image_resources/logo/teamlogo/8658.png",
-            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 90,25 90,75 50,95 10,75 10,25' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
+            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
             "Sporting": "https://images.fotmob.com/image_resources/logo/teamlogo/9845.png",
             "VfB Stuttgart": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 60 Q 50 95 15 60 Z' fill='%23fff' stroke='%23e63946' stroke-width='4'/><text x='50' y='35' fill='%23e63946' font-size='20' font-weight='bold' text-anchor='middle'>VfB</text><path d='M25 60 L75 60 L50 88 Z' fill='%23ffeb3b'/></svg>",
             "Viking": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%23cc2b32' stroke='%23ffeb3b' stroke-width='3'/><text x='50' y='40' fill='%23ffeb3b' font-size='10' font-weight='bold' text-anchor='middle'>VIKING F.K.</text><text x='50' y='72' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>STAVANGER</text></svg>",
@@ -470,7 +469,7 @@
         };
 
         function getTeamLogo(name) {
-            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'></path><path d='M2 12h20'></path></svg>";
+            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z'></path><path d='M2 12h20'></path></svg>";
         }
 
         let matchdays = [
@@ -494,7 +493,7 @@
                     { home: "Bayern", away: "Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand", live: false },
                     { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
                     { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Man United", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
+                    { home: "ManUnited", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
                 ]
             },
             {
@@ -502,14 +501,15 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "At. Madrid", away: "Man United", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "Villarreal", away: "Neapel", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "Viking", away: "Bayern", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
-                    { home: "Feyenoord", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
+                    // Aktuelle Live-Zwischenstände direkt übernommen:
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "21'"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "23'"},
+                    { home: "Viking", away: "Bayern", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "22'"},
+                    { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
                     { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
@@ -569,7 +569,6 @@
                             const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name || "";
                             const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name || "";
                             
-                            // Korrigierte Tor-Auswertung mit Fallback auf 0
                             const homeScore = parseInt(homeComp.score);
                             const awayScore = parseInt(awayComp.score);
 
@@ -653,7 +652,7 @@
                             aTeam.pts += 3;
                             aTeam.form.push('win');
                             hTeam.lost++;
-                            hTeam.form.push('loss');
+                            aTeam.form.push('loss');
                         } else {
                             hTeam.drawn++;
                             hTeam.pts += 1;
@@ -731,7 +730,6 @@
                         statusText = `<span class="match-status">${dateTimeString}</span>`;
                     }
 
-                    // Score-Anzeige jetzt direkt basierend auf den aktuellen Torschützen-Werten
                     const displayHomeScore = (m.homeScore !== null && !isNaN(m.homeScore)) ? m.homeScore : 0;
                     const displayAwayScore = (m.awayScore !== null && !isNaN(m.awayScore)) ? m.awayScore : 0;
                     const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
