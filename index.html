@@ -462,7 +462,7 @@
             "Roma": "https://images.fotmob.com/image_resources/logo/teamlogo/8686.png",
             "Sabah FK": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 15 L85 15 L85 60 Q 50 98 15 60 Z' fill='%23000' stroke='%23ff4081' stroke-width='4'/><text x='50' y='45' fill='%23ff4081' font-size='18' font-weight='bold' text-anchor='middle'>SABAH</text><text x='50' y='75' fill='%23ff4081' font-size='10' font-weight='bold' text-anchor='middle'>2017</text></svg>",
             "Slavia Prag": "https://images.fotmob.com/image_resources/logo/teamlogo/8658.png",
-            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
+            "Slovan Bratislava": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 90,25 90,75 50,95 10,75 10,25' fill='%2333b5e5'/><circle cx='50' cy='52' r='32' fill='%23ff3333'/><path d='M46 32 h8 v15 h15 v8 h-15 v15 h-8 v-15 h-15 v-8 h15 z' fill='%23fff'/><text x='50' y='22' fill='%23003366' font-size='9' font-weight='bold' text-anchor='middle'>SLOVAN</text></svg>",
             "Sporting": "https://images.fotmob.com/image_resources/logo/teamlogo/9845.png",
             "VfB Stuttgart": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M15 10 L85 10 L85 60 Q 50 95 15 60 Z' fill='%23fff' stroke='%23e63946' stroke-width='4'/><text x='50' y='35' fill='%23e63946' font-size='20' font-weight='bold' text-anchor='middle'>VfB</text><path d='M25 60 L75 60 L50 88 Z' fill='%23ffeb3b'/></svg>",
             "Viking": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='5,20 95,20 80,85 5,85' fill='%23cc2b32' stroke='%23ffeb3b' stroke-width='3'/><text x='50' y='40' fill='%23ffeb3b' font-size='10' font-weight='bold' text-anchor='middle'>VIKING F.K.</text><text x='50' y='72' fill='%23ffeb3b' font-size='12' font-weight='bold' text-anchor='middle'>STAVANGER</text></svg>",
@@ -502,15 +502,14 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    // Alle heutigen Abendspiele direkt als LIVE aktiv gesetzt:
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "At. Madrid", away: "Man United", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "Villarreal", away: "Neapel", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "Viking", away: "Bayern", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "12'" },
-                    { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "At. Madrid", away: "Man United", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "Viking", away: "Bayern", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "1'"},
+                    { home: "Feyenoord", away: "Como", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
                     { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
@@ -569,8 +568,11 @@
 
                             const homeTeamName = homeComp.team.shortDisplayName || homeComp.team.name || "";
                             const awayTeamName = awayComp.team.shortDisplayName || awayComp.team.name || "";
+                            
+                            // Korrigierte Tor-Auswertung mit Fallback auf 0
                             const homeScore = parseInt(homeComp.score);
                             const awayScore = parseInt(awayComp.score);
+
                             const statusType = competition.status.type.state; 
                             const detailMinutes = competition.status.displayClock;
 
@@ -595,7 +597,7 @@
                     }
                 }
             } catch (error) {
-                console.error("Netlify-Proxy nicht erreichbar, nutze lokalen Live-Status:", error);
+                console.error("Netlify-Proxy Fehler:", error);
             }
 
             matchdays.forEach(md => {
@@ -729,7 +731,10 @@
                         statusText = `<span class="match-status">${dateTimeString}</span>`;
                     }
 
-                    const scoreText = (hasResult || isLive) ? `${m.homeScore} - ${m.awayScore}` : 'vs';
+                    // Score-Anzeige jetzt direkt basierend auf den aktuellen Torschützen-Werten
+                    const displayHomeScore = (m.homeScore !== null && !isNaN(m.homeScore)) ? m.homeScore : 0;
+                    const displayAwayScore = (m.awayScore !== null && !isNaN(m.awayScore)) ? m.awayScore : 0;
+                    const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
 
                     html += `
                         <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};">
