@@ -112,6 +112,25 @@
             color: var(--text-primary);
         }
 
+        /* Spezial-Styling für den Live-Sub-Tab */
+        .sub-tab.live-tab-btn {
+            border-color: rgba(255, 51, 51, 0.4);
+            color: var(--text-secondary);
+        }
+
+        .sub-tab.live-tab-btn.has-live {
+            border-color: var(--live-red);
+            color: var(--live-red);
+            font-weight: 700;
+            animation: pulse-border 1.5s infinite;
+        }
+
+        .sub-tab.live-tab-btn.active {
+            background: var(--live-red);
+            color: #fff;
+            border-color: var(--live-red);
+        }
+
         .filter-row {
             display: flex;
             gap: 8px;
@@ -315,6 +334,13 @@
         .dot.win { background-color: var(--green); }
         .dot.loss { background-color: var(--live-red); }
         .dot.draw { background-color: var(--text-secondary); }
+
+        .no-live-msg {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -336,7 +362,8 @@
             <div class="sub-tabs">
                 <button class="sub-tab active" onclick="filterMatches('all', event)">Alle Spiele</button>
                 <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
-                <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende / Live</button>
+                <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende</button>
+                <button id="live-tab-btn" class="sub-tab live-tab-btn" onclick="filterMatches('only-live', event)">🔴 Live</button>
             </div>
             <div class="filter-row">
                 <select id="team-filter" class="team-select" onchange="filterByTeam(this.value)">
@@ -636,6 +663,7 @@
         }
 
         async function fetchLiveScores() {
+            let hasActiveLiveGames = false;
             try {
                 const response = await fetch('/.netlify/functions/proxy');
                 if (response.ok) {
@@ -672,6 +700,7 @@
                                             m.live = true;
                                             m.liveTime = detailMinutes ? detailMinutes + "'" : '';
                                             m.status = "LIVE";
+                                            hasActiveLiveGames = true;
                                         } else if (statusType === 'post') {
                                             m.live = false;
                                             m.status = "Endstand";
@@ -682,11 +711,30 @@
                         });
                     }
                 }
-                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
             } catch (error) {
                 console.error("Fehler beim Abrufen der Live-Daten:", error);
-                document.getElementById('clock').innerText = new Date().toLocaleTimeString();
             }
+
+            // Live-Button Status aktualisieren
+            matchdays.forEach(md => {
+                md.matches.forEach(m => {
+                    if (m.live) hasActiveLiveGames = true;
+                });
+            });
+
+            const liveTabBtn = document.getElementById('live-tab-btn');
+            if (liveTabBtn) {
+                if (hasActiveLiveGames) {
+                    liveTabBtn.classList.add('has-live');
+                } else {
+                    liveTabBtn.classList.remove('has-live');
+                }
+            }
+
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            
+            // Ansicht aktualisieren, falls Live-Daten geladen wurden
+            renderAppContent();
         }
 
         function calculateStandings() {
@@ -752,11 +800,11 @@
             return standingsArr;
         }
 
-        async function renderApp() {
-            await fetchLiveScores();
-
+        function renderAppContent() {
             const wrapper = document.getElementById('matchdays-wrapper');
             wrapper.innerHTML = '';
+
+            let totalVisibleMatches = 0;
 
             matchdays.forEach(md => {
                 let mdDiv = document.createElement('div');
@@ -770,16 +818,26 @@
                     const isFinished = hasResult && !m.live && m.status === "Endstand";
                     const isUpcoming = !hasResult || m.live;
 
-                    let matchesStatusFilter = (currentFilter === 'all') || 
-                                              (currentFilter === 'finished' && isFinished) || 
-                                              (currentFilter === 'upcoming' && isUpcoming);
+                    let matchesStatusFilter = false;
+                    if (currentFilter === 'all') {
+                        matchesStatusFilter = true;
+                    } else if (currentFilter === 'finished') {
+                        matchesStatusFilter = isFinished;
+                    } else if (currentFilter === 'upcoming') {
+                        matchesStatusFilter = isUpcoming && !m.live;
+                    } else if (currentFilter === 'only-live') {
+                        matchesStatusFilter = m.live;
+                    }
 
                     let matchesTeamFilter = (selectedTeam === 'all') || 
                                             (m.home === selectedTeam || m.away === selectedTeam);
 
                     let showCard = matchesStatusFilter && matchesTeamFilter;
 
-                    if (showCard) visibleMatchCount++;
+                    if (showCard) {
+                        visibleMatchCount++;
+                        totalVisibleMatches++;
+                    }
 
                     const isLive = m.live;
                     let statusText = '';
@@ -821,6 +879,11 @@
                 wrapper.appendChild(mdDiv);
             });
 
+            if (totalVisibleMatches === 0 && currentFilter === 'only-live') {
+                wrapper.innerHTML = `<div class="no-live-msg">Aktuell finden keine Live-Spiele statt. 🔴⚽</div>`;
+            }
+
+            // Tabelle rendern
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             
@@ -879,23 +942,25 @@
             currentFilter = filter;
             document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
-            renderApp();
+            renderAppContent();
         }
 
         function filterByTeam(team) {
             selectedTeam = team;
-            renderApp();
+            renderAppContent();
         }
 
         function resetTeamFilter() {
             selectedTeam = 'all';
             document.getElementById('team-filter').value = 'all';
-            renderApp();
+            renderAppContent();
         }
 
+        // Initialisierung
         initTeamDropdown();
-        renderApp();
-        setInterval(renderApp, 30000);
+        renderAppContent(); // Sofortige Anzeige der Spiele (ohne Warten)
+        fetchLiveScores();  // API im Hintergrund abfragen
+        setInterval(fetchLiveScores, 30000);
     </script>
 </body>
 </html>
