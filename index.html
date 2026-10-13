@@ -506,13 +506,13 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "Viking", away: "Bayern", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "Halbzeit"},
-                    { home: "Inter", away: "FC Brügge", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "Halbzeit"},
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "Viking", away: "Bayern", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
+                    { home: "Inter", away: "FC Brügge", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
                     { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
                     { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
                     { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
@@ -594,6 +594,7 @@
                             const awayScore = parseInt(awayComp.score);
                             const statusType = competition.status.type.state; 
                             const detailMinutes = competition.status.displayClock;
+                            const statusName = competition.status.type.name;
 
                             matchdays.forEach(md => {
                                 md.matches.forEach(m => {
@@ -603,7 +604,13 @@
 
                                         if (statusType === 'in') {
                                             m.live = true;
-                                            m.liveTime = detailMinutes ? detailMinutes + "'" : '';
+                                            if (detailMinutes && detailMinutes !== "" && detailMinutes !== "0") {
+                                                m.liveTime = detailMinutes + "'";
+                                            } else if (statusName && statusName.includes('STATUS_HALFTIME')) {
+                                                m.liveTime = "Halbzeit";
+                                            } else {
+                                                m.liveTime = "2. Halbzeit";
+                                            }
                                             m.status = "LIVE";
                                         } else if (statusType === 'post') {
                                             m.live = false;
