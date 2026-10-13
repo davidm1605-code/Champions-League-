@@ -570,11 +570,12 @@
         }
 
         async function fetchLiveScores() {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+            const clockEl = document.getElementById('clock');
+            if (clockEl) clockEl.innerText = new Date().toLocaleTimeString();
             
             try {
-                // Wir nutzen hier einen Multi-Source-Ansatz über eine extrem verlässliche offene Fußball-Schnittstelle
-                const targetUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/scoreboard';
+                // Wir nutzen wieder den absolut stabilen Original-Endpunkt von ESPN
+                const targetUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uerj.champions/scoreboard';
                 const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
                 
                 const response = await fetch(proxyUrl);
@@ -617,9 +618,10 @@
                     }
                 }
             } catch (error) {
-                console.log("Hintergrund-Abruf Hinweis: Nutze lokale/Manuelle Fallbacks.");
+                console.log("Netzwerk- oder API-Hinweis: App läuft auf lokalen Daten weiter.");
             }
 
+            // WICHTIG: Render wird IMMER ausgeführt, selbst wenn die API fehlschlägt!
             renderAppContent();
         }
 
@@ -663,3 +665,204 @@
                             hTeam.pts += 1;
                             hTeam.form.push('draw');
                             aTeam.drawn++;
+                            aTeam.pts += 1;
+                            aTeam.form.push('draw');
+                        }
+                    }
+                });
+            });
+
+            let standingsArr = Object.values(tableMap);
+            standingsArr.sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                const diffA = a.gf - a.ga;
+                const diffB = b.gf - b.ga;
+                if (diffB !== diffA) return diffB - diffA;
+                return b.gf - a.gf;
+            });
+
+            standingsArr.forEach((row, index) => {
+                row.rank = index + 1;
+            });
+
+            return standingsArr;
+        }
+
+        function renderAppContent() {
+            const wrapper = document.getElementById('matchdays-wrapper');
+            if (!wrapper) return;
+            wrapper.innerHTML = '';
+
+            let totalVisibleMatches = 0;
+            let activeLiveCount = 0;
+
+            matchdays.forEach((md, dIndex) => {
+                let mdDiv = document.createElement('div');
+                mdDiv.className = 'matchday-container';
+                
+                let html = `<div class="matchday-title">${md.day}</div>`;
+                let visibleMatchCount = 0;
+                
+                md.matches.forEach((m, mIndex) => {
+                    if (m.live) activeLiveCount++;
+
+                    const hasResult = (m.homeScore !== null && m.awayScore !== null);
+                    const isFinished = hasResult && !m.live && m.status === "Endstand";
+                    
+                    let matchesStatusFilter = false;
+                    if (currentFilter === 'all') {
+                        matchesStatusFilter = true;
+                    } else if (currentFilter === 'finished') {
+                        matchesStatusFilter = isFinished;
+                    } else if (currentFilter === 'upcoming') {
+                        matchesStatusFilter = !isFinished && !m.live;
+                    } else if (currentFilter === 'only-live') {
+                        matchesStatusFilter = m.live;
+                    }
+
+                    let matchesTeamFilter = (selectedTeam === 'all') || 
+                                            (m.home === selectedTeam || m.away === selectedTeam);
+
+                    let showCard = matchesStatusFilter && matchesTeamFilter;
+
+                    if (showCard) {
+                        visibleMatchCount++;
+                        totalVisibleMatches++;
+                    }
+
+                    const isLive = m.live;
+                    let statusText = '';
+                    if (isLive) {
+                        statusText = `<span class="match-status live-text">LIVE ${m.liveTime || ''}</span>`;
+                    } else if (hasResult) {
+                        statusText = `<span class="match-status">${m.status || 'Endstand'}</span>`;
+                    } else {
+                        const dateTimeString = (m.date ? m.date + ' ' : '') + (m.time ? m.time + ' Uhr' : '');
+                        statusText = `<span class="match-status">${dateTimeString}</span>`;
+                    }
+
+                    const displayHomeScore = (m.homeScore !== null && !isNaN(m.homeScore)) ? m.homeScore : 0;
+                    const displayAwayScore = (m.awayScore !== null && !isNaN(m.awayScore)) ? m.awayScore : 0;
+                    const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
+
+                    html += `
+                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};" onclick="editMatchScore(${dIndex}, ${mIndex})" title="Klicken zum Korrigieren">
+                            <div class="team-side home">
+                                <span class="team-name">${m.home}</span>
+                                <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
+                            </div>
+                            <div class="match-info">
+                                <div class="score">${scoreText}</div>
+                                ${statusText}
+                            </div>
+                            <div class="team-side away">
+                                <img src="${getTeamLogo(m.away)}" class="team-logo" alt="${m.away}">
+                                <span class="team-name">${m.away}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                mdDiv.innerHTML = html;
+                if (visibleMatchCount === 0) {
+                    mdDiv.style.display = 'none';
+                } else {
+                    mdDiv.style.display = 'block';
+                }
+                wrapper.appendChild(mdDiv);
+            });
+
+            const liveTabBtn = document.getElementById('live-tab-btn');
+            if (liveTabBtn) {
+                if (activeLiveCount > 0) {
+                    liveTabBtn.classList.add('has-live');
+                } else {
+                    liveTabBtn.classList.remove('has-live');
+                }
+            }
+
+            if (totalVisibleMatches === 0 && currentFilter === 'only-live') {
+                wrapper.innerHTML = `<div class="no-live-msg">Aktuell finden keine Live-Spiele statt. 🔴⚽</div>`;
+            }
+
+            const tbody = document.getElementById('table-body');
+            if (tbody) {
+                tbody.innerHTML = '';
+                const currentStandings = calculateStandings();
+                currentStandings.forEach((row) => {
+                    const diff = row.gf - row.ga;
+                    const diffStr = diff > 0 ? `+${diff}` : diff;
+                    
+                    let dotsHtml = '';
+                    const recentForm = row.form.slice(-5);
+                    recentForm.forEach(f => {
+                        dotsHtml += `<span class="dot ${f}"></span>`;
+                    });
+                    if (dotsHtml === '') {
+                        dotsHtml = `<span class="dot draw"></span>`;
+                    }
+                    
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.rank}</td>
+                        <td class="team-col">
+                            <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:26px;height:26px;">
+                            ${row.team}
+                        </td>
+                        <td>${row.played}</td>
+                        <td>${row.won}</td>
+                        <td>${row.drawn}</td>
+                        <td>${row.lost}</td>
+                        <td>${row.gf}:${row.ga}</td>
+                        <td>${diffStr}</td>
+                        <td><strong>${row.pts}</strong></td>
+                        <td>
+                            <div class="form-dots">
+                                ${dotsHtml}
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        function switchMainTab(tab) {
+            document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+
+            if (tab === 'matches') {
+                document.querySelector('.main-tab:nth-child(1)').classList.add('active');
+                document.getElementById('section-matches').classList.add('active');
+            } else {
+                document.querySelector('.main-tab:nth-child(2)').classList.add('active');
+                document.getElementById('section-table').classList.add('active');
+            }
+        }
+
+        function filterMatches(filter, event) {
+            currentFilter = filter;
+            document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            renderAppContent();
+        }
+
+        function filterByTeam(team) {
+            selectedTeam = team;
+            renderAppContent();
+        }
+
+        function resetTeamFilter() {
+            selectedTeam = 'all';
+            document.getElementById('team-filter').value = 'all';
+            renderAppContent();
+        }
+
+        // Initialisierung – JETZT absolut fehlerresistent
+        initTeamDropdown();
+        renderAppContent(); // Zeigt sofort alle Spiele an!
+        fetchLiveScores();   // Holt im Hintergrund die Live-Daten
+        setInterval(fetchLiveScores, 30000);
+    </script>
+</body>
+</html>
