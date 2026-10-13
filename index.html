@@ -173,7 +173,7 @@
         .match-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 12px 14px;
+            padding: 12px 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -201,15 +201,13 @@
         .team-side {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 6px;
             flex: 1;
         }
 
-        /* Hier korrigiert: Heimteam spiegelt die Anordnung, damit Name & Logo exakt sitzen */
         .team-side.home {
-            justify-content: flex-start;
-            flex-direction: row-reverse;
-            text-align: left;
+            justify-content: flex-end;
+            text-align: right;
         }
 
         .team-side.away {
@@ -218,17 +216,17 @@
         }
 
         .team-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            width: 110px;
+            width: 105px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .team-logo {
-            width: 30px;
-            height: 30px;
+            width: 26px;
+            height: 26px;
             object-fit: contain;
             background-color: #ffffff;
             border-radius: 50%;
@@ -237,23 +235,23 @@
         }
 
         .match-info {
-            padding: 0 8px;
+            padding: 0 6px;
             text-align: center;
-            min-width: 85px;
+            flex: 0 0 85px;
         }
 
         .score {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             color: var(--text-primary);
             background: rgba(255, 255, 255, 0.05);
-            padding: 5px 12px;
+            padding: 4px 8px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
         }
 
         .match-status {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-secondary);
             margin-top: 4px;
             display: block;
