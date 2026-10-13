@@ -79,6 +79,25 @@
             font-size: 12px;
             color: var(--text-secondary);
             margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--accent-color);
+            padding: 2px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent-color);
+            color: #000;
         }
 
         .controls-container {
@@ -352,7 +371,10 @@
             <button class="main-tab" onclick="switchMainTab('table')">📊 Tabelle</button>
         </div>
         
-        <div class="status-bar" id="status-bar">Live-API verbunden • Letztes Update: <span id="clock">--:--:--</span></div>
+        <div class="status-bar" id="status-bar">
+            <span>Live-API verbunden • <span id="clock">--:--:--</span></span>
+            <button class="refresh-btn" onclick="fetchLiveScores()">Aktualisieren</button>
+        </div>
     </header>
 
     <!-- SPIELE SEKTION -->
@@ -448,7 +470,7 @@
         };
 
         function getTeamLogo(name) {
-            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10z'></path><path d='M2 12h20'></path></svg>";
+            return teamLogos[name] || "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><path d='M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z'></path><path d='M2 12h20'></path></svg>";
         }
 
         let matchdays = [
@@ -480,7 +502,7 @@
                 matches: [
                     { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
                     { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "10'" },
                     { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
                     { home: "Arsenal", away: "LOSC", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
                     { home: "At. Madrid", away: "Man United", homeScore: null, awayScore: null, time: "21:00", date: "13.10.", live: false },
@@ -523,7 +545,6 @@
             });
         }
 
-        // Hilfsfunktion zum flexiblen Abgleich von Vereinsnamen
         function isTeamMatch(localName, apiName) {
             if (!localName || !apiName) return false;
             const l = localName.toLowerCase().replace(/fc|rc|ssc|vfb|fk| /g, '');
@@ -537,7 +558,6 @@
                 const response = await fetch('/.netlify/functions/proxy');
                 if (response.ok) {
                     const data = await response.json();
-                    
                     if (data && data.events) {
                         data.events.forEach(event => {
                             const competition = event.competitions[0];
@@ -563,7 +583,6 @@
                                             m.live = true;
                                             m.liveTime = detailMinutes ? detailMinutes + "'" : '';
                                             m.status = "LIVE";
-                                            hasActiveLiveGames = true;
                                         } else if (statusType === 'post') {
                                             m.live = false;
                                             m.status = "Endstand";
@@ -575,10 +594,9 @@
                     }
                 }
             } catch (error) {
-                console.error("Fehler beim Abrufen der Live-Daten:", error);
+                console.error("Netlify-Proxy nicht erreichbar, nutze lokalen Live-Status:", error);
             }
 
-            // Prüfen ob irgendwo ein Live-Spiel aktiv ist
             matchdays.forEach(md => {
                 md.matches.forEach(m => {
                     if (m.live) hasActiveLiveGames = true;
@@ -710,7 +728,7 @@
                         statusText = `<span class="match-status">${dateTimeString}</span>`;
                     }
 
-                    const scoreText = hasResult ? `${m.homeScore} - ${m.awayScore}` : 'vs';
+                    const scoreText = (hasResult || isLive) ? `${m.homeScore} - ${m.awayScore}` : 'vs';
 
                     html += `
                         <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};">
@@ -743,7 +761,6 @@
                 wrapper.innerHTML = `<div class="no-live-msg">Aktuell finden keine Live-Spiele statt. 🔴⚽</div>`;
             }
 
-            // Tabelle rendern
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
             
