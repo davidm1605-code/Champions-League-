@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UEFA Champions League 2026/27 - Live</title>
+    <title>UEFA Champions League 2026/27</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -12,8 +12,8 @@
             --text-primary: #f0f6fc;
             --text-secondary: #8b949e;
             --accent-color: #00d2ff;
-            --live-red: #ff3333;
             --green: #238636;
+            --live-red: #ff3333;
         }
 
         * {
@@ -129,24 +129,7 @@
         .sub-tab.active {
             border-color: var(--accent-color);
             color: var(--text-primary);
-        }
-
-        .sub-tab.live-tab-btn {
-            border-color: rgba(255, 51, 51, 0.4);
-            color: var(--text-secondary);
-        }
-
-        .sub-tab.live-tab-btn.has-live {
-            border-color: var(--live-red);
-            color: var(--live-red);
-            font-weight: 700;
-            animation: pulse-border 1.5s infinite;
-        }
-
-        .sub-tab.live-tab-btn.active {
-            background: var(--live-red);
-            color: #fff;
-            border-color: var(--live-red);
+            background: rgba(0, 210, 255, 0.1);
         }
 
         .filter-row {
@@ -229,17 +212,6 @@
             margin-bottom: 0;
         }
 
-        .match-card.live {
-            border: 2px solid var(--live-red);
-            animation: pulse-border 1.5s infinite;
-        }
-
-        @keyframes pulse-border {
-            0% { border-color: rgba(255, 51, 51, 0.4); }
-            50% { border-color: rgba(255, 51, 51, 1); }
-            100% { border-color: rgba(255, 51, 51, 0.4); }
-        }
-
         .team-side {
             display: flex;
             align-items: center;
@@ -301,11 +273,6 @@
             letter-spacing: 0.3px;
         }
 
-        .match-status.live-text {
-            color: var(--live-red);
-            font-weight: bold;
-        }
-
         .table-container {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -357,13 +324,6 @@
         .dot.win { background-color: var(--green); }
         .dot.loss { background-color: var(--live-red); }
         .dot.draw { background-color: var(--text-secondary); }
-
-        .no-live-msg {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
@@ -378,7 +338,7 @@
         
         <div class="status-bar" id="status-bar">
             <span>App aktiv (Klick zum Korrigieren) • <span id="clock">--:--:--</span></span>
-            <button class="refresh-btn" onclick="fetchLiveScores()">Aktualisieren</button>
+            <button class="refresh-btn" onclick="fetchResults()">Ergebnisse laden</button>
         </div>
     </header>
 
@@ -389,7 +349,6 @@
                 <button class="sub-tab active" onclick="filterMatches('all', event)">Alle Spiele</button>
                 <button class="sub-tab" onclick="filterMatches('finished', event)">Beendet</button>
                 <button class="sub-tab" onclick="filterMatches('upcoming', event)">Kommende</button>
-                <button id="live-tab-btn" class="sub-tab live-tab-btn" onclick="filterMatches('only-live', event)">🔴 Live</button>
             </div>
             <div class="filter-row">
                 <select id="team-filter" class="team-select" onchange="filterByTeam(this.value)">
@@ -481,47 +440,47 @@
             {
                 day: "Spieltag 1 von 8",
                 matches: [
-                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
-                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand", live: false },
-                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
-                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand", live: false },
-                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
-                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand", live: false },
-                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
-                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
-                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand", live: false },
-                    { home: "Bayern", away: "Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand", live: false },
-                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand", live: false },
-                    { home: "ManUnited", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand", live: false }
+                    { home: "FC Brügge", away: "Aston Villa", homeScore: 3, awayScore: 1, status: "Endstand" },
+                    { home: "AEK", away: "LASK", homeScore: 1, awayScore: 0, status: "Endstand" },
+                    { home: "FC Porto", away: "Man City", homeScore: 0, awayScore: 2, status: "Endstand" },
+                    { home: "Real Madrid", away: "Inter", homeScore: 2, awayScore: 1, status: "Endstand" },
+                    { home: "Dortmund", away: "Villarreal", homeScore: 3, awayScore: 2, status: "Endstand" },
+                    { home: "LOSC", away: "Benfica", homeScore: 2, awayScore: 3, status: "Endstand" },
+                    { home: "Barcelona", away: "Feyenoord", homeScore: 5, awayScore: 1, status: "Endstand" },
+                    { home: "VfB Stuttgart", away: "Viking", homeScore: 3, awayScore: 1, status: "Endstand" },
+                    { home: "Neapel", away: "Arsenal", homeScore: 0, awayScore: 1, status: "Endstand" },
+                    { home: "Liverpool", away: "At. Madrid", homeScore: 2, awayScore: 3, status: "Endstand" },
+                    { home: "PSG", away: "Slovan Bratislava", homeScore: 6, awayScore: 1, status: "Endstand" },
+                    { home: "Sporting", away: "Galatasaray", homeScore: 3, awayScore: 1, status: "Endstand" },
+                    { home: "Fenerbahce", away: "Roma", homeScore: 1, awayScore: 1, status: "Endstand" },
+                    { home: "PSV Eindhoven", away: "Donezk", homeScore: 1, awayScore: 1, status: "Endstand" },
+                    { home: "Bayern", away: "Bodø/Glimt", homeScore: 5, awayScore: 0, status: "Endstand" },
+                    { home: "Slavia Prag", away: "Lens", homeScore: 2, awayScore: 3, status: "Endstand" },
+                    { home: "Como", away: "RB Leipzig", homeScore: 4, awayScore: 1, status: "Endstand" },
+                    { home: "ManUnited", away: "Sabah FK", homeScore: 4, awayScore: 0, status: "Endstand" }
                 ]
             },
             {
                 day: "Spieltag 2 von 8",
                 matches: [
-                    { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand", live: false },
-                    { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Galatasaray", away: "Barcelona", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "Arsenal", away: "LOSC", homeScore: 0, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "At. Madrid", away: "ManUnited", homeScore: 1, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "Villarreal", away: "Neapel", homeScore: 2, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "Viking", away: "Bayern", homeScore: 2, awayScore: 0, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "Inter", away: "FC Brügge", homeScore: 1, awayScore: 1, status: "LIVE", live: true, liveTime: "2. Halbzeit"},
-                    { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand", live: false },
-                    { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "Slovan Bratislava", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false },
-                    { home: "Aston Villa", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "Man City", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "Bodø/Glimt", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "14.10.", live: false },
-                    { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10.", live: false }
+                    { home: "Lens", away: "Sporting", homeScore: 0, awayScore: 2, status: "Endstand" },
+                    { home: "Sabah FK", away: "Slavia Prag", homeScore: 2, awayScore: 0, status: "Endstand" },
+                    { home: "Galatasaray", away: "Barcelona", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "RB Leipzig", away: "PSV Eindhoven", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "Arsenal", away: "LOSC", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "At. Madrid", away: "ManUnited", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "Villarreal", away: "Neapel", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "Viking", away: "Bayern", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "Inter", away: "FC Brügge", homeScore: null, awayScore: null, status: "Endstand" },
+                    { home: "Feyenoord", away: "Como", homeScore: 0, awayScore: 0, status: "Endstand" },
+                    { home: "Donezk", away: "AEK", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "Benfica", away: "FC Porto", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "Roma", away: "Real Madrid", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "Slovan Bratislava", away: "VfB Stuttgart", homeScore: null, awayScore: null, time: "18:45", date: "14.10." },
+                    { home: "Aston Villa", away: "Fenerbahce", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "Man City", away: "PSG", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "Bodø/Glimt", away: "Dortmund", homeScore: null, awayScore: null, time: "21:00", date: "14.10." },
+                    { home: "LASK", away: "Liverpool", homeScore: null, awayScore: null, time: "18:45", date: "14.10." }
                 ]
             }
         ];
@@ -559,6 +518,7 @@
 
             m.homeScore = parseInt(newHome);
             m.awayScore = parseInt(newAway);
+            m.status = "Endstand";
             renderAppContent();
         }
 
@@ -569,14 +529,11 @@
             return l.includes(a) || a.includes(l);
         }
 
-        // INTELLIGENTER MULTI-QUELLEN-ABRUF (ESPN primär, football-data.org als Backup)
-        async function fetchLiveScores() {
+        // AUTOMATISCHES ABRUFEN DER BEENDETEN SPIELE & ENDERGEBNISSE
+        async function fetchResults() {
             const clockEl = document.getElementById('clock');
             if (clockEl) clockEl.innerText = new Date().toLocaleTimeString();
             
-            let success = false;
-
-            // VERSUCH 1: ESPN (Primärquelle über Proxy)
             try {
                 const targetUrl = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uerj.champions/scoreboard';
                 const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
@@ -584,7 +541,7 @@
                 const response = await fetch(proxyUrl);
                 if (response.ok) {
                     const data = await response.json();
-                    if (data && data.events && data.events.length > 0) {
+                    if (data && data.events) {
                         data.events.forEach(event => {
                             const competition = event.competitions[0];
                             const homeComp = competition.competitors.find(c => c.homeAway === 'home');
@@ -598,73 +555,24 @@
                             const homeScore = parseInt(homeComp.score);
                             const awayScore = parseInt(awayComp.score);
                             const statusType = competition.status.type.state; 
-                            const detailMinutes = competition.status.displayClock;
 
-                            matchdays.forEach(md => {
-                                md.matches.forEach(m => {
-                                    if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
-                                        if (!isNaN(homeScore)) m.homeScore = homeScore;
-                                        if (!isNaN(awayScore)) m.awayScore = awayScore;
-
-                                        if (statusType === 'in') {
-                                            m.live = true;
-                                            m.liveTime = (detailMinutes && detailMinutes !== "" && detailMinutes !== "0") ? detailMinutes + "'" : "2. Halbzeit";
-                                            m.status = "LIVE";
-                                        } else if (statusType === 'post') {
-                                            m.live = false;
-                                            m.status = "Endstand";
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                        success = true;
-                    }
-                }
-            } catch (e) {
-                console.log("Primärquelle (ESPN) hat keine aktuellen Daten geliefert. Wechsle zu Backup...");
-            }
-
-            // VERSUCH 2: football-data.org als intelligenter Backup-Fallback, falls Versuch 1 fehlschlägt
-            if (!success) {
-                try {
-                    const backupUrl = 'https://api.football-data.org/v4/competitions/CL/matches?matchday=2';
-                    const proxyBackup = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(backupUrl);
-                    
-                    const backupRes = await fetch(proxyBackup);
-                    if (backupRes.ok) {
-                        const backupData = await backupRes.json();
-                        if (backupData && backupData.matches) {
-                            backupData.matches.forEach(match => {
-                                const homeName = match.homeTeam.name;
-                                const awayName = match.awayTeam.name;
-                                const hScore = match.score.fullTime.home;
-                                const aScore = match.score.fullTime.away;
-                                const status = match.status; // IN_PLAY, FINISHED, SCHEDULED
-
+                            // Nur übernehmen, wenn das Spiel auch wirklich beendet ist ('post')
+                            if (statusType === 'post' && !isNaN(homeScore) && !isNaN(awayScore)) {
                                 matchdays.forEach(md => {
                                     md.matches.forEach(m => {
-                                        if (isTeamMatch(m.home, homeName) && isTeamMatch(m.away, awayName)) {
-                                            if (hScore !== null) m.homeScore = hScore;
-                                            if (aScore !== null) m.awayScore = aScore;
-
-                                            if (status === 'IN_PLAY' || status === 'PAUSED') {
-                                                m.live = true;
-                                                m.liveTime = status === 'PAUSED' ? 'Halbzeit' : '2. Halbzeit';
-                                                m.status = 'LIVE';
-                                            } else if (status === 'FINISHED') {
-                                                m.live = false;
-                                                m.status = 'Endstand';
-                                            }
+                                        if (isTeamMatch(m.home, homeTeamName) && isTeamMatch(m.away, awayTeamName)) {
+                                            m.homeScore = homeScore;
+                                            m.awayScore = awayScore;
+                                            m.status = "Endstand";
                                         }
                                     });
                                 });
-                            });
-                        }
+                            }
+                        });
                     }
-                } catch (err) {
-                    console.log("Backup-Quelle ebenfalls im Limit oder nicht erreichbar.");
                 }
+            } catch (e) {
+                console.log("Automatischer Abruf im Hintergrund fehlgeschlagen. Nutze lokale/manuelle Einträge.");
             }
 
             renderAppContent();
@@ -677,237 +585,4 @@
                 md.matches.forEach(m => {
                     [m.home, m.away].forEach(team => {
                         if (!tableMap[team]) {
-                            tableMap[team] = { team: team, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, pts: 0, form: [] };
-                        }
-                    });
-
-                    if (m.homeScore !== null && m.awayScore !== null && !m.live) {
-                        const hTeam = tableMap[m.home];
-                        const aTeam = tableMap[m.away];
-
-                        hTeam.played++;
-                        aTeam.played++;
-
-                        hTeam.gf += m.homeScore;
-                        hTeam.ga += m.awayScore;
-                        aTeam.gf += m.awayScore;
-                        aTeam.ga += m.homeScore;
-
-                        if (m.homeScore > m.awayScore) {
-                            hTeam.won++;
-                            hTeam.pts += 3;
-                            hTeam.form.push('win');
-                            aTeam.lost++;
-                            aTeam.form.push('loss');
-                        } else if (m.homeScore < m.awayScore) {
-                            aTeam.won++;
-                            aTeam.pts += 3;
-                            aTeam.form.push('win');
-                            hTeam.lost++;
-                            aTeam.form.push('loss');
-                        } else {
-                            hTeam.drawn++;
-                            hTeam.pts += 1;
-                            hTeam.form.push('draw');
-                            aTeam.drawn++;
-                            aTeam.pts += 1;
-                            aTeam.form.push('draw');
-                        }
-                    }
-                });
-            });
-
-            let standingsArr = Object.values(tableMap);
-            standingsArr.sort((a, b) => {
-                if (b.pts !== a.pts) return b.pts - a.pts;
-                const diffA = a.gf - a.ga;
-                const diffB = b.gf - b.ga;
-                if (diffB !== diffA) return diffB - diffA;
-                return b.gf - a.gf;
-            });
-
-            standingsArr.forEach((row, index) => {
-                row.rank = index + 1;
-            });
-
-            return standingsArr;
-        }
-
-        function renderAppContent() {
-            const wrapper = document.getElementById('matchdays-wrapper');
-            if (!wrapper) return;
-            wrapper.innerHTML = '';
-
-            let totalVisibleMatches = 0;
-            let activeLiveCount = 0;
-
-            matchdays.forEach((md, dIndex) => {
-                let mdDiv = document.createElement('div');
-                mdDiv.className = 'matchday-container';
-                
-                let html = `<div class="matchday-title">${md.day}</div>`;
-                let visibleMatchCount = 0;
-                
-                md.matches.forEach((m, mIndex) => {
-                    if (m.live) activeLiveCount++;
-
-                    const hasResult = (m.homeScore !== null && m.awayScore !== null);
-                    const isFinished = hasResult && !m.live && m.status === "Endstand";
-                    
-                    let matchesStatusFilter = false;
-                    if (currentFilter === 'all') {
-                        matchesStatusFilter = true;
-                    } else if (currentFilter === 'finished') {
-                        matchesStatusFilter = isFinished;
-                    } else if (currentFilter === 'upcoming') {
-                        matchesStatusFilter = !isFinished && !m.live;
-                    } else if (currentFilter === 'only-live') {
-                        matchesStatusFilter = m.live;
-                    }
-
-                    let matchesTeamFilter = (selectedTeam === 'all') || 
-                                            (m.home === selectedTeam || m.away === selectedTeam);
-
-                    let showCard = matchesStatusFilter && matchesTeamFilter;
-
-                    if (showCard) {
-                        visibleMatchCount++;
-                        totalVisibleMatches++;
-                    }
-
-                    const isLive = m.live;
-                    let statusText = '';
-                    if (isLive) {
-                        statusText = `<span class="match-status live-text">LIVE ${m.liveTime || ''}</span>`;
-                    } else if (hasResult) {
-                        statusText = `<span class="match-status">${m.status || 'Endstand'}</span>`;
-                    } else {
-                        const dateTimeString = (m.date ? m.date + ' ' : '') + (m.time ? m.time + ' Uhr' : '');
-                        statusText = `<span class="match-status">${dateTimeString}</span>`;
-                    }
-
-                    const displayHomeScore = (m.homeScore !== null && !isNaN(m.homeScore)) ? m.homeScore : 0;
-                    const displayAwayScore = (m.awayScore !== null && !isNaN(m.awayScore)) ? m.awayScore : 0;
-                    const scoreText = (hasResult || isLive) ? `${displayHomeScore} - ${displayAwayScore}` : 'vs';
-
-                    html += `
-                        <div class="match-card ${isLive ? 'live' : ''}" style="display: ${showCard ? 'flex' : 'none'};" onclick="editMatchScore(${dIndex}, ${mIndex})" title="Klicken zum Korrigieren">
-                            <div class="team-side home">
-                                <span class="team-name">${m.home}</span>
-                                <img src="${getTeamLogo(m.home)}" class="team-logo" alt="${m.home}">
-                            </div>
-                            <div class="match-info">
-                                <div class="score">${scoreText}</div>
-                                ${statusText}
-                            </div>
-                            <div class="team-side away">
-                                <img src="${getTeamLogo(m.away)}" class="team-logo" alt="${m.away}">
-                                <span class="team-name">${m.away}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                mdDiv.innerHTML = html;
-                if (visibleMatchCount === 0) {
-                    mdDiv.style.display = 'none';
-                } else {
-                    mdDiv.style.display = 'block';
-                }
-                wrapper.appendChild(mdDiv);
-            });
-
-            const liveTabBtn = document.getElementById('live-tab-btn');
-            if (liveTabBtn) {
-                if (activeLiveCount > 0) {
-                    liveTabBtn.classList.add('has-live');
-                } else {
-                    liveTabBtn.classList.remove('has-live');
-                }
-            }
-
-            if (totalVisibleMatches === 0 && currentFilter === 'only-live') {
-                wrapper.innerHTML = `<div class="no-live-msg">Aktuell finden keine Live-Spiele statt. 🔴⚽</div>`;
-            }
-
-            const tbody = document.getElementById('table-body');
-            if (tbody) {
-                tbody.innerHTML = '';
-                const currentStandings = calculateStandings();
-                currentStandings.forEach((row) => {
-                    const diff = row.gf - row.ga;
-                    const diffStr = diff > 0 ? `+${diff}` : diff;
-                    
-                    let dotsHtml = '';
-                    const recentForm = row.form.slice(-5);
-                    recentForm.forEach(f => {
-                        dotsHtml += `<span class="dot ${f}"></span>`;
-                    });
-                    if (dotsHtml === '') {
-                        dotsHtml = `<span class="dot draw"></span>`;
-                    }
-                    
-                    let tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${row.rank}</td>
-                        <td class="team-col">
-                            <img src="${getTeamLogo(row.team)}" class="team-logo" style="width:26px;height:26px;">
-                            ${row.team}
-                        </td>
-                        <td>${row.played}</td>
-                        <td>${row.won}</td>
-                        <td>${row.drawn}</td>
-                        <td>${row.lost}</td>
-                        <td>${row.gf}:${row.ga}</td>
-                        <td>${diffStr}</td>
-                        <td><strong>${row.pts}</strong></td>
-                        <td>
-                            <div class="form-dots">
-                                ${dotsHtml}
-                            </div>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            }
-        }
-
-        function switchMainTab(tab) {
-            document.querySelectorAll('.main-tab').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-
-            if (tab === 'matches') {
-                document.querySelector('.main-tab:nth-child(1)').classList.add('active');
-                document.getElementById('section-matches').classList.add('active');
-            } else {
-                document.querySelector('.main-tab:nth-child(2)').classList.add('active');
-                document.getElementById('section-table').classList.add('active');
-            }
-        }
-
-        function filterMatches(filter, event) {
-            currentFilter = filter;
-            document.querySelectorAll('.sub-tab').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-            renderAppContent();
-        }
-
-        function filterByTeam(team) {
-            selectedTeam = team;
-            renderAppContent();
-        }
-
-        function resetTeamFilter() {
-            selectedTeam = 'all';
-            document.getElementById('team-filter').value = 'all';
-            renderAppContent();
-        }
-
-        // Initialisierung
-        initTeamDropdown();
-        renderAppContent();
-        fetchLiveScores();
-        setInterval(fetchLiveScores, 30000);
-    </script>
-</body>
-</html>
+                            tableMap[team] = { team: team, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, pts: 0,
